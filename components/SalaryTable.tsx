@@ -1,4 +1,4 @@
-type Row = { hobong: number; pay: number[] };
+type Row = { hobong: number; pay: (number | null)[] };
 
 export default function SalaryTable({
   columns,
@@ -30,7 +30,11 @@ export default function SalaryTable({
               </td>
               {r.pay.map((p, i) => (
                 <td key={i} className="px-3 py-2 text-right tabular-nums">
-                  {p.toLocaleString("ko-KR")}원
+                  {p === null ? (
+                    <span className="text-slate-300">–</span>
+                  ) : (
+                    `${p.toLocaleString("ko-KR")}원`
+                  )}
                 </td>
               ))}
             </tr>

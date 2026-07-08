@@ -1,0 +1,92 @@
+{
+  "year": 2026,
+  "source": "인사혁신처 공무원수당규정, 군인연금법, 국민건강보험공단 2026 기준",
+  "_note": "검증된 항목만 수록. 위험근무수당(병과별)·특수지수당은 공개 데이터 정확도가 낮아 2차 추가 예정. 항목 추가는 이 JSON에만 하면 계산기에 자동 반영됨.",
+
+  "pension": {
+    "label": "군인연금 기여금",
+    "rate": 0.07,
+    "base": "salary",
+    "_note": "군인연금 기여율은 기준소득월액의 7% (공무원연금 9%와 다름). 여기서는 기본급 근사 적용."
+  },
+  "health": {
+    "label": "건강보험",
+    "rate": 0.03595,
+    "base": "gross"
+  },
+  "longTermCare": {
+    "label": "장기요양보험",
+    "rateOfHealth": 0.1314
+  },
+
+  "incomeTaxSimplified": [
+    { "upTo": 2000000, "rate": 0.008 },
+    { "upTo": 3000000, "rate": 0.02 },
+    { "upTo": 4500000, "rate": 0.045 },
+    { "upTo": 7000000, "rate": 0.08 },
+    { "upTo": 99999999, "rate": 0.12 }
+  ],
+  "localTaxRateOfIncomeTax": 0.1,
+
+  "dependentTaxRelief": 12500,
+  "dependentTaxReliefNote": "부양가족(배우자+자녀) 1인당 소득세 약 12,500원 감면 근사값.",
+
+  "regularBonusAddon": {
+    "_note": "정근수당 가산금 (매월, 중사 이상). 근무연수 구간별 정액. 하사는 근사 적용.",
+    "brackets": [
+      { "underYears": 5, "amount": 30000 },
+      { "underYears": 10, "amount": 50000 },
+      { "underYears": 15, "amount": 60000 },
+      { "underYears": 20, "amount": 80000 },
+      { "underYears": 25, "amount": 110000 },
+      { "underYears": 999, "amount": 130000 }
+    ]
+  },
+
+  "regularBonus": {
+    "_note": "정근수당 (연 2회). 월봉급액 대비 비율, 월 환산 시 ÷6 근사.",
+    "brackets": [
+      { "underYears": 1, "rate": 0 },
+      { "underYears": 2, "rate": 0.1 },
+      { "underYears": 3, "rate": 0.2 },
+      { "underYears": 4, "rate": 0.25 },
+      { "underYears": 5, "rate": 0.3 },
+      { "underYears": 6, "rate": 0.35 },
+      { "underYears": 7, "rate": 0.4 },
+      { "underYears": 999, "rate": 0.5 }
+    ]
+  },
+
+  "allowances": [
+    {
+      "id": "spouse",
+      "label": "배우자 가족수당",
+      "type": "checkbox",
+      "amount": 40000,
+      "hint": "배우자가 있으면 월 4만 원"
+    },
+    {
+      "id": "children",
+      "label": "자녀 수",
+      "type": "number",
+      "perUnit": 60000,
+      "max": 6,
+      "hint": "자녀 1인당 평균 약 6만 원 (첫째 5만·둘째 8만·셋째+ 12만의 근사 평균)"
+    },
+    {
+      "id": "housing",
+      "label": "주택수당",
+      "type": "checkbox",
+      "amount": 160000,
+      "hint": "하사~중령 대상 월 16만 원"
+    },
+    {
+      "id": "overtimeHours",
+      "label": "시간외근무 시간",
+      "type": "number",
+      "formula": "overtime",
+      "max": 100,
+      "hint": "시간당 = 기본급 × (1/209) × 1.5. 부대·직책별로 인정 시간이 다름"
+    }
+  ]
+}
