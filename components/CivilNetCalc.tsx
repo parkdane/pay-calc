@@ -28,8 +28,8 @@ export default function CivilNetCalc() {
 
     // 기본 수당
     const meal = rates.meal;
-    const positionBonus =
-      (rates.positionBonusByGrade as Record<string, number>)[gradeLabel] ?? 175000;
+const positionBonus =
+      (rates.positionBonusByGrade as unknown as Record<string, number>)[gradeLabel] ?? 175000;
 
     // 상세 수당 (정근수당 가산금 + 정근수당 월환산)
     let regularAddon = 0;
