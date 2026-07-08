@@ -15,15 +15,19 @@ export default function CivilNetCalc() {
     if (!row) return null;
 
     const base = row.pay[gradeIdx];
-    const allowance = rates.allowances.meal + rates.allowances.positionBonus9;
+    if (base === undefined) return null;
+
+    const allowance = rates.allowances.meal + rates.allowances.positionBonus;
     const gross = base + allowance;
 
-    // 공제 — 예시 로직. 실데이터 적용 시 검증 필요
-    const pension = base * rates.pensionRate;
+    // 공무원연금 기여금 (9%) — 국민연금 아님
+    const pension = base * rates.civilPensionRate;
     const health = gross * rates.healthRate;
     const longTermCare = health * rates.longTermCareRateOfHealth;
 
-    const taxBracket = rates.incomeTaxSimplified.find((b) => gross <= b.upTo)!;
+    const taxBracket =
+      rates.incomeTaxSimplified.find((b) => gross <= b.upTo) ??
+      rates.incomeTaxSimplified[rates.incomeTaxSimplified.length - 1];
     const incomeTax = gross * taxBracket.rate;
     const localTax = incomeTax * rates.localTaxRateOfIncomeTax;
 
@@ -35,7 +39,7 @@ export default function CivilNetCalc() {
       allowance,
       gross,
       items: [
-        { label: "연금 기여금", value: pension },
+        { label: "공무원연금 기여금", value: pension },
         { label: "건강보험", value: health },
         { label: "장기요양보험", value: longTermCare },
         { label: "소득세", value: incomeTax },

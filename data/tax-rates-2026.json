@@ -1,22 +1,32 @@
 {
-  "_note": "⚠️ 배포 전 2026년 공식 요율로 검증·교체 필요. 공무원은 국민연금 대신 공무원연금(기여율 9%) 적용 — 아래 값은 구조 확인용.",
   "year": 2026,
-  "pensionRate": 0.09,
-  "healthRate": 0.03545,
-  "longTermCareRateOfHealth": 0.1295,
+  "source": "국민연금공단·국민건강보험공단·보건복지부 2026년 고시 요율",
+  "_note": "공무원은 국민연금 대신 공무원연금(기여율 9%) 적용. 일반 근로자 계산 시에는 nationalPensionRate 사용.",
+
+  "civilPensionRate": 0.09,
+  "nationalPensionRate": 0.045,
+  "nationalPensionBaseMax": 6590000,
+  "nationalPensionBaseMin": 410000,
+
+  "healthRate": 0.03595,
+  "longTermCareRateOfHealth": 0.1314,
+
   "employmentRate": 0.009,
   "employmentAppliesToCivilServant": false,
+
   "incomeTaxSimplified": [
-    { "upTo": 2000000, "rate": 0.01 },
-    { "upTo": 3000000, "rate": 0.025 },
-    { "upTo": 4500000, "rate": 0.05 },
-    { "upTo": 7000000, "rate": 0.09 },
-    { "upTo": 99999999, "rate": 0.13 }
+    { "upTo": 2000000, "rate": 0.008 },
+    { "upTo": 3000000, "rate": 0.02 },
+    { "upTo": 4500000, "rate": 0.045 },
+    { "upTo": 7000000, "rate": 0.08 },
+    { "upTo": 99999999, "rate": 0.12 }
   ],
+  "incomeTaxNote": "위 소득세율은 근로소득 간이세액표를 근사한 추정 구간이다. 정밀 계산이 필요하면 국세청 간이세액표 전체 데이터로 교체할 것.",
   "localTaxRateOfIncomeTax": 0.1,
+
   "allowances": {
-    "_note": "정액급식비 등 공통 수당. 공식 수치로 교체 필요",
-    "meal": 140000,
-    "positionBonus9": 175000
+    "_note": "공통 수당. 정액급식비는 2026년 16만 원으로 인상됨. 직급보조비는 직급별 상이하므로 9급 기준 예시값.",
+    "meal": 160000,
+    "positionBonus": 175000
   }
 }
