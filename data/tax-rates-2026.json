@@ -1,0 +1,22 @@
+{
+  "_note": "⚠️ 배포 전 2026년 공식 요율로 검증·교체 필요. 공무원은 국민연금 대신 공무원연금(기여율 9%) 적용 — 아래 값은 구조 확인용.",
+  "year": 2026,
+  "pensionRate": 0.09,
+  "healthRate": 0.03545,
+  "longTermCareRateOfHealth": 0.1295,
+  "employmentRate": 0.009,
+  "employmentAppliesToCivilServant": false,
+  "incomeTaxSimplified": [
+    { "upTo": 2000000, "rate": 0.01 },
+    { "upTo": 3000000, "rate": 0.025 },
+    { "upTo": 4500000, "rate": 0.05 },
+    { "upTo": 7000000, "rate": 0.09 },
+    { "upTo": 99999999, "rate": 0.13 }
+  ],
+  "localTaxRateOfIncomeTax": 0.1,
+  "allowances": {
+    "_note": "정액급식비 등 공통 수당. 공식 수치로 교체 필요",
+    "meal": 140000,
+    "positionBonus9": 175000
+  }
+}
