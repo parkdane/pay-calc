@@ -11,7 +11,6 @@ import police from "@/data/salary-police-2026.json";
 import fire from "@/data/salary-fire-2026.json";
 import teacher from "@/data/salary-teacher-2026.json";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DATA: Record<string, any> = { civil, military, police, fire, teacher };
 type Slug = keyof typeof DATA;
 
@@ -57,7 +56,7 @@ export default async function SalaryPage({
         </p>
       </header>
 
-      {/* 계산기 CTA (표 위) */}
+      {/* 계산기 CTA */}
       {isMilitary ? (
         <div className="space-y-3">
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
@@ -77,11 +76,13 @@ export default async function SalaryPage({
         <CalcCta />
       )}
 
-      {/* 군인: 병사 고정급 + 간부 호봉표 여러 개 */}
+      {/* 💡 표 바로 위(계산기 밑)로 광고 이동 */}
+      <AdSlot id={`salary-${slug}-top`} />
+
+      {/* 군인: 병사 고정급 + 간부 호봉표 */}
       {isMilitary ? (
         <div className="space-y-8">
           <SoldierTable title={d.soldier.title} rows={d.soldier.rows} />
-          <AdSlot id="salary-military-mid" />
           {d.officerTables.map(
             (t: {
               title: string;
@@ -99,10 +100,7 @@ export default async function SalaryPage({
           )}
         </div>
       ) : (
-        <>
-          <SalaryTable columns={d.columns} rows={d.rows} />
-          <AdSlot id={`salary-${slug}-mid`} />
-        </>
+        <SalaryTable columns={d.columns} rows={d.rows} />
       )}
 
       <section className="space-y-3 text-slate-700">
@@ -116,8 +114,8 @@ export default async function SalaryPage({
       </section>
 
       <Faq items={d.faq} />
-
-      <AdSlot id={`salary-${slug}-bottom`} />
+      
+      {/* 하단 광고는 중복 방지를 위해 삭제했습니다 */}
     </article>
   );
 }
