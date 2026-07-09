@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import military from "@/data/salary-military-2026.json";
 import cfg from "@/data/military-allowances-2026.json";
+import { monthlyIncomeTax } from "@/lib/incomeTax";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -97,18 +98,14 @@ export default function MilitaryNetCalc() {
     const pension = base * cfg.pension.rate;
     const health = grossFinal * cfg.health.rate;
     const longTermCare = health * cfg.longTermCare.rateOfHealth;
-    const bracket =
-      cfg.incomeTaxSimplified.find((b) => grossFinal <= b.upTo) ??
-      cfg.incomeTaxSimplified[cfg.incomeTaxSimplified.length - 1];
-    let incomeTax = grossFinal * bracket.rate;
-    // 부양가족(배우자+자녀) 소득세 감면
-    if (useDetail) {
-      const spouse = inputs["spouse"] === true ? 1 : 0;
-      const children = typeof inputs["children"] === "number" ? inputs["children"] : 0;
-      const deps = spouse + (children as number);
-      if (deps > 0) incomeTax = Math.max(0, incomeTax - deps * cfg.dependentTaxRelief);
-    }
-    const localTax = incomeTax * cfg.localTaxRateOfIncomeTax;
+    const bracket = null; // (구버전 구간세율 미사용)
+    void bracket;
+    const spouseDep = inputs["spouse"] === true ? 1 : 0;
+    const childrenDep =
+      typeof inputs["children"] === "number" ? (inputs["children"] as number) : 0;
+    const deps = useDetail ? spouseDep + childrenDep : 0;
+    const incomeTax = monthlyIncomeTax(grossFinal, pension, deps);
+    const localTax = Math.floor(incomeTax * cfg.localTaxRateOfIncomeTax);
 
     const deductions = [
       { label: cfg.pension.label, value: pension },

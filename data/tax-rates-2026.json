@@ -48,7 +48,33 @@
   },
 
   "dependentTaxRelief": 12500,
-  "dependentTaxReliefNote": "부양가족(본인 제외) 1인당 소득세를 약 12,500원 감면하는 근사값. 실제 간이세액표는 급여·가족수 2차원 표.",
+  "dependentTaxReliefNote": "(구버전 근사값 - lib/incomeTax.ts 도입으로 미사용)",
+
+  "familyAllowance": {
+    "_note": "공무원수당규정 별표5. 배우자 4만, 첫째 5만, 둘째 8만, 셋째 이상 각 12만 (월)",
+    "spouse": 40000,
+    "child1": 50000,
+    "child2": 80000,
+    "child3plus": 120000
+  },
+
+  "overtime": {
+    "_note": "시간당 = 기준호봉 봉급 × 조정률 × 150% ÷ 209. 2026년부터 8급(상당) 이하 60%로 상향. 기준호봉은 별표12 근사(10호봉).",
+    "baseHobong": 10,
+    "reduction60Grades": ["9급", "8급", "순경", "경장", "소방사", "소방교"],
+    "reductionDefault": 0.55,
+    "reduction60": 0.6,
+    "maxHours": 57
+  },
+
+  "dangerAllowance": {
+    "_note": "2026년 경찰·소방 위험근무수당 월 8만 원(7만→8만 인상). 일반직은 해당 없음.",
+    "police": 80000,
+    "fire": 80000
+  },
+
+  "holidayBonusRate": 0.6,
+  "holidayBonusNote": "명절휴가비 = 월봉급액의 60%, 연 2회(설·추석). 연간 환산에만 사용.",
 
   "regularBonusAddon": {
     "_note": "정근수당 가산금 (매월). 근무연수 구간별 정액.",
