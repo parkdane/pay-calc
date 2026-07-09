@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import CivilNetCalc from "@/components/CivilNetCalc";
-import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
 import Link from "next/link";
 
@@ -42,10 +41,8 @@ export default function Page() {
         </p>
       </header>
 
+      {/* 광고 코드는 삭제했습니다. CivilNetCalc 내부에서 알아서 띄워줍니다. */}
       <CivilNetCalc />
-
-      {/* 계산 결과 바로 아래 = 클릭률 최고 광고 자리 */}
-      <AdSlot id="calc-civil-net-result" />
 
       <section className="space-y-3 text-sm leading-relaxed text-slate-700">
         <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
@@ -75,8 +72,6 @@ export default function Page() {
       </section>
 
       <Faq items={FAQ} />
-
-      <AdSlot id="calc-civil-net-bottom" />
     </article>
   );
 }
