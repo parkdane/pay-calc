@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import cfg from "@/data/soldier-savings-2026.json";
+import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -60,11 +61,11 @@ export default function SoldierSavingsCalc() {
             onChange={(e) => setMonths(Number(e.target.value))}
             className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5"
           >
-        {cfg.serviceMonths.map((s) => (
-  <option key={s.label} value={s.months}>
-    {s.label}
-  </option>
-))}
+            {cfg.serviceMonths.map((s) => (
+              <option key={s.months} value={s.months}>
+                {s.label}
+              </option>
+            ))}
           </select>
         </label>
 
@@ -88,6 +89,9 @@ export default function SoldierSavingsCalc() {
           </p>
         </div>
       </div>
+
+      {/* 광고 (입력 아래, 결과 위) */}
+      <AdSlot id="calc-soldier-save-mid" />
 
       {/* 결과 */}
       <div className="overflow-hidden rounded-xl border border-slate-200">

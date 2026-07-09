@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -113,6 +114,9 @@ export default function SavingsGoalSim() {
           </span>
         </div>
       </div>
+
+      {/* 광고 (입력 아래, 결과 위) */}
+      <AdSlot id="calc-savings-goal-mid" />
 
       {/* 결과 */}
       {result.save <= 0 ? (

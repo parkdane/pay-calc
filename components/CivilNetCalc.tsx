@@ -216,6 +216,9 @@ export default function CivilNetCalc() {
         )}
       </div>
 
+      {/* 광고 (입력 아래, 결과 위) */}
+      <AdSlot id="calc-civil-net-mid" />
+
       {/* 상세 옵션 (접이식) */}
       <details
         className="rounded-xl border border-slate-200 p-4"
@@ -327,9 +330,6 @@ export default function CivilNetCalc() {
           </div>
         </>
       )}
-
-      {/* 결과 바로 아래 광고 (노출 최적 위치) */}
-      {result && <AdSlot id="calc-civil-net-result" />}
 
       <p className="text-xs leading-relaxed text-slate-400">
         ※ 참고용 추정치입니다. 소득세는 간이세액표 산출 방식(연환산)으로

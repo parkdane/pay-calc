@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const MONTHS = 36;
@@ -93,6 +94,9 @@ export default function NaeilSavingsCalc() {
           />
         </div>
       </div>
+
+      {/* 광고 (입력 아래, 결과 위) */}
+      <AdSlot id="calc-naeil-save-mid" />
 
       {/* 결과 */}
       <div className="overflow-hidden rounded-xl border border-slate-200">

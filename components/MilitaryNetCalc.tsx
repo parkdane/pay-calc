@@ -207,6 +207,9 @@ export default function MilitaryNetCalc() {
         ))}
       </div>
 
+      {/* 광고 (수당 입력 아래) */}
+      <AdSlot id="calc-military-net-mid" />
+
       {/* 상세 옵션 (접이식) */}
       <details
         className="rounded-xl border border-slate-200 p-4"
@@ -258,9 +261,6 @@ export default function MilitaryNetCalc() {
           선택한 계급에 해당 호봉이 없습니다. 다른 호봉을 선택하세요.
         </p>
       )}
-
-      {/* 결과 바로 아래 광고 (노출 최적 위치) */}
-      {result && <AdSlot id="calc-military-net-result" />}
 
       <p className="text-xs leading-relaxed text-slate-400">
         ※ 위험근무수당(병과별), 특수지 근무수당 등은 개인·부대별 편차가 커

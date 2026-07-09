@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import cfg from "@/data/youth-savings-2026.json";
+import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -95,6 +96,9 @@ export default function YouthSavingsCalc() {
           </p>
         </div>
       </div>
+
+      {/* 광고 (입력 아래, 결과 위) */}
+      <AdSlot id="calc-youth-save-mid" />
 
       {/* 결과 */}
       <div className="overflow-hidden rounded-xl border border-slate-200">

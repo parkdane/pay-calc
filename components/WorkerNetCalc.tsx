@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { monthlyIncomeTax } from "@/lib/incomeTax";
+import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const manwon = (n: number) => Math.round(n / 10000).toLocaleString("ko-KR") + "만";
@@ -114,6 +115,9 @@ export default function WorkerNetCalc() {
           </span>
         </label>
       </div>
+
+      {/* 광고 (입력 아래, 결과 위) */}
+      <AdSlot id="calc-worker-net-mid" />
 
       {/* 결과 */}
       <div className="overflow-hidden rounded-xl border border-slate-200">

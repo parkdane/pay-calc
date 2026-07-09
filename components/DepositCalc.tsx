@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const TAX_RATE = 0.154; // 이자소득세 15.4% (소득세 14% + 지방세 1.4%)
@@ -129,6 +130,9 @@ export default function DepositCalc() {
           비과세 (일반 과세 시 이자의 15.4% 공제)
         </label>
       </div>
+
+      {/* 광고 (입력 아래, 결과 위) */}
+      <AdSlot id="calc-deposit-mid" />
 
       {/* 결과 */}
       <div className="overflow-hidden rounded-xl border border-slate-200">
