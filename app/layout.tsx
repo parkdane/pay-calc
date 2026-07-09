@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   },
   description:
     "2026년 공무원·군인·경찰·소방 봉급표와 실수령액 계산기, 청년 정책 적금 계산기를 제공합니다.",
+  verification: {
+    other: {
+      // 😎 태그 껍데기는 빼고, 핵심 인증 코드만 깔끔하게 넣었습니다!
+      "naver-site-verification": "53b5ffabd7662133f9b4ab1ab89732ef406dba9b",
+    },
+  },
 };
 
 const NAV = [
