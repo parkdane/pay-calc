@@ -9,9 +9,10 @@ import civil from "@/data/salary-civil-2026.json";
 import military from "@/data/salary-military-2026.json";
 import police from "@/data/salary-police-2026.json";
 import fire from "@/data/salary-fire-2026.json";
+import teacher from "@/data/salary-teacher-2026.json";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const DATA: Record<string, any> = { civil, military, police, fire };
+const DATA: Record<string, any> = { civil, military, police, fire, teacher };
 type Slug = keyof typeof DATA;
 
 export function generateStaticParams() {

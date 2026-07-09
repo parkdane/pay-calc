@@ -5,6 +5,7 @@ const SALARY = [
   { href: "/salary/military", title: "군인 봉급표", desc: "병사 월급 · 부사관·장교 호봉표" },
   { href: "/salary/police", title: "경찰 봉급표", desc: "순경부터 경감까지" },
   { href: "/salary/fire", title: "소방 봉급표", desc: "소방사부터 소방경까지" },
+  { href: "/salary/teacher", title: "교사 봉급표", desc: "유·초·중·고 교원 호봉표" },
 ] as const;
 
 const CALC = [
@@ -12,6 +13,8 @@ const CALC = [
   { href: "/calc/military-net", title: "군인 간부 실수령액 계산기", desc: "수당 포함 부사관·장교 실수령액" },
   { href: "/calc/soldier-save", title: "장병내일준비적금 계산기", desc: "정부 매칭 포함 전역 수령액" },
   { href: "/calc/youth-save", title: "청년미래적금 계산기", desc: "정부기여금 포함 3년 만기액" },
+  { href: "/calc/naeil-save", title: "청년내일저축계좌 계산기", desc: "정부지원 월 30만 포함 만기액" },
+  { href: "/calc/deposit", title: "적금·예금 이자 계산기", desc: "세후 만기 수령액 계산" },
 ] as const;
 
 export default function Home() {

@@ -28,6 +28,16 @@ const ITEMS = [
     title: "청년미래적금 계산기",
     desc: "정부기여금 6~12% 포함 3년 만기 수령액",
   },
+  {
+    href: "/calc/naeil-save",
+    title: "청년내일저축계좌 계산기",
+    desc: "정부지원 월 최대 30만 원 포함 만기액",
+  },
+  {
+    href: "/calc/deposit",
+    title: "적금·예금 이자 계산기",
+    desc: "세후 만기 수령액, 적금·예금 모두 지원",
+  },
 ];
 
 export default function Page() {

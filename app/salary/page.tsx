@@ -28,6 +28,11 @@ const ITEMS = [
     title: "소방 봉급표",
     desc: "소방사~소방경, 31호봉까지",
   },
+  {
+    href: "/salary/teacher",
+    title: "교사 봉급표",
+    desc: "유·초·중·고 교원, 주요 호봉 + 근속가봉",
+  },
 ];
 
 export default function Page() {

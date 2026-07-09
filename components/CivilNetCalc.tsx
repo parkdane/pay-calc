@@ -5,15 +5,20 @@ import rates from "@/data/tax-rates-2026.json";
 import civil from "@/data/salary-civil-2026.json";
 import police from "@/data/salary-police-2026.json";
 import fire from "@/data/salary-fire-2026.json";
+import teacher from "@/data/salary-teacher-2026.json";
 import { monthlyIncomeTax } from "@/lib/incomeTax";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
 const OCCUPATIONS = [
-  { id: "civil", label: "일반직 공무원", data: civil, danger: 0 },
-  { id: "police", label: "경찰", data: police, danger: rates.dangerAllowance.police },
-  { id: "fire", label: "소방", data: fire, danger: rates.dangerAllowance.fire },
+  { id: "civil", label: "일반직 공무원", data: civil, danger: 0, teacher: false },
+  { id: "police", label: "경찰", data: police, danger: rates.dangerAllowance.police, teacher: false },
+  { id: "fire", label: "소방", data: fire, danger: rates.dangerAllowance.fire, teacher: false },
+  { id: "teacher", label: "교사 (유·초·중·고)", data: teacher, danger: 0, teacher: true },
 ] as const;
+
+const TEACHER_ALLOWANCE = 250000; // 교직수당 (전 교원 공통)
+const HOMEROOM_ALLOWANCE = 200000; // 담임수당
 
 function pickBracket<T extends { underYears: number }>(brackets: T[], years: number): T {
   return brackets.find((b) => years < b.underYears) ?? brackets[brackets.length - 1];
@@ -55,14 +60,23 @@ export default function CivilNetCalc() {
     const meal = rates.meal;
     items.push({ label: "정액급식비", value: meal });
 
-    const positionBonus =
-      (rates.positionBonusByGrade as unknown as Record<string, number>)[gradeLabel] ??
-      175000;
-    items.push({ label: "직급보조비", value: positionBonus });
+    if (occ.teacher) {
+      // 교사: 직급보조비 대신 교직수당
+      items.push({ label: "교직수당", value: TEACHER_ALLOWANCE });
+      if (includeDanger) {
+        // 교사 직종에서 이 체크박스는 담임수당으로 사용
+        items.push({ label: "담임수당", value: HOMEROOM_ALLOWANCE });
+      }
+    } else {
+      const positionBonus =
+        (rates.positionBonusByGrade as unknown as Record<string, number>)[gradeLabel] ??
+        175000;
+      items.push({ label: "직급보조비", value: positionBonus });
 
-    // 위험근무수당 (경찰·소방)
-    if (occ.danger > 0 && includeDanger) {
-      items.push({ label: "위험근무수당", value: occ.danger });
+      // 위험근무수당 (경찰·소방)
+      if (occ.danger > 0 && includeDanger) {
+        items.push({ label: "위험근무수당", value: occ.danger });
+      }
     }
 
     if (useDetail) {
@@ -158,7 +172,7 @@ export default function CivilNetCalc() {
         </label>
         <div className="grid grid-cols-2 gap-4">
           <label className="space-y-1.5 text-sm font-medium text-slate-700">
-            {occIdx === 0 ? "직급" : "계급"}
+            {occ.teacher ? "구분" : occIdx === 0 ? "직급" : "계급"}
             <select
               value={gradeIdx}
               onChange={(e) => setGradeIdx(Number(e.target.value))}
@@ -186,7 +200,7 @@ export default function CivilNetCalc() {
             </select>
           </label>
         </div>
-        {occ.danger > 0 && (
+        {(occ.danger > 0 || occ.teacher) && (
           <label className="flex items-center gap-2 text-sm text-slate-700">
             <input
               type="checkbox"
@@ -194,7 +208,9 @@ export default function CivilNetCalc() {
               onChange={(e) => setIncludeDanger(e.target.checked)}
               className="h-4 w-4"
             />
-            위험근무수당 포함 (월 {won(occ.danger)})
+            {occ.teacher
+              ? `담임수당 포함 (월 ${won(HOMEROOM_ALLOWANCE)})`
+              : `위험근무수당 포함 (월 ${won(occ.danger)})`}
           </label>
         )}
       </div>
