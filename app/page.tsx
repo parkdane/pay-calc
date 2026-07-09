@@ -37,9 +37,6 @@ export default function Home() {
         </p>
       </section>
 
-      {/* 💡 깔끔하게 <AdSlot />만 남겨두면 만능 코드가 알아서 작동합니다. */}
-      <AdSlot />
-
       <section className="space-y-4">
         <h2 className="text-lg font-bold text-slate-900">봉급표</h2>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -48,6 +45,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <AdSlot id="home-mid" />
 
       <section className="space-y-4">
         <h2 className="text-lg font-bold text-slate-900">계산기</h2>

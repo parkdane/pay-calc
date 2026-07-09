@@ -37,6 +37,8 @@ export default function AdSlot({ id }: { id?: string }) {
     };
   }, [isMobile]);
 
+  // 광고 컨테이너. id는 노출 위치 구분용으로 받되 애드핏 단위는 PC/모바일로 자동 전환된다.
+  void id;
   return (
     <div className="my-8 flex w-full flex-col items-center justify-center clear-both">
       <div

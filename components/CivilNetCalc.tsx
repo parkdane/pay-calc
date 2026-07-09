@@ -7,7 +7,6 @@ import police from "@/data/salary-police-2026.json";
 import fire from "@/data/salary-fire-2026.json";
 import teacher from "@/data/salary-teacher-2026.json";
 import { monthlyIncomeTax } from "@/lib/incomeTax";
-// 💡 1. 맨 위에 AdSlot을 불러옵니다.
 import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
@@ -26,6 +25,7 @@ function pickBracket<T extends { underYears: number }>(brackets: T[], years: num
   return brackets.find((b) => years < b.underYears) ?? brackets[brackets.length - 1];
 }
 
+// 자녀 수 → 가족수당 (첫째 5만, 둘째 8만, 셋째 이상 각 12만)
 function childAllowance(n: number): number {
   const fa = rates.familyAllowance;
   if (n <= 0) return 0;
@@ -38,6 +38,7 @@ export default function CivilNetCalc() {
   const [occIdx, setOccIdx] = useState(0);
   const [gradeIdx, setGradeIdx] = useState(0);
   const [hobong, setHobong] = useState(1);
+  // 상세 옵션
   const [useDetail, setUseDetail] = useState(false);
   const [spouse, setSpouse] = useState(false);
   const [children, setChildren] = useState(0);
@@ -55,13 +56,16 @@ export default function CivilNetCalc() {
     const base = row.pay[gradeIdx];
     if (base === undefined || base === null) return null;
 
+    // ── 수당 ──
     const items: { label: string; value: number }[] = [];
     const meal = rates.meal;
     items.push({ label: "정액급식비", value: meal });
 
     if (occ.teacher) {
+      // 교사: 직급보조비 대신 교직수당
       items.push({ label: "교직수당", value: TEACHER_ALLOWANCE });
       if (includeDanger) {
+        // 교사 직종에서 이 체크박스는 담임수당으로 사용
         items.push({ label: "담임수당", value: HOMEROOM_ALLOWANCE });
       }
     } else {
@@ -70,15 +74,18 @@ export default function CivilNetCalc() {
         175000;
       items.push({ label: "직급보조비", value: positionBonus });
 
+      // 위험근무수당 (경찰·소방)
       if (occ.danger > 0 && includeDanger) {
         items.push({ label: "위험근무수당", value: occ.danger });
       }
     }
 
     if (useDetail) {
+      // 가족수당 (세분화)
       const fam = (spouse ? rates.familyAllowance.spouse : 0) + childAllowance(children);
       if (fam > 0) items.push({ label: "가족수당", value: fam });
 
+      // 정근수당 가산금 + 정근수당(월환산)
       const addon = pickBracket(rates.regularBonusAddon.brackets, years).amount;
       if (addon > 0) items.push({ label: "정근수당 가산금", value: addon });
       const bonusRate = pickBracket(rates.regularBonus.brackets, years).rate;
@@ -86,6 +93,7 @@ export default function CivilNetCalc() {
       if (bonusMonthly > 0)
         items.push({ label: "정근수당(월환산)", value: bonusMonthly });
 
+      // 시간외근무수당: 기준호봉 봉급 × 조정률 × 150% ÷ 209 × 시간
       if (overtimeH > 0) {
         const ot = rates.overtime;
         const baseRow = d.rows.find((r) => r.hobong === ot.baseHobong);
@@ -104,6 +112,7 @@ export default function CivilNetCalc() {
     const allowanceTotal = items.reduce((s, i) => s + i.value, 0);
     const gross = base + allowanceTotal;
 
+    // ── 공제 ──
     const pension = base * rates.civilPensionRate;
     const health = gross * rates.healthRate;
     const longTermCare = health * rates.longTermCareRateOfHealth;
@@ -121,9 +130,11 @@ export default function CivilNetCalc() {
     const totalDeduction = deductions.reduce((s, x) => s + x.value, 0);
     const net = gross - totalDeduction;
 
+    // ── 연간 환산 (E) ──
+    // 명절휴가비(봉급×60%×연2회)는 월 계산 미포함 항목이라 연간에서 더한다
     const holidayBonus = base * rates.holidayBonusRate * 2;
     const annualGross = gross * 12 + holidayBonus;
-    const annualNetApprox = net * 12 + holidayBonus * 0.85;
+    const annualNetApprox = net * 12 + holidayBonus * 0.85; // 명절휴가비 공제 근사 15%
 
     return {
       base,
@@ -272,9 +283,6 @@ export default function CivilNetCalc() {
         </div>
       </details>
 
-      {/* 💡 2. 입력과 결과 사이에 광고 배치 완료 */}
-      <AdSlot />
-
       {/* 결과 */}
       {result && (
         <>
@@ -296,6 +304,7 @@ export default function CivilNetCalc() {
             </dl>
           </div>
 
+          {/* 연간 환산 */}
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm">
             <p className="font-semibold text-slate-800">연간 환산</p>
             <div className="mt-2 space-y-1 text-slate-600">
@@ -318,6 +327,9 @@ export default function CivilNetCalc() {
           </div>
         </>
       )}
+
+      {/* 결과 바로 아래 광고 (노출 최적 위치) */}
+      {result && <AdSlot id="calc-civil-net-result" />}
 
       <p className="text-xs leading-relaxed text-slate-400">
         ※ 참고용 추정치입니다. 소득세는 간이세액표 산출 방식(연환산)으로
