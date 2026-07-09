@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import military from "@/data/salary-military-2026.json";
 import cfg from "@/data/military-allowances-2026.json";
 import { monthlyIncomeTax } from "@/lib/incomeTax";
+import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -257,6 +258,9 @@ export default function MilitaryNetCalc() {
           선택한 계급에 해당 호봉이 없습니다. 다른 호봉을 선택하세요.
         </p>
       )}
+
+      {/* 결과 바로 아래 광고 (노출 최적 위치) */}
+      {result && <AdSlot id="calc-military-net-result" />}
 
       <p className="text-xs leading-relaxed text-slate-400">
         ※ 위험근무수당(병과별), 특수지 근무수당 등은 개인·부대별 편차가 커
