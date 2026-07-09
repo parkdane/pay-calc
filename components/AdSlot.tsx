@@ -17,9 +17,8 @@ export default function AdSlot({ id }: { id?: string }) {
     if (!containerRef.current) return;
     containerRef.current.innerHTML = '';
 
-    // 💡 두 개의 ID가 모두 완벽하게 입력되었습니다.
-    const PC_ID = 'DAN-KWXtT6PXMVtf1ygq'; // 728x90 PC ID
-    const MOBILE_ID = 'DAN-yzPJgMAQOUioIWCh'; // 320x50 모바일 ID
+    const PC_ID = 'DAN-KWXtT6PXMVtf1ygq'; 
+    const MOBILE_ID = 'DAN-yzPJgMAQOUioIWCh'; 
 
     const adId = isMobile ? MOBILE_ID : PC_ID; 
     const width = isMobile ? '320' : '728';
@@ -45,11 +44,14 @@ export default function AdSlot({ id }: { id?: string }) {
     };
   }, [isMobile]);
 
+  // 💡 주문하신대로 상세페이지 안에서 표와 계산기 사이에 자연스럽게 들어가도록 정돈하는 스타일입니다.
   return (
-    <div 
-      ref={containerRef} 
-      className="my-6 flex justify-center items-center w-full bg-white" 
-      style={{ minHeight: isMobile ? '50px' : '90px' }} 
-    />
+    <div className="w-full flex flex-col items-center justify-center my-8 clear-both">
+      <div 
+        ref={containerRef} 
+        className="flex justify-center items-center w-full bg-white" 
+        style={{ minHeight: isMobile ? '50px' : '90px' }} 
+      />
+    </div>
   );
 }
