@@ -1,52 +1,55 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-interface AdSlotProps {
-  id: string;
-  width?: string;
-  height?: string;
-}
-
-export default function AdSlot({ id, width = '728', height = '90' }: AdSlotProps) {
+export default function AdSlot({ id }: { id?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (!containerRef.current) return;
-
-    // 기존 광고 주입 초기화 (중복 방지)
     containerRef.current.innerHTML = '';
 
-    // 1. 카카오 애드핏 <ins> 태그 생성
+    // 💡 두 개의 ID가 모두 완벽하게 입력되었습니다.
+    const PC_ID = 'DAN-KWXtT6PXMVtf1ygq'; // 728x90 PC ID
+    const MOBILE_ID = 'DAN-yzPJgMAQOUioIWCh'; // 320x50 모바일 ID
+
+    const adId = isMobile ? MOBILE_ID : PC_ID; 
+    const width = isMobile ? '320' : '728';
+    const height = isMobile ? '50' : '90';
+
     const ins = document.createElement('ins');
     ins.className = 'kakao_ad_area';
     ins.style.display = 'none';
-    ins.setAttribute('data-ad-unit', id);
+    ins.setAttribute('data-ad-unit', adId);
     ins.setAttribute('data-ad-width', width);
     ins.setAttribute('data-ad-height', height);
 
-    // 2. 카카오 애드핏 <script> 태그 생성
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = '//t1.daumcdn.net/kas/static/ba.min.js';
     script.async = true;
 
-    // 3. 컨테이너에 주입
     containerRef.current.appendChild(ins);
     containerRef.current.appendChild(script);
 
     return () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = '';
-      }
+      if (containerRef.current) containerRef.current.innerHTML = '';
     };
-  }, [id, width, height]);
+  }, [isMobile]);
 
   return (
     <div 
       ref={containerRef} 
-      className="my-6 flex justify-center items-center w-full" 
-      style={{ minHeight: `${height}px` }} 
+      className="my-6 flex justify-center items-center w-full bg-white" 
+      style={{ minHeight: isMobile ? '50px' : '90px' }} 
     />
   );
 }
