@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AdSlot from "@/components/AdSlot"; // 💡 1. 광고 컴포넌트 임포트
 
 const SALARY = [
   { href: "/salary/civil", title: "일반직 공무원 봉급표", desc: "9급~3급 호봉별 2026년 봉급표" },
@@ -35,6 +36,9 @@ export default function Home() {
           계산기, 정책 적금 계산기를 무료로 제공합니다.
         </p>
       </section>
+
+      {/* 💡 2. 소개글 바로 아래에 광고 배치 (애드핏에서 설정한 가로x세로 크기로 width, height 조절 가능) */}
+      <AdSlot id="DAN-KWXtT6PXMVtf1ygq" width="728" height="90" />
 
       <section className="space-y-4">
         <h2 className="text-lg font-bold text-slate-900">봉급표</h2>
