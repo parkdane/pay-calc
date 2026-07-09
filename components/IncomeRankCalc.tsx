@@ -47,7 +47,7 @@ export default function IncomeRankCalc() {
               type="number"
               min={0}
               step={100}
-              value={manwon}
+              value={manwon === 0 ? "" : manwon}
               onChange={(e) => {
                 setManwon(Number(e.target.value) || 0);
                 setSubmitted(false);

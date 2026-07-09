@@ -182,7 +182,7 @@ function NumInput({
         type="number"
         min={0}
         step={step}
-        value={value}
+        value={value === 0 ? "" : value}
         onChange={(e) => onChange(Number(e.target.value) || 0)}
         className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 tabular-nums"
       />

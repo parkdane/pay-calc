@@ -191,7 +191,7 @@ export default function MilitaryNetCalc() {
                 type="number"
                 min={0}
                 max={a.max ?? 99}
-                value={(inputs[a.id] as number) ?? ""}
+                value={(inputs[a.id] as number) || ""}
                 placeholder="0"
                 onChange={(e) =>
                   setInputs((p) => ({
@@ -221,7 +221,7 @@ export default function MilitaryNetCalc() {
               type="number"
               min={0}
               max={40}
-              value={years}
+              value={years === 0 ? "" : years}
               onChange={(e) => setYears(Number(e.target.value) || 0)}
               className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5"
             />

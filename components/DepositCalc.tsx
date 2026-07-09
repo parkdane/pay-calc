@@ -68,7 +68,7 @@ export default function DepositCalc() {
               type="number"
               min={10000}
               step={10000}
-              value={monthly}
+              value={monthly === 0 ? "" : monthly}
               onChange={(e) => setMonthly(Number(e.target.value) || 0)}
               className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 tabular-nums"
             />
@@ -80,7 +80,7 @@ export default function DepositCalc() {
               type="number"
               min={100000}
               step={100000}
-              value={lump}
+              value={lump === 0 ? "" : lump}
               onChange={(e) => setLump(Number(e.target.value) || 0)}
               className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 tabular-nums"
             />

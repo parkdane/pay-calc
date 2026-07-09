@@ -240,7 +240,7 @@ export default function CivilNetCalc() {
                 type="number"
                 min={0}
                 max={6}
-                value={children}
+                value={children === 0 ? "" : children}
                 onChange={(e) => setChildren(Number(e.target.value) || 0)}
                 className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5"
               />
@@ -256,7 +256,7 @@ export default function CivilNetCalc() {
                 type="number"
                 min={0}
                 max={40}
-                value={years}
+                value={years === 0 ? "" : years}
                 onChange={(e) => setYears(Number(e.target.value) || 0)}
                 className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5"
               />
@@ -270,7 +270,7 @@ export default function CivilNetCalc() {
                 type="number"
                 min={0}
                 max={57}
-                value={overtimeH}
+                value={overtimeH === 0 ? "" : overtimeH}
                 onChange={(e) => setOvertimeH(Number(e.target.value) || 0)}
                 className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5"
               />

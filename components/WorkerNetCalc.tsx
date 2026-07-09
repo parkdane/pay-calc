@@ -91,7 +91,7 @@ export default function WorkerNetCalc() {
             type="number"
             min={0}
             step={100}
-            value={annualManwon}
+            value={annualManwon === 0 ? "" : annualManwon}
             onChange={(e) => setAnnualManwon(Number(e.target.value) || 0)}
             className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 tabular-nums"
           />
@@ -105,7 +105,7 @@ export default function WorkerNetCalc() {
             type="number"
             min={0}
             max={10}
-            value={dependents}
+            value={dependents === 0 ? "" : dependents}
             onChange={(e) => setDependents(Number(e.target.value) || 0)}
             className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5"
           />
