@@ -11,6 +11,7 @@ import police from "@/data/salary-police-2026.json";
 import fire from "@/data/salary-fire-2026.json";
 import teacher from "@/data/salary-teacher-2026.json";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DATA: Record<string, any> = { civil, military, police, fire, teacher };
 type Slug = keyof typeof DATA;
 
@@ -56,7 +57,7 @@ export default async function SalaryPage({
         </p>
       </header>
 
-      {/* 계산기 CTA */}
+      {/* 계산기 CTA (표 위) */}
       {isMilitary ? (
         <div className="space-y-3">
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
@@ -76,10 +77,10 @@ export default async function SalaryPage({
         <CalcCta />
       )}
 
-      {/* 💡 표 바로 위(계산기 밑)로 광고 이동 */}
+      {/* 광고 (CTA와 표 사이) */}
       <AdSlot id={`salary-${slug}-top`} />
 
-      {/* 군인: 병사 고정급 + 간부 호봉표 */}
+      {/* 군인: 병사 고정급 + 간부 호봉표 / 그 외: 단일 표 */}
       {isMilitary ? (
         <div className="space-y-8">
           <SoldierTable title={d.soldier.title} rows={d.soldier.rows} />
@@ -114,8 +115,9 @@ export default async function SalaryPage({
       </section>
 
       <Faq items={d.faq} />
-      
-      {/* 하단 광고는 중복 방지를 위해 삭제했습니다 */}
+
+      {/* 하단 광고 */}
+      <AdSlot id={`salary-${slug}-bottom`} />
     </article>
   );
 }
