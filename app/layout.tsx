@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 };
 
 const NAV = [
-  { href: "/salary/civil", label: "봉급표" },
-  { href: "/calc/civil-net", label: "계산기" },
+  { href: "/salary", label: "봉급표" },
+  { href: "/calc", label: "계산기" },
   { href: "/guide", label: "가이드" },
 ];
 
