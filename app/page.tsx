@@ -17,6 +17,8 @@ const CALC = [
   { href: "/calc/deposit", title: "적금·예금 이자 계산기", desc: "세후 만기 수령액 계산" },
   { href: "/calc/leap-save", title: "청년도약계좌 만기 계산기", desc: "기여금 확대 기준 만기액" },
   { href: "/calc/income-rank", title: "내 연봉 상위 몇 %?", desc: "국세청 통계 기준 연봉 순위" },
+  { href: "/calc/worker-net", title: "연봉 실수령액 계산기", desc: "직장인 4대보험·소득세 공제" },
+  { href: "/calc/savings-goal", title: "저축 목표 시뮬레이터", desc: "1억 모으기까지 걸리는 기간" },
 ] as const;
 
 export default function Home() {

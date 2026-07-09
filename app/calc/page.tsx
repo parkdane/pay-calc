@@ -48,6 +48,16 @@ const ITEMS = [
     title: "내 연봉 상위 몇 %?",
     desc: "국세청 통계 기준 연봉 순위 확인",
   },
+  {
+    href: "/calc/worker-net",
+    title: "연봉 실수령액 계산기 (직장인)",
+    desc: "4대보험·소득세 공제 + 연봉별 비교 그래프",
+  },
+  {
+    href: "/calc/savings-goal",
+    title: "저축 목표 시뮬레이터",
+    desc: "월급·지출 입력 → 1억 모으기까지 걸리는 기간",
+  },
 ];
 
 export default function Page() {

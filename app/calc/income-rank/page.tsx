@@ -56,10 +56,10 @@ export default function Page() {
         </p>
         <p>
           내 연봉의 세후 실수령액이 궁금하다면{" "}
-          <Link href="/calc/civil-net" className="text-blue-700 underline">
-            실수령액 계산기
+          <Link href="/calc/worker-net" className="text-blue-700 underline">
+            연봉 실수령액 계산기
           </Link>
-          에서 확인할 수 있습니다.
+          에서 확인하고, 연봉별 실수령 비율 그래프도 함께 볼 수 있습니다.
         </p>
       </section>
 
