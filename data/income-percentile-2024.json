@@ -1,0 +1,13 @@
+{
+  "year": 2024,
+  "source": "국세청 근로소득 백분위(천분위) 자료, 2024년 귀속 (공공데이터포털, 2025-12-31 등록)",
+  "_note": "각 앵커는 해당 상위 % 구간의 1인당 평균 총급여(세전, 비과세 제외). 구간 사이는 선형 보간.",
+  "anchors": [
+    { "topPercent": 100, "income": 0 },
+    { "topPercent": 50, "income": 34160000 },
+    { "topPercent": 30, "income": 50620000 },
+    { "topPercent": 10, "income": 91160000 },
+    { "topPercent": 1, "income": 199530000 }
+  ],
+  "median": 34160000
+}

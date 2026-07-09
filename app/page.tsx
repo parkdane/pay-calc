@@ -15,6 +15,8 @@ const CALC = [
   { href: "/calc/youth-save", title: "청년미래적금 계산기", desc: "정부기여금 포함 3년 만기액" },
   { href: "/calc/naeil-save", title: "청년내일저축계좌 계산기", desc: "정부지원 월 30만 포함 만기액" },
   { href: "/calc/deposit", title: "적금·예금 이자 계산기", desc: "세후 만기 수령액 계산" },
+  { href: "/calc/leap-save", title: "청년도약계좌 만기 계산기", desc: "기여금 확대 기준 만기액" },
+  { href: "/calc/income-rank", title: "내 연봉 상위 몇 %?", desc: "국세청 통계 기준 연봉 순위" },
 ] as const;
 
 export default function Home() {

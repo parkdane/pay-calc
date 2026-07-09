@@ -38,6 +38,16 @@ const ITEMS = [
     title: "적금·예금 이자 계산기",
     desc: "세후 만기 수령액, 적금·예금 모두 지원",
   },
+  {
+    href: "/calc/leap-save",
+    title: "청년도약계좌 만기 계산기",
+    desc: "기존 가입자용, 기여금 확대 기준 반영",
+  },
+  {
+    href: "/calc/income-rank",
+    title: "내 연봉 상위 몇 %?",
+    desc: "국세청 통계 기준 연봉 순위 확인",
+  },
 ];
 
 export default function Page() {
