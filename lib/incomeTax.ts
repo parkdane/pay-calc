@@ -1,65 +1,62 @@
 /**
- * 근로소득 간이세액표 산출 방식(연환산)으로 월 원천징수 소득세를 근사 계산.
- * 국세청 간이세액표가 만들어지는 공식 그대로를 따르므로
- * 단순 구간 세율보다 실제 명세서에 훨씬 근접한다.
- *
- * @param monthlyGross  월 세전 급여(과세 대상)
- * @param monthlyPension 월 연금 기여금(공무원연금/군인연금/국민연금 본인부담)
- * @param dependents    부양가족 수(본인 제외)
- * @returns 월 소득세 (지방소득세 별도)
+ * 근로소득 간이세액표 기반 월 원천징수 소득세 계산.
+ * 국세청 2024 간이세액표 실측값을 (월급여 × 공제대상가족수) 2차원 앵커로 넣고
+ * 양방향 선형 보간한다. 근사 공식보다 실제 명세서에 정확히 근접한다.
+ * (지방소득세 10% 별도, 100% 징수 기준)
  */
+
+const GROSS_ROWS = [
+  2000000, 2500000, 3000000, 3500000, 4000000, 4500000, 5000000, 6000000,
+  7000000, 8000000, 10000000,
+];
+
+// [본인1명, 2명, 3명, 4명, 5명] — 국세청 2024 간이세액표(100%)
+const TAX_TABLE: Record<number, number[]> = {
+  2000000: [19520, 6600, 0, 0, 0],
+  2500000: [41630, 21150, 8700, 1440, 0],
+  3000000: [84850, 56600, 20960, 7540, 2340],
+  3500000: [127220, 92460, 47160, 20870, 9950],
+  4000000: [178650, 148340, 88280, 55090, 34320],
+  4500000: [244890, 199170, 128000, 82700, 55650],
+  5000000: [314890, 273380, 185320, 126930, 89530],
+  6000000: [494340, 449600, 341480, 256790, 200550],
+  7000000: [720030, 662280, 522300, 411290, 331290],
+  8000000: [981600, 913960, 745580, 615600, 505440],
+  10000000: [1637600, 1556280, 1355880, 1195440, 1055270],
+};
+
+function extrapolate(gross: number, colIdx: number): number {
+  const top = TAX_TABLE[10000000][colIdx];
+  const over = gross - 10000000;
+  return top + over * 0.35;
+}
+
 export function monthlyIncomeTax(
   monthlyGross: number,
-  monthlyPension: number,
+  _monthlyPension: number,
   dependents: number
 ): number {
-  const g = monthlyGross * 12; // 연 급여 환산
-  const pension = monthlyPension * 12;
-  const family = 1 + Math.max(0, dependents); // 본인 포함 공제 인원
+  void _monthlyPension;
+  const col = Math.min(Math.max(0, dependents), 4);
 
-  // 1) 근로소득공제
-  let earned: number;
-  if (g <= 5_000_000) earned = g * 0.7;
-  else if (g <= 15_000_000) earned = 3_500_000 + (g - 5_000_000) * 0.4;
-  else if (g <= 45_000_000) earned = 7_500_000 + (g - 15_000_000) * 0.15;
-  else if (g <= 100_000_000) earned = 12_000_000 + (g - 45_000_000) * 0.05;
-  else earned = 14_750_000 + (g - 100_000_000) * 0.02;
+  if (monthlyGross <= 0) return 0;
+  if (monthlyGross <= GROSS_ROWS[0]) {
+    const r = TAX_TABLE[GROSS_ROWS[0]][col] / GROSS_ROWS[0];
+    return Math.floor(monthlyGross * r);
+  }
+  if (monthlyGross >= 10000000) {
+    return Math.floor(extrapolate(monthlyGross, col));
+  }
 
-  // 2) 인적공제 (1인당 150만)
-  const personal = family * 1_500_000;
-
-  // 3) 연금보험료 공제 (전액)
-  // 4) 특별소득공제 등 근사 (간이세액표 산식)
-  let special: number;
-  if (g <= 30_000_000) special = 3_100_000 + g * 0.04;
-  else if (g <= 45_000_000)
-    special = 3_100_000 + g * 0.04 - (g - 30_000_000) * 0.05;
-  else if (g <= 70_000_000) special = 3_100_000 + g * 0.015;
-  else if (g <= 120_000_000) special = 3_100_000 + g * 0.005;
-  else special = 3_100_000;
-
-  const taxBase = Math.max(0, g - earned - personal - pension - special);
-
-  // 5) 기본세율 (누진)
-  let tax: number;
-  if (taxBase <= 14_000_000) tax = taxBase * 0.06;
-  else if (taxBase <= 50_000_000) tax = 840_000 + (taxBase - 14_000_000) * 0.15;
-  else if (taxBase <= 88_000_000) tax = 6_240_000 + (taxBase - 50_000_000) * 0.24;
-  else if (taxBase <= 150_000_000)
-    tax = 15_360_000 + (taxBase - 88_000_000) * 0.35;
-  else if (taxBase <= 300_000_000)
-    tax = 37_060_000 + (taxBase - 150_000_000) * 0.38;
-  else tax = 94_060_000 + (taxBase - 300_000_000) * 0.4;
-
-  // 6) 근로소득세액공제
-  let credit = tax <= 1_300_000 ? tax * 0.55 : 715_000 + (tax - 1_300_000) * 0.3;
-  let creditCap: number;
-  if (g <= 33_000_000) creditCap = 740_000;
-  else if (g <= 70_000_000)
-    creditCap = Math.max(660_000, 740_000 - (g - 33_000_000) * 0.008);
-  else creditCap = Math.max(500_000, 660_000 - (g - 70_000_000) * 0.5);
-  credit = Math.min(credit, creditCap);
-
-  const annualTax = Math.max(0, tax - credit);
-  return Math.floor(annualTax / 12);
+  for (let i = 0; i < GROSS_ROWS.length - 1; i++) {
+    const g1 = GROSS_ROWS[i];
+    const g2 = GROSS_ROWS[i + 1];
+    if (monthlyGross >= g1 && monthlyGross < g2) {
+      const t1 = TAX_TABLE[g1][col];
+      const t2 = TAX_TABLE[g2][col];
+      const t = (monthlyGross - g1) / (g2 - g1);
+      return Math.floor(t1 + (t2 - t1) * t);
+    }
+  }
+  return 0;
 }
