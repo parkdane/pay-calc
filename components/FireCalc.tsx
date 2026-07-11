@@ -167,7 +167,9 @@ export default function FireCalc() {
   }, [age, asset, monthlySave, monthlyExpense, inflation, withdrawRate, sideIncome, pension]);
 
   return (
-    <div className="space-y-6">
+    <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+      {/* ═══ 왼쪽: 입력 ═══ */}
+      <div className="space-y-4">
       {/* ── 기본 입력 ── */}
       <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
         <p className="text-sm font-semibold text-slate-800">은퇴 목표와 자산</p>
@@ -232,8 +234,11 @@ export default function FireCalc() {
         </div>
       </div>
 
-      <AdSlot id="calc-fire-mid" />
+      </div>
+      {/* ═══ 왼쪽 입력 끝 ═══ */}
 
+      {/* ═══ 오른쪽: 결과 (데스크톱에서 스크롤 따라옴) ═══ */}
+      <div className="space-y-6 lg:sticky lg:top-20">
       {/* ── 결과 카드 ── */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <ResultCard
@@ -294,7 +299,11 @@ export default function FireCalc() {
           </tbody>
         </table>
       </div>
+      </div>
+      {/* ═══ 오른쪽 결과 끝 ═══ */}
 
+      {/* ── 하단 전체 폭: 설명·면책·광고 ── */}
+      <div className="space-y-6 lg:col-span-2">
       <section className="space-y-1.5 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
         <p className="font-semibold text-slate-800">파이어 넘버란?</p>
         <p>
@@ -312,6 +321,7 @@ export default function FireCalc() {
       </p>
 
       <AdSlot id="calc-fire-bottom" />
+      </div>
     </div>
   );
 }
