@@ -45,12 +45,11 @@ export default function IncomeRankCalc() {
           내 연봉 (세전 총급여, 만원)
           <div className="mt-1 flex gap-2">
             <input
-              type="number"
-              min={0}
-              step={100}
-              value={manwon === 0 ? "" : manwon}
+              type="text"
+              inputMode="numeric"
+              value={manwon === 0 ? "" : manwon.toLocaleString("ko-KR")}
               onChange={(e) => {
-                setManwon(Number(e.target.value) || 0);
+                setManwon(Number(e.target.value.replace(/[^0-9]/g, "")) || 0);
                 setSubmitted(false);
               }}
               className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 tabular-nums"

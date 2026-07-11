@@ -89,11 +89,12 @@ export default function WorkerNetCalc() {
         <label className="space-y-1.5 text-sm font-medium text-slate-700">
           연봉 (만원)
           <input
-            type="number"
-            min={0}
-            step={100}
-            value={annualManwon === 0 ? "" : annualManwon}
-            onChange={(e) => setAnnualManwon(Number(e.target.value) || 0)}
+            type="text"
+            inputMode="numeric"
+            value={annualManwon === 0 ? "" : annualManwon.toLocaleString("ko-KR")}
+            onChange={(e) =>
+              setAnnualManwon(Number(e.target.value.replace(/[^0-9]/g, "")) || 0)
+            }
             className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 tabular-nums"
           />
           <span className="text-xs font-normal text-slate-400">

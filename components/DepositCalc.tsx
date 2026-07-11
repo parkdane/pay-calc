@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import AdSlot from "@/components/AdSlot";
+import MoneyInput from "@/components/MoneyInput";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const TAX_RATE = 0.154; // 이자소득세 15.4% (소득세 14% + 지방세 1.4%)
@@ -65,26 +66,12 @@ export default function DepositCalc() {
         {mode === "savings" ? (
           <label className="block text-sm font-medium text-slate-700">
             월 납입액
-            <input
-              type="number"
-              min={10000}
-              step={10000}
-              value={monthly === 0 ? "" : monthly}
-              onChange={(e) => setMonthly(Number(e.target.value) || 0)}
-              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 tabular-nums"
-            />
+            <MoneyInput value={monthly} onChange={setMonthly} placeholder="예: 300,000" />
           </label>
         ) : (
           <label className="block text-sm font-medium text-slate-700">
             예치 금액
-            <input
-              type="number"
-              min={100000}
-              step={100000}
-              value={lump === 0 ? "" : lump}
-              onChange={(e) => setLump(Number(e.target.value) || 0)}
-              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 tabular-nums"
-            />
+            <MoneyInput value={lump} onChange={setLump} placeholder="예: 10,000,000" />
           </label>
         )}
 
