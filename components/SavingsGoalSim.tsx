@@ -83,13 +83,13 @@ export default function SavingsGoalSim() {
           <div className="text-sm font-medium text-slate-700">
             <div className="flex items-center justify-between">
               <span>저축 금리 (연)</span>
-              <span className="tabular-nums text-blue-700">{rate.toFixed(1)}%</span>
+              <span className="tabular-nums text-blue-700">{rate.toFixed(2)}%</span>
             </div>
             <input
               type="range"
               min={0}
               max={7}
-              step={0.1}
+              step={0.01}
               value={rate}
               onChange={(e) => setRate(Number(e.target.value))}
               className="mt-3 w-full accent-blue-700"
@@ -141,7 +141,7 @@ export default function SavingsGoalSim() {
               <p>
                 · 이자 없이 모으면{" "}
                 <strong>{fmt(result.plainMonths!)}</strong> 걸립니다. 연{" "}
-                {rate.toFixed(1)}% 저축으로{" "}
+                {rate.toFixed(2)}% 저축으로{" "}
                 <strong className="text-blue-700">
                   {result.interestSaved}개월 단축
                 </strong>

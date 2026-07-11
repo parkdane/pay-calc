@@ -113,13 +113,24 @@ export default function DepositCalc() {
           <div className="text-sm font-medium text-slate-700">
             <div className="flex items-center justify-between">
               <span>연 금리</span>
-              <span className="tabular-nums text-blue-700">{rate.toFixed(1)}%</span>
+              <div className="flex items-center gap-1">
+                <input
+                  type="number"
+                  min={0}
+                  max={15}
+                  step={0.01}
+                  value={rate}
+                  onChange={(e) => setRate(Number(e.target.value) || 0)}
+                  className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-blue-700"
+                />
+                <span className="text-blue-700">%</span>
+              </div>
             </div>
             <input
               type="range"
               min={0.5}
               max={10}
-              step={0.1}
+              step={0.01}
               value={rate}
               onChange={(e) => setRate(Number(e.target.value))}
               className="mt-3 w-full accent-blue-700"
