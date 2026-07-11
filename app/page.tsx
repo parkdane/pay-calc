@@ -33,6 +33,7 @@ const CALC_GROUPS = [
       { href: "/calc/deposit", title: "적금·예금 이자 계산기", desc: "세후 만기 수령액" },
       { href: "/calc/income-rank", title: "내 연봉 상위 몇 %?", desc: "국세청 통계 기준 순위" },
       { href: "/calc/savings-goal", title: "저축 목표 시뮬레이터", desc: "1억까지 걸리는 기간" },
+      { href: "/calc/fire", title: "파이어족 계산기", desc: "조기 은퇴 가능 나이 계산" },
     ],
   },
 ] as const;
