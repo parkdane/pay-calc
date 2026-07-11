@@ -9,8 +9,10 @@ type Product = {
   product: string;
   baseRate: number;
   maxRate: number;
-  term: string;
+  term: number;
+  group?: string;
   joinWay?: string;
+  note?: string;
 };
 
 export default function RateTable() {
