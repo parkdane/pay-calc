@@ -1,0 +1,11 @@
+name = "moneywatch-rate-worker"
+main = "rate-worker.js"
+compatibility_date = "2025-01-01"
+
+# 매일 새벽 6시 KST (= 전날 21:00 UTC)
+[triggers]
+crons = ["0 21 * * *"]
+
+# 환경변수는 코드에 넣지 말고 Cloudflare 대시보드에서 설정:
+#   Settings > Variables and Secrets 에 아래 4개 추가
+#   FSS_AUTH_KEY, GH_TOKEN, GH_REPO(=parkdane/pay-calc), GH_PATH(=data/rates.json)

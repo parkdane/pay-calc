@@ -52,6 +52,19 @@ export default function Home() {
         </p>
       </section>
 
+      <Link
+        href="/rates"
+        className="block rounded-xl border border-blue-200 bg-blue-50 p-5 transition hover:shadow-md"
+      >
+        <p className="text-sm font-semibold text-blue-700">📊 매일 갱신</p>
+        <p className="mt-1 font-bold text-slate-900">
+          예금·적금 금리 비교 — 오늘 최고금리 보러 가기
+        </p>
+        <p className="mt-1 text-sm text-slate-500">
+          시중·저축·인터넷은행 정기예금·적금 최고금리를 매일 자동 갱신합니다.
+        </p>
+      </Link>
+
       <section className="space-y-4">
         <h2 className="text-lg font-bold text-slate-900">봉급표</h2>
         <div className="grid gap-4 sm:grid-cols-2">
