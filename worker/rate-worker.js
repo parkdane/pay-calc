@@ -94,8 +94,25 @@ async function run(env) {
     deposits,
     savings,
   };
-  const ok = await commitToGithub(env, JSON.stringify(payload, null, 2));
-  return { ok, deposits: deposits.length, savings: savings.length };
+  const committed = await commitToGithub(env, JSON.stringify(payload, null, 2));
+
+  // 커밋 성공 시 Cloudflare Pages Deploy Hook 호출 → 수동 재배포 트리거
+  let deployTriggered = false;
+  if (committed && env.CF_DEPLOY_HOOK) {
+    try {
+      const hook = await fetch(env.CF_DEPLOY_HOOK, { method: "POST" });
+      deployTriggered = hook.ok;
+    } catch (e) {
+      deployTriggered = false;
+    }
+  }
+
+  return {
+    ok: committed,
+    deposits: deposits.length,
+    savings: savings.length,
+    deployTriggered,
+  };
 }
 
 export default {
