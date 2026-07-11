@@ -83,7 +83,18 @@ export default function LeapAccountCalc() {
         <div>
           <div className="flex items-center justify-between text-sm font-medium text-slate-700">
             <span>적용 금리 (연)</span>
-            <span className="tabular-nums text-blue-700">{rate.toFixed(2)}%</span>
+            <div className="flex items-center gap-1">
+              <input
+                type="number"
+                min={0}
+                max={15}
+                step={0.01}
+                value={rate}
+                onChange={(e) => setRate(Number(e.target.value) || 0)}
+                className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-blue-700"
+              />
+              <span className="text-blue-700">%</span>
+            </div>
           </div>
           <input
             type="range"
