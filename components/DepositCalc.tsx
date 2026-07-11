@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AdSlot from "@/components/AdSlot";
 import MoneyInput from "@/components/MoneyInput";
 
@@ -14,6 +14,20 @@ export default function DepositCalc() {
   const [months, setMonths] = useState(12);
   const [rate, setRate] = useState(3.5);
   const [taxFree, setTaxFree] = useState(false);
+
+  // 금리 페이지에서 "이 금리로 계산" 클릭 시 URL 파라미터로 초기값 세팅
+  // 예: /calc/deposit?rate=4.51&mode=deposit
+  const [fromRates, setFromRates] = useState(false);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const r = parseFloat(params.get("rate") || "");
+    if (!isNaN(r) && r > 0 && r <= 10) {
+      setRate(r);
+      setFromRates(true);
+    }
+    const m = params.get("mode");
+    if (m === "deposit" || m === "savings") setMode(m);
+  }, []);
 
   const result = useMemo(() => {
     const r = rate / 100;
@@ -39,6 +53,12 @@ export default function DepositCalc() {
 
   return (
     <div className="space-y-6">
+      {fromRates && (
+        <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+          금리 비교에서 선택한 <strong>{rate.toFixed(2)}%</strong>가 적용됐습니다.
+          납입액·기간을 넣어 실수령액을 확인하세요.
+        </div>
+      )}
       {/* 모드 전환 */}
       <div className="grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1">
         {(

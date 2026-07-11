@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import rates from "@/data/rates.json";
 
 type Product = {
@@ -8,10 +9,8 @@ type Product = {
   product: string;
   baseRate: number;
   maxRate: number;
-  term: number;
-  group?: string;
+  term: string;
   joinWay?: string;
-  note?: string;
 };
 
 export default function RateTable() {
@@ -68,6 +67,7 @@ export default function RateTable() {
                 <th className="whitespace-nowrap px-2 py-2.5 text-right font-semibold sm:px-3">
                   최고
                 </th>
+                <th className="px-2 py-2.5 text-center font-semibold sm:px-3"></th>
               </tr>
             </thead>
             <tbody>
@@ -86,6 +86,16 @@ export default function RateTable() {
                   </td>
                   <td className="whitespace-nowrap px-2 py-2 text-right font-bold tabular-nums text-blue-700 sm:px-3">
                     {p.maxRate.toFixed(2)}%
+                  </td>
+                  <td className="whitespace-nowrap px-2 py-2 text-center sm:px-3">
+                    <Link
+                      href={`/calc/deposit?rate=${p.maxRate}&mode=${
+                        tab === "deposits" ? "deposit" : "savings"
+                      }`}
+                      className="inline-block rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 transition hover:bg-blue-100"
+                    >
+                      계산
+                    </Link>
                   </td>
                 </tr>
               ))}
