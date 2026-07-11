@@ -42,9 +42,9 @@ export default function Page() {
         </p>
       </header>
 
-      <RateTable />
+      <AdSlot id="rates-top" />
 
-      <AdSlot id="rates-mid" />
+      <RateTable />
 
       <section className="space-y-3 text-sm leading-relaxed text-slate-700">
         <h2 className="text-xl font-bold text-slate-900">금리 비교 시 확인할 점</h2>
