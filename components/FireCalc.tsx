@@ -570,7 +570,7 @@ export default function FireCalc() {
         <DepletionChart path={r.depletionPath} depletionAge={r.depletionAge} />
 
         {/* 몬테카를로 시뮬레이션 */}
-        {monteCarlo &&
+        {monteCarlo ? (
           (() => {
             const status = monteCarlo.successRate >= 85 ? "good" : monteCarlo.successRate >= 60 ? "warn" : "bad";
             const COLOR = {
@@ -596,7 +596,12 @@ export default function FireCalc() {
                 </p>
               </div>
             );
-          })()}
+          })()
+        ) : (
+          <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5 text-center text-sm text-[#8B93A6]">
+            FIRE 달성 시점이 계산되지 않아(100세 내 목표 미달성) 몬테카를로 시뮬레이션을 실행할 수 없습니다.
+          </div>
+        )}
 
         {/* 계산 방식 설명 */}
         <div className="space-y-1.5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 text-xs leading-relaxed text-[#7A8296]">
