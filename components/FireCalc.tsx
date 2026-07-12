@@ -205,7 +205,7 @@ export default function FireCalc() {
     : `현재 조건으로는 70년 내 목표 달성이 어렵습니다. 저축을 늘리거나 목표 지출을 줄여보세요.`;
 
   return (
-    <div className="mx-auto max-w-7xl">
+    <div className="mx-auto max-w-[1440px]">
     <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
       {/* ═══ 왼쪽: 입력 ═══ */}
       <div className="space-y-4">
