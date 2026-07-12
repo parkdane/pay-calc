@@ -206,6 +206,9 @@ export default function FireCalc() {
 
   return (
     <div className="mx-auto max-w-[1280px] px-4">
+    {/* 광고 (입력칸 위, 전체 폭) */}
+    <AdSlot id="calc-fire-mid" />
+
     <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
       {/* ═══ 왼쪽: 입력 ═══ */}
       <div className="space-y-4">
@@ -419,9 +422,6 @@ export default function FireCalc() {
       </div>
     </div>
 
-    {/* 광고 (그리드 전체 밑, 전체 폭 — 728px 배너가 넘치지 않도록) */}
-    <AdSlot id="calc-fire-mid" />
-
     {/* ═══ 하단 전체 폭 (grid 밖으로 분리 — sticky 오른쪽 컬럼과 겹치는 문제 방지) ═══ */}
     <div className="mt-6 space-y-6">
       <section className="space-y-1.5 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
@@ -526,59 +526,54 @@ function GrowthChart({
 
         {/* 목표 자산(주황) 점 */}
         {path.map((p, i) => (
-          <circle key={`t-${i}`} cx={x(p.age)} cy={y(p.target)} r="2.5" fill="#f59e0b" />
+          <circle
+            key={`t-${i}`}
+            cx={x(p.age)}
+            cy={y(p.target)}
+            r={hover === i ? 4 : 2.5}
+            fill="#f59e0b"
+            onMouseEnter={() => setHover(i)}
+            onMouseLeave={() => setHover(null)}
+            style={{ cursor: "pointer" }}
+          />
         ))}
 
-        {/* 예상 자산(파랑) 점 + 툴팁 */}
+        {/* 예상 자산(파랑) 점 */}
         {path.map((p, i) => (
-          <g key={i}>
-            <circle
-              cx={x(p.age)}
-              cy={y(p.asset)}
-              r={hover === i ? 5 : 3}
-              fill="#2563eb"
-              onMouseEnter={() => setHover(i)}
-              onMouseLeave={() => setHover(null)}
-              style={{ cursor: "pointer" }}
-            />
-            {hover === i && (
+          <circle
+            key={`a-${i}`}
+            cx={x(p.age)}
+            cy={y(p.asset)}
+            r={hover === i ? 5 : 3}
+            fill="#2563eb"
+            onMouseEnter={() => setHover(i)}
+            onMouseLeave={() => setHover(null)}
+            style={{ cursor: "pointer" }}
+          />
+        ))}
+
+        {/* 툴팁 — 모든 점을 다 그린 다음, 가장 마지막에 그려서 항상 맨 위에 보이도록 함 */}
+        {hover !== null &&
+          (() => {
+            const p = path[hover];
+            const topY = Math.min(y(p.asset), y(p.target));
+            const boxX = Math.min(x(p.age) + 6, W - 128);
+            const boxY = Math.max(topY - 58, 2);
+            return (
               <g>
-                <rect
-                  x={Math.min(x(p.age) + 6, W - 128)}
-                  y={Math.max(y(p.asset) - 58, 2)}
-                  width="124"
-                  height="52"
-                  rx="4"
-                  fill="#1e293b"
-                />
-                <text
-                  x={Math.min(x(p.age) + 12, W - 122)}
-                  y={Math.max(y(p.asset) - 42, 18)}
-                  fontSize="11"
-                  fill="#fff"
-                >
+                <rect x={boxX} y={boxY} width="124" height="52" rx="4" fill="#1e293b" />
+                <text x={boxX + 6} y={boxY + 16} fontSize="11" fill="#fff">
                   {Math.round(p.age)}세
                 </text>
-                <text
-                  x={Math.min(x(p.age) + 12, W - 122)}
-                  y={Math.max(y(p.asset) - 28, 32)}
-                  fontSize="11"
-                  fill="#93c5fd"
-                >
+                <text x={boxX + 6} y={boxY + 30} fontSize="11" fill="#93c5fd">
                   자산 {eokShort(p.asset)}
                 </text>
-                <text
-                  x={Math.min(x(p.age) + 12, W - 122)}
-                  y={Math.max(y(p.asset) - 14, 46)}
-                  fontSize="11"
-                  fill="#fcd34d"
-                >
+                <text x={boxX + 6} y={boxY + 44} fontSize="11" fill="#fcd34d">
                   목표 {eokShort(p.target)}
                 </text>
               </g>
-            )}
-          </g>
-        ))}
+            );
+          })()}
 
         {/* X축 라벨 */}
         {xTicks.map((a, i) => (
