@@ -38,7 +38,10 @@ export default function Page() {
         </p>
       </header>
 
-      <WorkerNetCalc />
+      {/* 전역 max-w-4xl(896px) 제한을 벗어나 전체 폭 확보. 실제 표시 폭은 WorkerNetCalc.tsx의 max-w-[1280px]가 결정 */}
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <WorkerNetCalc />
+      </div>
 
       <AdSlot id="calc-worker-net-result" />
 

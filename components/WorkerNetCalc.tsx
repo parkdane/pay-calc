@@ -60,18 +60,13 @@ export default function WorkerNetCalc() {
   const [annualManwon, setAnnualManwon] = useState(5000);
   const [dependents, setDependents] = useState(0);
 
-  const my = useMemo(
-    () => calcNet(annualManwon * 10000, dependents),
-    [annualManwon, dependents]
-  );
+  const my = useMemo(() => calcNet(annualManwon * 10000, dependents), [annualManwon, dependents]);
 
   const topPct = useMemo(() => topPercentOf(annualManwon * 10000), [annualManwon]);
   const vsMedian = (annualManwon * 10000) / incomePercentileMeta.median;
 
   const bars = useMemo(() => {
-    const list = COMPARE.includes(annualManwon)
-      ? COMPARE
-      : [...COMPARE, annualManwon].sort((a, b) => a - b);
+    const list = COMPARE.includes(annualManwon) ? COMPARE : [...COMPARE, annualManwon].sort((a, b) => a - b);
     const max = Math.max(...list) * 10000;
     return list.map((m) => {
       const r = calcNet(m * 10000, dependents);
@@ -88,145 +83,147 @@ export default function WorkerNetCalc() {
   }, [annualManwon, dependents]);
 
   return (
-    <div className="space-y-6">
-      {/* 입력 */}
-      <div className="grid grid-cols-2 gap-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
-        <label className="space-y-1.5 text-sm font-medium text-slate-700">
-          연봉 (만원)
-          <input
-            type="text"
-            inputMode="numeric"
-            value={annualManwon === 0 ? "" : annualManwon.toLocaleString("ko-KR")}
-            onChange={(e) =>
-              setAnnualManwon(Number(e.target.value.replace(/[^0-9]/g, "")) || 0)
-            }
-            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 tabular-nums"
-          />
-          <span className="text-xs font-normal text-slate-400">
-            세전 계약 연봉. 5천만 원이면 5000
-          </span>
-        </label>
-        <label className="space-y-1.5 text-sm font-medium text-slate-700">
-          부양가족 수
-          <input
-            type="number"
-            min={0}
-            max={10}
-            value={dependents === 0 ? "" : dependents}
-            onChange={(e) => setDependents(Number(e.target.value) || 0)}
-            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5"
-          />
-          <span className="text-xs font-normal text-slate-400">
-            본인 제외. 소득세 인적공제 반영
-          </span>
-        </label>
-      </div>
-
-      {/* 광고 (입력 아래, 결과 위) */}
+    <div className="mx-auto max-w-[1280px] px-4">
+      {/* 광고 (입력칸 위, 전체 폭) */}
       <AdSlot id="calc-worker-net-mid" />
 
-      {/* 결과 */}
-      <div className="overflow-hidden rounded-xl border border-slate-200">
-        <div className="bg-blue-700 px-5 py-4 text-white">
-          <p className="text-sm opacity-80">월 실수령액</p>
-          <p className="text-3xl font-bold tabular-nums">{won(my.net)}</p>
-          <p className="mt-1 text-sm opacity-90">
-            연 실수령 {won(my.annualNet)} · 세전의 {(my.netRate * 100).toFixed(1)}%
-          </p>
-        </div>
-        <dl className="divide-y divide-slate-100 bg-white text-sm">
-          <Row label="월 세전 급여" value={won(my.monthlyGross)} />
-          {my.deductions.map((d) => (
-            <Row key={d.label} label={d.label} value={"- " + won(d.value)} muted />
-          ))}
-          <Row label="공제 합계" value={"- " + won(my.totalDeduction)} bold />
-        </dl>
-      </div>
+      <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
+        {/* ═══ 왼쪽: 입력 ═══ */}
+        <div className="space-y-4">
+          <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">기본 입력</p>
+              <p className="mt-0.5 text-base font-bold text-slate-900">연봉과 부양가족</p>
+            </div>
 
-      {/* 핵심 지표 */}
-      <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">핵심 지표</p>
-        <p className="mt-1 text-lg font-bold text-slate-900">
-          내 연봉은 근로소득자 상위 {topPct <= 1 ? "1% 이내" : `${topPct.toFixed(1)}%`}
-        </p>
-        <p className="mt-1 text-sm leading-relaxed text-slate-600">
-          {incomePercentileMeta.year}년 귀속 근로소득자 중위 연봉은{" "}
-          <strong className="tabular-nums">{won(incomePercentileMeta.median)}</strong>입니다.
-          입력한 연봉은 중위의 <strong className="tabular-nums">{vsMedian.toFixed(1)}배</strong>입니다.
-        </p>
-        <Link
-          href="/calc/income-rank"
-          className="mt-2 inline-block text-xs font-medium text-blue-700 underline underline-offset-2"
-        >
-          연봉순위 계산기에서 자세히 보기 →
-        </Link>
-        <p className="mt-2 text-xs text-slate-400">{incomePercentileMeta.source}</p>
-      </div>
-
-      {/* 연봉별 실수령 비교 막대그래프 */}
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <p className="font-semibold text-slate-800">
-          연봉별 실수령액 비교{" "}
-          <span className="text-xs font-normal text-slate-400">
-            (연간, 파란색=실수령 / 회색=세금·보험)
-          </span>
-        </p>
-        <div className="mt-4 space-y-2.5">
-          {bars.map((b) => (
-            <div key={b.annual}>
-              <div className="mb-0.5 flex justify-between text-xs">
-                <span
-                  className={
-                    b.mine ? "font-bold text-blue-700" : "text-slate-500"
-                  }
-                >
-                  {b.annual.toLocaleString()}만 {b.mine && "← 내 연봉"}
-                </span>
-                <span className="tabular-nums text-slate-500">
-                  실수령 {manwon(b.net)} ({(b.rate * 100).toFixed(0)}%)
-                </span>
-              </div>
-              <div className="flex h-4 w-full overflow-hidden rounded bg-slate-100">
-                <div
-                  className={b.mine ? "bg-blue-700" : "bg-blue-400"}
-                  style={{ width: `${b.netW}%` }}
+            <label className="block">
+              <span className="text-sm font-medium text-slate-700">연봉 (만원)</span>
+              <div className="mt-1.5">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={annualManwon === 0 ? "" : annualManwon.toLocaleString("ko-KR")}
+                  onChange={(e) => setAnnualManwon(Number(e.target.value.replace(/[^0-9]/g, "")) || 0)}
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-right text-base tabular-nums"
                 />
-                <div className="bg-slate-300" style={{ width: `${b.taxW}%` }} />
               </div>
-            </div>
-          ))}
+              <span className="mt-1 block text-xs font-normal text-slate-400">
+                세전 계약 연봉. 5천만 원이면 5000
+              </span>
+            </label>
+
+            <label className="block">
+              <span className="text-sm font-medium text-slate-700">부양가족 수</span>
+              <div className="mt-1.5">
+                <input
+                  type="number"
+                  min={0}
+                  max={10}
+                  value={dependents === 0 ? "" : dependents}
+                  onChange={(e) => setDependents(Number(e.target.value) || 0)}
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-right text-base tabular-nums"
+                />
+              </div>
+              <span className="mt-1 block text-xs font-normal text-slate-400">
+                본인 제외. 소득세 인적공제 반영
+              </span>
+            </label>
+          </div>
         </div>
-        <p className="mt-3 text-xs leading-relaxed text-slate-400">
-          연봉이 오를수록 높은 세율 구간에 걸리는 금액이 늘어나 실수령
-          비율(%)이 점점 낮아집니다. 연봉 3천만 원은 약 90%를 받지만 1억
-          원은 약 80% 수준만 손에 들어오는 이유입니다.
-        </p>
-      </div>
 
-      {/* 과세표준 구간 */}
-      <div className="rounded-xl border border-slate-200 bg-white p-5 text-sm">
-        <p className="mb-3 font-semibold text-slate-800">
-          소득세 과세표준 구간 (누진세율)
-        </p>
-        <dl className="space-y-1.5 text-slate-600">
-          {TAX_BRACKETS.map((t) => (
-            <div key={t.upTo} className="flex justify-between">
-              <dt>~ {t.upTo} 원</dt>
-              <dd className="font-medium tabular-nums text-slate-900">{t.rate}</dd>
+        {/* ═══ 오른쪽: 결과 (sticky) ═══ */}
+        <div className="space-y-5 lg:sticky lg:top-20">
+          {/* 결과 요약 */}
+          <div className="overflow-hidden rounded-xl border border-slate-200">
+            <div className="bg-blue-700 px-5 py-4 text-white">
+              <p className="text-sm opacity-80">월 실수령액</p>
+              <p className="text-3xl font-bold tabular-nums">{won(my.net)}</p>
+              <p className="mt-1 text-sm opacity-90">
+                연 실수령 {won(my.annualNet)} · 세전의 {(my.netRate * 100).toFixed(1)}%
+              </p>
             </div>
-          ))}
-        </dl>
-        <p className="mt-3 text-xs leading-relaxed text-slate-400">
-          누진 구조라 구간을 넘는 금액에만 높은 세율이 적용됩니다. 과세표준은
-          연봉에서 근로소득공제·인적공제 등을 뺀 금액이라 연봉 자체와는
-          다릅니다.
-        </p>
+            <dl className="divide-y divide-slate-100 bg-white text-sm">
+              <Row label="월 세전 급여" value={won(my.monthlyGross)} />
+              {my.deductions.map((d) => (
+                <Row key={d.label} label={d.label} value={"- " + won(d.value)} muted />
+              ))}
+              <Row label="공제 합계" value={"- " + won(my.totalDeduction)} bold />
+            </dl>
+          </div>
+
+          {/* 핵심 지표 */}
+          <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">핵심 지표</p>
+            <p className="mt-1 text-lg font-bold text-slate-900">
+              내 연봉은 근로소득자 상위 {topPct <= 1 ? "1% 이내" : `${topPct.toFixed(1)}%`}
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-slate-600">
+              {incomePercentileMeta.year}년 귀속 근로소득자 중위 연봉은{" "}
+              <strong className="tabular-nums">{won(incomePercentileMeta.median)}</strong>입니다. 입력한 연봉은
+              중위의 <strong className="tabular-nums">{vsMedian.toFixed(1)}배</strong>입니다.
+            </p>
+            <Link
+              href="/calc/income-rank"
+              className="mt-2 inline-block text-xs font-medium text-blue-700 underline underline-offset-2"
+            >
+              연봉순위 계산기에서 자세히 보기 →
+            </Link>
+            <p className="mt-2 text-xs text-slate-400">{incomePercentileMeta.source}</p>
+          </div>
+
+          {/* 연봉별 실수령 비교 막대그래프 */}
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <p className="font-semibold text-slate-800">
+              연봉별 실수령액 비교{" "}
+              <span className="text-xs font-normal text-slate-400">(연간, 파란색=실수령 / 회색=세금·보험)</span>
+            </p>
+            <div className="mt-4 space-y-2.5">
+              {bars.map((b) => (
+                <div key={b.annual}>
+                  <div className="mb-0.5 flex justify-between text-xs">
+                    <span className={b.mine ? "font-bold text-blue-700" : "text-slate-500"}>
+                      {b.annual.toLocaleString()}만 {b.mine && "← 내 연봉"}
+                    </span>
+                    <span className="tabular-nums text-slate-500">
+                      실수령 {manwon(b.net)} ({(b.rate * 100).toFixed(0)}%)
+                    </span>
+                  </div>
+                  <div className="flex h-4 w-full overflow-hidden rounded bg-slate-100">
+                    <div className={b.mine ? "bg-blue-700" : "bg-blue-400"} style={{ width: `${b.netW}%` }} />
+                    <div className="bg-slate-300" style={{ width: `${b.taxW}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="mt-3 text-xs leading-relaxed text-slate-400">
+              연봉이 오를수록 높은 세율 구간에 걸리는 금액이 늘어나 실수령 비율(%)이 점점 낮아집니다. 연봉 3천만
+              원은 약 90%를 받지만 1억 원은 약 80% 수준만 손에 들어오는 이유입니다.
+            </p>
+          </div>
+
+          {/* 과세표준 구간 */}
+          <div className="rounded-xl border border-slate-200 bg-white p-5 text-sm">
+            <p className="mb-3 font-semibold text-slate-800">소득세 과세표준 구간 (누진세율)</p>
+            <dl className="space-y-1.5 text-slate-600">
+              {TAX_BRACKETS.map((t) => (
+                <div key={t.upTo} className="flex justify-between">
+                  <dt>~ {t.upTo} 원</dt>
+                  <dd className="font-medium tabular-nums text-slate-900">{t.rate}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-3 text-xs leading-relaxed text-slate-400">
+              누진 구조라 구간을 넘는 금액에만 높은 세율이 적용됩니다. 과세표준은 연봉에서 근로소득공제·인적공제
+              등을 뺀 금액이라 연봉 자체와는 다릅니다.
+            </p>
+          </div>
+        </div>
       </div>
 
-      <p className="text-xs leading-relaxed text-slate-400">
-        ※ 참고용 추정치입니다. 소득세는 간이세액표 산출 방식(연환산) 근사이며,
-        비과세 식대, 연말정산 공제 항목, 회사별 공제 차이에 따라 실제
-        급여명세서와 다를 수 있습니다.
+      {/* ═══ 하단 전체 폭 (grid 밖으로 분리 — sticky 오른쪽 컬럼과 겹치는 문제 방지) ═══ */}
+      <p className="mt-6 text-xs leading-relaxed text-slate-400">
+        ※ 참고용 추정치입니다. 소득세는 간이세액표 산출 방식(연환산) 근사이며, 비과세 식대, 연말정산 공제 항목,
+        회사별 공제 차이에 따라 실제 급여명세서와 다를 수 있습니다.
       </p>
     </div>
   );
@@ -245,12 +242,8 @@ function Row({
 }) {
   return (
     <div className="flex items-center justify-between px-5 py-2.5">
-      <dt className={muted ? "text-slate-500" : "font-medium text-slate-800"}>
-        {label}
-      </dt>
-      <dd
-        className={`tabular-nums ${bold ? "font-bold text-slate-900" : muted ? "text-slate-500" : "text-slate-800"}`}
-      >
+      <dt className={muted ? "text-slate-500" : "font-medium text-slate-800"}>{label}</dt>
+      <dd className={`tabular-nums ${bold ? "font-bold text-slate-900" : muted ? "text-slate-500" : "text-slate-800"}`}>
         {value}
       </dd>
     </div>
