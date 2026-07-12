@@ -608,7 +608,8 @@ function DepletionChart({
   if (path.length < 2) {
     return (
       <div className="rounded-xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-400">
-        FIRE 달성 시점이 계산되면 재정 수명 차트가 표시됩니다.
+        현재 조건으로는 70년 내 FIRE 목표 자산에 도달하지 못해 은퇴 후 자산 소진 시뮬레이션을 계산할 수 없습니다.
+        저축을 늘리거나 목표 지출을 줄이면 여기에 표시됩니다.
       </div>
     );
   }
