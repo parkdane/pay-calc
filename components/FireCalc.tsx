@@ -144,21 +144,20 @@ export default function FireCalc() {
     const realReturn = (1 + returnRate / 100) / (1 + inflation / 100) - 1;
     const mRet = realReturn / 12;
     const save = monthlySave * 10000;
-    const targetGrowth = Math.pow(1 + inflation / 100, 1 / 12);
 
     const startAsset = asset * 10000;
     const already = startAsset >= fireNumber;
     // 100세까지만 시뮬레이션 (그 이후는 의미 없음)
     const maxMonths = Math.max(0, Math.round((100 - age) * 12));
 
-    // 1) 달성 시점 계산 (통계용)
+    // 1) 달성 시점 계산 (통계용) — 실질 수익률로 자산을 불리므로, 비교 대상인 목표 자산은
+    //    오늘 화폐가치 기준으로 고정한다 (여기서 또 물가를 반영하면 이중 반영이 됨)
     let cur = startAsset;
-    let target = fireNumber;
+    const target = fireNumber;
     let months = 0;
     if (!already) {
       while (cur < target && months < maxMonths) {
         cur = cur * (1 + mRet) + save;
-        target = target * targetGrowth;
         months++;
       }
     }
@@ -172,12 +171,11 @@ export default function FireCalc() {
     ];
     {
       let c = startAsset,
-        t = fireNumber,
         m = 0;
+      const t = fireNumber;
       const cap = reached ? Math.min(months + 12 * 10, maxMonths) : maxMonths;
       while (m < cap) {
         c = c * (1 + mRet) + save;
-        t = t * targetGrowth;
         m++;
         if (m % 12 === 0) path.push({ age: age + m / 12, asset: c, target: t });
       }
@@ -188,8 +186,7 @@ export default function FireCalc() {
     let shortfall: number | null = null;
     if (retireAge > age) {
       const tM = (retireAge - age) * 12;
-      let tgt = fireNumber;
-      for (let m = 0; m < tM; m++) tgt = tgt * targetGrowth;
+      const tgt = fireNumber;
       let projected = startAsset;
       for (let m = 0; m < tM; m++) projected = projected * (1 + mRet) + save;
       shortfall = Math.max(0, tgt - projected);
@@ -198,13 +195,11 @@ export default function FireCalc() {
         hi = 50000000;
       for (let it = 0; it < 40; it++) {
         const mid = (lo + hi) / 2;
-        let c = startAsset,
-          t = fireNumber;
+        let c = startAsset;
         for (let m = 0; m < tM; m++) {
           c = c * (1 + mRet) + mid;
-          t = t * targetGrowth;
         }
-        if (c >= t) hi = mid;
+        if (c >= tgt) hi = mid;
         else lo = mid;
       }
       extraSave = Math.max(0, hi - save);
@@ -268,14 +263,11 @@ export default function FireCalc() {
       const fireNum = (netMonthly * 10000 * 12) / (withdrawRate / 100);
       const realR = (1 + rate / 100) / (1 + inflation / 100) - 1;
       const mRet = realR / 12;
-      const tg = Math.pow(1 + inflation / 100, 1 / 12);
       let cur = asset * 10000,
-        target = fireNum,
         months = 0;
       const max = Math.max(0, Math.round((100 - age) * 12));
-      while (cur < target && months < max) {
+      while (cur < fireNum && months < max) {
         cur = cur * (1 + mRet) + monthlySave * 10000;
-        target = target * tg;
         months++;
       }
       return {
@@ -611,7 +603,7 @@ function GrowthChart({
       <p className="mb-1 text-sm font-semibold text-slate-800">자산 성장 시뮬레이션</p>
       <p className="mb-3 text-xs text-slate-400">
         <span className="text-blue-600">■</span> 내 예상 자산 &nbsp;
-        <span className="text-amber-500">■</span> 필요 목표 자산(물가 반영) · 점에 마우스를 올려보세요
+        <span className="text-amber-500">■</span> 필요 목표 자산(오늘 화폐가치 기준, 고정) · 점에 마우스를 올려보세요
       </p>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="xMidYMid meet">
         {/* Y 그리드 + 라벨 */}
