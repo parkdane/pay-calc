@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-12T04:55:26.069Z",
+  "updatedAt": "2026-07-12T04:55:32.641Z",
   "source": "OpenDART(금융감독원 전자공시) 사업보고서 직원현황, 1인평균급여액 기준",
   "note": "회사 전체 임직원(신입~임원) 평균이며 특정 연차·직급 기준이 아닙니다. 사업부문·성별별 인원수 가중평균으로 계산했습니다.",
   "companies": [
@@ -108,6 +108,14 @@
       "year": 2025
     },
     {
+      "name": "삼성물산",
+      "corpCode": "00149655",
+      "avgSalary": 123011770,
+      "employeeCount": 9261,
+      "avgTenure": 15,
+      "year": 2025
+    },
+    {
       "name": "KT",
       "corpCode": "00190321",
       "avgSalary": 118603428,
@@ -192,10 +200,6 @@
     {
       "name": "HD현대중공업",
       "reason": "no_salary_field"
-    },
-    {
-      "name": "삼성물산",
-      "reason": "013"
     }
   ]
 }
