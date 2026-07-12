@@ -1,0 +1,48 @@
+{
+  "updatedAt": "2026-07-12T04:51:35.188Z",
+  "source": "OpenDART(금융감독원 전자공시) 사업보고서 직원현황, 1인평균급여액 기준",
+  "note": "회사 전체 임직원(신입~임원) 평균이며 특정 연차·직급 기준이 아닙니다. 사업부문·성별별 인원수 가중평균으로 계산했습니다.",
+  "companies": [
+    {
+      "name": "SK하이닉스",
+      "corpCode": "00164779",
+      "avgSalary": 185004892,
+      "employeeCount": 34549,
+      "avgTenure": 13.4,
+      "year": 2025
+    },
+    {
+      "name": "삼성전자",
+      "corpCode": "00126380",
+      "avgSalary": 157064509,
+      "employeeCount": 128881,
+      "avgTenure": 13.7,
+      "year": 2025
+    },
+    {
+      "name": "NAVER",
+      "corpCode": "00266961",
+      "avgSalary": 145516148,
+      "employeeCount": 5047,
+      "avgTenure": 7.7,
+      "year": 2025
+    },
+    {
+      "name": "현대자동차",
+      "corpCode": "00164742",
+      "avgSalary": 130858949,
+      "employeeCount": 72598,
+      "avgTenure": 15.8,
+      "year": 2025
+    },
+    {
+      "name": "카카오",
+      "corpCode": "00258801",
+      "avgSalary": 108721061,
+      "employeeCount": 3922,
+      "avgTenure": null,
+      "year": 2025
+    }
+  ],
+  "failed": []
+}
