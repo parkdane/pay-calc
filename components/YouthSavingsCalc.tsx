@@ -38,14 +38,14 @@ export default function YouthSavingsCalc() {
   return (
     <div className="space-y-6">
       {/* 입력 */}
-      <div className="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-5">
+      <div className="space-y-5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
         {/* 유형 */}
-        <label className="block text-sm font-medium text-slate-700">
+        <label className="block text-sm font-medium text-[#5B6478]">
           가입 유형
           <select
             value={typeId}
             onChange={(e) => setTypeId(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5"
+            className="mt-1 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
           >
             {cfg.types.map((t) => (
               <option key={t.id} value={t.id}>
@@ -53,14 +53,14 @@ export default function YouthSavingsCalc() {
               </option>
             ))}
           </select>
-          <span className="mt-1 block text-xs text-slate-400">{type.hint}</span>
+          <span className="mt-1 block text-xs text-[#8B93A6]">{type.hint}</span>
         </label>
 
         {/* 월 납입액 */}
         <div>
-          <div className="flex items-center justify-between text-sm font-medium text-slate-700">
+          <div className="flex items-center justify-between text-sm font-medium text-[#5B6478]">
             <span>월 납입액</span>
-            <span className="tabular-nums text-[#5B67A2]">{won(monthly)}</span>
+            <span className="tabular-nums text-[#2E4494]">{won(monthly)}</span>
           </div>
           <input
             type="range"
@@ -69,16 +69,16 @@ export default function YouthSavingsCalc() {
             step={cfg.monthlyStep}
             value={monthly}
             onChange={(e) => setMonthly(Number(e.target.value))}
-            className="mt-2 w-full accent-[#5B67A2]"
+            className="mt-2 w-full accent-[#2E4494]"
           />
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-[#8B93A6]">
             월 최대 50만 원, 3년(36개월) 만기 자유적립식
           </p>
         </div>
 
         {/* 금리 */}
         <div>
-          <div className="flex items-center justify-between text-sm font-medium text-slate-700">
+          <div className="flex items-center justify-between text-sm font-medium text-[#5B6478]">
             <span>적용 금리 (연)</span>
             <div className="flex items-center gap-1">
               <input
@@ -88,9 +88,9 @@ export default function YouthSavingsCalc() {
                 step={0.01}
                 value={rate}
                 onChange={(e) => setRate(Number(e.target.value) || 0)}
-                className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-[#5B67A2]"
+                className="w-16 rounded-lg border border-[rgba(46,68,148,0.22)] px-2 py-1 text-right tabular-nums text-[#2E4494]"
               />
-              <span className="text-[#5B67A2]">%</span>
+              <span className="text-[#2E4494]">%</span>
             </div>
           </div>
           <input
@@ -100,9 +100,9 @@ export default function YouthSavingsCalc() {
             step={0.01}
             value={rate}
             onChange={(e) => setRate(Number(e.target.value))}
-            className="mt-2 w-full accent-[#5B67A2]"
+            className="mt-2 w-full accent-[#2E4494]"
           />
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-[#8B93A6]">
             기본 5.0% (전 기관 동일). 은행 우대금리 포함 최대 8%
           </p>
         </div>
@@ -112,12 +112,12 @@ export default function YouthSavingsCalc() {
       <AdSlot id="calc-youth-save-mid" />
 
       {/* 결과 */}
-      <div className="overflow-hidden rounded-xl border border-slate-200">
-        <div className="bg-[#5B67A2] px-5 py-4 text-white">
+      <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
+        <div className="bg-[#2E4494] px-5 py-4 text-white">
           <p className="text-sm opacity-80">3년 만기 예상 수령액</p>
           <p className="text-3xl font-bold tabular-nums">{won(result.total)}</p>
         </div>
-        <dl className="divide-y divide-slate-100 bg-white text-sm">
+        <dl className="divide-y divide-[rgba(46,68,148,0.10)] bg-white text-sm">
           <Row label="내 납입 원금" value={won(result.principal)} />
           {result.matching > 0 && (
             <Row
@@ -131,7 +131,7 @@ export default function YouthSavingsCalc() {
         </dl>
       </div>
 
-      <p className="text-xs leading-relaxed text-slate-400">
+      <p className="text-xs leading-relaxed text-[#8B93A6]">
         ※ 참고용 추정치입니다. 정부기여금은 소득 유형별 심사로 결정되며,
         중도해지 시 기여금·비과세 혜택을 받을 수 없습니다. 실제 금리·수령액은
         취급 은행과 서민금융진흥원에서 확인하세요.
@@ -155,18 +155,18 @@ function Row({
 }) {
   return (
     <div className="flex items-center justify-between px-5 py-2.5">
-      <dt className={muted ? "text-slate-500" : "font-medium text-slate-800"}>
+      <dt className={muted ? "text-[#7A8296]" : "font-medium text-[#1B2A4A]"}>
         {label}
       </dt>
       <dd
         className={`tabular-nums ${
           bold
-            ? "font-bold text-slate-900"
+            ? "font-bold text-[#1B2A4A]"
             : accent
-              ? "font-semibold text-[#5B67A2]"
+              ? "font-semibold text-[#2E4494]"
               : muted
-                ? "text-slate-500"
-                : "text-slate-800"
+                ? "text-[#7A8296]"
+                : "text-[#1B2A4A]"
         }`}
       >
         {value}

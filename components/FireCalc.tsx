@@ -324,11 +324,11 @@ export default function FireCalc() {
       {/* ═══ 왼쪽: 입력 ═══ */}
       <div className="space-y-4">
         {/* 기본 입력 */}
-        <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
+        <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">기본 입력</p>
-            <p className="mt-0.5 text-base font-bold text-slate-900">은퇴 목표와 자산 속도</p>
-            <p className="mt-0.5 text-xs text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">기본 입력</p>
+            <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">은퇴 목표와 자산 속도</p>
+            <p className="mt-0.5 text-xs text-[#8B93A6]">
               현재 나이부터 월 투자 가능액까지, 계산의 출발점이 되는 값입니다.
             </p>
           </div>
@@ -372,11 +372,11 @@ export default function FireCalc() {
         </div>
 
         {/* 생활비 기준 */}
-        <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
+        <div className="space-y-3 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">생활비 기준</p>
-            <p className="mt-0.5 text-base font-bold text-slate-900">은퇴 후 월 생활비</p>
-            <p className="mt-0.5 text-xs text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">생활비 기준</p>
+            <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">은퇴 후 월 생활비</p>
+            <p className="mt-0.5 text-xs text-[#8B93A6]">
               평균 생활비 프리셋으로 빠르게 시작하고, 본인 소비 구조에 맞게 조정하세요.
             </p>
           </div>
@@ -395,25 +395,25 @@ export default function FireCalc() {
                 onClick={() => setMonthlyExpense(p.value)}
                 className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
                   monthlyExpense === p.value
-                    ? "border-[#5B67A2] bg-[#EEF0FA] text-[#5B67A2]"
-                    : "border-slate-300 bg-white text-slate-600 hover:border-[#7B86AA]"
+                    ? "border-[#2E4494] bg-[rgba(46,68,148,0.06)] text-[#2E4494]"
+                    : "border-[rgba(46,68,148,0.22)] bg-white text-[#5B6478] hover:border-[#2E4494]"
                 }`}
               >
-                {p.label} <span className="text-slate-400">{p.value}만</span>
+                {p.label} <span className="text-[#8B93A6]">{p.value}만</span>
               </button>
             ))}
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-[#8B93A6]">
             평균값은 참고용이며 실제 계산은 본인의 은퇴 후 소비 구조에 맞게 조정하세요.
           </p>
         </div>
 
         {/* 가정 옵션 */}
-        <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
+        <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">가정 옵션</p>
-            <p className="mt-0.5 text-base font-bold text-slate-900">수익률과 인출률 조정</p>
-            <p className="mt-0.5 text-xs text-slate-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">가정 옵션</p>
+            <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">수익률과 인출률 조정</p>
+            <p className="mt-0.5 text-xs text-[#8B93A6]">
               현실적인 범위(연 5~12%)에서 보수적·공격적 시나리오를 함께 비교하세요.
             </p>
           </div>
@@ -424,7 +424,7 @@ export default function FireCalc() {
                 <button
                   key={p.label}
                   onClick={() => setReturnRate(p.value)}
-                  className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-500 hover:border-[#7B86AA]"
+                  className="rounded-md border border-[rgba(46,68,148,0.14)] bg-white px-2 py-1 text-xs text-[#7A8296] hover:border-[#2E4494]"
                 >
                   {p.label} {p.value}%
                 </button>
@@ -435,22 +435,22 @@ export default function FireCalc() {
             )}
           </div>
           <Slider label="물가상승률" value={inflation} onChange={setInflation} min={0} max={6} step={0.1} />
-          <label className="flex items-start gap-2 text-sm text-slate-700">
+          <label className="flex items-start gap-2 text-sm text-[#5B6478]">
             <input
               type="checkbox"
               checked={growSavings}
               onChange={(e) => setGrowSavings(e.target.checked)}
-              className="mt-0.5 h-4 w-4 rounded border-slate-300"
+              className="mt-0.5 h-4 w-4 rounded border-[rgba(46,68,148,0.22)]"
             />
             <span>
               월 투자금도 물가상승률만큼 매년 인상
-              <span className="block text-xs font-normal text-slate-400">
+              <span className="block text-xs font-normal text-[#8B93A6]">
                 승진·연봉 인상으로 저축 여력이 같이 늘어난다고 가정 (기본: 지금 금액 그대로 유지)
               </span>
             </span>
           </label>
           <Slider label="안전인출률" value={withdrawRate} onChange={setWithdrawRate} min={2.5} max={5} step={0.5} />
-          <div className="grid grid-cols-2 gap-4 border-t border-slate-200 pt-4">
+          <div className="grid grid-cols-2 gap-4 border-t border-[rgba(46,68,148,0.14)] pt-4">
             <Field label="월 부수입" value={sideIncome} onChange={setSideIncome} suffix="만원" />
             <Field label="월 연금 예상액" value={pension} onChange={setPension} suffix="만원" />
           </div>
@@ -464,7 +464,7 @@ export default function FireCalc() {
           <button
             type="button"
             onClick={copyShareLink}
-            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-[#7B86AA]"
+            className="flex-1 rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2 text-xs font-medium text-[#5B6478] hover:border-[#2E4494]"
           >
             {copied ? "링크 복사됨" : "링크 복사 (값 공유·저장)"}
           </button>
@@ -472,14 +472,14 @@ export default function FireCalc() {
             type="button"
             onClick={downloadPdf}
             disabled={exporting}
-            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-[#7B86AA] disabled:opacity-50"
+            className="flex-1 rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2 text-xs font-medium text-[#5B6478] hover:border-[#2E4494] disabled:opacity-50"
           >
             {exporting ? "PDF 생성 중..." : "PDF로 저장"}
           </button>
         </div>
 
         {/* 한줄 요약 */}
-        <div className="rounded-xl bg-[#5B67A2] px-5 py-4 text-sm leading-relaxed text-white">{summary}</div>
+        <div className="rounded-xl bg-[#2E4494] px-5 py-4 text-sm leading-relaxed text-white">{summary}</div>
 
         {/* 결과 카드 */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -520,8 +520,8 @@ export default function FireCalc() {
         <DepletionChart path={r.depletionPath} depletionAge={r.depletionAge} />
 
         {/* 계산 방식 설명 */}
-        <div className="space-y-1.5 rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs leading-relaxed text-slate-500">
-          <p className="font-semibold text-slate-700">이 차트는 이렇게 계산됩니다</p>
+        <div className="space-y-1.5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4 text-xs leading-relaxed text-[#7A8296]">
+          <p className="font-semibold text-[#5B6478]">이 차트는 이렇게 계산됩니다</p>
           <p>
             자산(파랑 선)은 입력한 기대수익률 그대로 매달 복리로 불어나고, 목표 자산(주황 선)은 물가상승률만큼
             매년 커집니다. 즉 오늘 화폐가치가 아니라, 실제 미래 시점에 필요한 원화 금액 기준의 시뮬레이션입니다.
@@ -534,13 +534,13 @@ export default function FireCalc() {
         </div>
 
         {/* 시나리오 비교 */}
-        <div className="overflow-hidden rounded-xl border border-slate-200">
-          <div className="border-b border-slate-100 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800">
+        <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
+          <div className="border-b border-[rgba(46,68,148,0.10)] bg-white px-4 py-2.5 text-sm font-semibold text-[#1B2A4A]">
             시나리오 비교 (수익률별 달성 나이)
           </div>
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-slate-500">
+              <tr className="text-[#7A8296]">
                 <th className="px-4 py-2 text-left font-medium">시나리오</th>
                 <th className="px-4 py-2 text-right font-medium">수익률</th>
                 <th className="px-4 py-2 text-right font-medium">달성 나이</th>
@@ -548,10 +548,10 @@ export default function FireCalc() {
             </thead>
             <tbody>
               {scenarios.map((s) => (
-                <tr key={s.rate} className="border-t border-slate-100">
-                  <td className="px-4 py-2 font-medium text-slate-800">{s.label}</td>
-                  <td className="px-4 py-2 text-right tabular-nums text-slate-600">연 {s.rate}%</td>
-                  <td className="px-4 py-2 text-right font-semibold tabular-nums text-[#5B67A2]">
+                <tr key={s.rate} className="border-t border-[rgba(46,68,148,0.10)]">
+                  <td className="px-4 py-2 font-medium text-[#1B2A4A]">{s.label}</td>
+                  <td className="px-4 py-2 text-right tabular-nums text-[#5B6478]">연 {s.rate}%</td>
+                  <td className="px-4 py-2 text-right font-semibold tabular-nums text-[#2E4494]">
                     {s.reachAge ? `${s.reachAge}세` : "100세+"}
                   </td>
                 </tr>
@@ -561,22 +561,22 @@ export default function FireCalc() {
         </div>
 
         {/* CAGR 참고 */}
-        <div className="overflow-hidden rounded-xl border border-slate-200">
-          <div className="border-b border-slate-100 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800">
+        <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
+          <div className="border-b border-[rgba(46,68,148,0.10)] bg-white px-4 py-2.5 text-sm font-semibold text-[#1B2A4A]">
             수익률 감 잡기 (대표 자산 장기 CAGR)
           </div>
           <table className="w-full text-sm">
             <tbody>
               {CAGR_TABLE.map((c) => (
-                <tr key={c.name} className="border-t border-slate-100">
-                  <td className="px-4 py-2 font-medium text-slate-800">{c.name}</td>
-                  <td className="px-4 py-2 text-right font-semibold tabular-nums text-[#5B67A2]">{c.cagr}%</td>
-                  <td className="px-4 py-2 text-right text-xs text-slate-400">{c.note}</td>
+                <tr key={c.name} className="border-t border-[rgba(46,68,148,0.10)]">
+                  <td className="px-4 py-2 font-medium text-[#1B2A4A]">{c.name}</td>
+                  <td className="px-4 py-2 text-right font-semibold tabular-nums text-[#2E4494]">{c.cagr}%</td>
+                  <td className="px-4 py-2 text-right text-xs text-[#8B93A6]">{c.note}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <p className="border-t border-slate-100 px-4 py-2 text-xs text-slate-400">
+          <p className="border-t border-[rgba(46,68,148,0.10)] px-4 py-2 text-xs text-[#8B93A6]">
             과거 장기 연평균 수익률 참고치입니다. 미래 수익을 보장하지 않으며 대가들의 수치는 재현 난이도가 매우 높습니다.
           </p>
         </div>
@@ -585,15 +585,15 @@ export default function FireCalc() {
 
     {/* ═══ 하단 전체 폭 (grid 밖으로 분리 — sticky 오른쪽 컬럼과 겹치는 문제 방지) ═══ */}
     <div className="mt-6 space-y-6">
-      <section className="space-y-1.5 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
-        <p className="font-semibold text-slate-800">파이어 넘버란?</p>
+      <section className="space-y-1.5 rounded-xl bg-white p-4 text-sm text-[#5B6478]">
+        <p className="font-semibold text-[#1B2A4A]">파이어 넘버란?</p>
         <p>
           은퇴 후 연 지출의 25배(4% 룰 기준)를 모으면, 자산을 원금 손실 없이 매년 인출하며 살 수 있다는
           개념입니다. 인출률을 낮출수록 안전하지만 목표 금액이 커집니다. 국민연금·배당 등 반복 수입은 월
           부수입·연금에 넣으면 목표 자산이 줄어듭니다.
         </p>
       </section>
-      <p className="text-xs leading-relaxed text-slate-400">
+      <p className="text-xs leading-relaxed text-[#8B93A6]">
         ※ 입력한 수익률을 매년 그대로 적용하고, 목표 자산은 물가상승률만큼 매년 커진다고 가정한 추정치입니다.
         실제 수익률은 매년 변동하며 세금·건강보험료는 반영하지 않았습니다. 보수적 수익률(5~7%)로 함께
         비교하는 것이 안전합니다.
@@ -614,7 +614,7 @@ function GrowthChart({
   const [hover, setHover] = useState<number | null>(null);
   if (path.length < 2) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-400">
+      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-6 text-center text-sm text-[#8B93A6]">
         입력값을 조정해 주세요.
       </div>
     );
@@ -647,10 +647,10 @@ function GrowthChart({
   const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => f * maxVal);
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
-      <p className="mb-1 text-sm font-semibold text-slate-800">자산 성장 시뮬레이션</p>
-      <p className="mb-3 text-xs text-slate-400">
-        <span className="text-[#5B67A2]">■</span> 내 예상 자산 &nbsp;
+    <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+      <p className="mb-1 text-sm font-semibold text-[#1B2A4A]">자산 성장 시뮬레이션</p>
+      <p className="mb-3 text-xs text-[#8B93A6]">
+        <span className="text-[#2E4494]">■</span> 내 예상 자산 &nbsp;
         <span className="text-amber-500">■</span> 필요 목표 자산(물가상승률만큼 매년 증가) · 점에 마우스를 올려보세요
       </p>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="xMidYMid meet">
@@ -759,7 +759,7 @@ function DepletionChart({
   const [hover, setHover] = useState<number | null>(null);
   if (path.length < 2) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-400">
+      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-6 text-center text-sm text-[#8B93A6]">
         현재 조건으로는 100세까지 FIRE 목표 자산에 도달하지 못해 은퇴 후 자산 소진 시뮬레이션을 계산할 수 없습니다.
         저축을 늘리거나 목표 지출을 줄이면 여기에 표시됩니다.
       </div>
@@ -790,9 +790,9 @@ function DepletionChart({
   const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => f * maxVal);
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
-      <p className="mb-1 text-sm font-semibold text-slate-800">재정 수명 차트</p>
-      <p className="mb-3 text-xs text-slate-400">
+    <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+      <p className="mb-1 text-sm font-semibold text-[#1B2A4A]">재정 수명 차트</p>
+      <p className="mb-3 text-xs text-[#8B93A6]">
         <span className="text-rose-500">■</span> 은퇴 후 자산 잔액 · FIRE 달성 시점부터 적립을 멈추고 생활비를
         인출한다고 가정합니다. 점에 마우스를 올려보세요
       </p>
@@ -869,12 +869,12 @@ function DepletionChart({
 
 function Card({ label, value, sub, highlight }: { label: string; value: string; sub?: string; highlight?: boolean }) {
   return (
-    <div className={`rounded-xl border p-4 ${highlight ? "border-[#BFC8EA] bg-[#EEF0FA]" : "border-slate-200 bg-white"}`}>
-      <p className="text-xs text-slate-500">{label}</p>
-      <p className={`mt-1 font-bold tabular-nums ${highlight ? "text-lg text-[#5B67A2]" : "text-base text-slate-900"}`}>
+    <div className={`rounded-xl border p-4 ${highlight ? "border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.06)]" : "border-[rgba(46,68,148,0.14)] bg-white"}`}>
+      <p className="text-xs text-[#7A8296]">{label}</p>
+      <p className={`mt-1 font-bold tabular-nums ${highlight ? "text-lg text-[#2E4494]" : "text-base text-[#1B2A4A]"}`}>
         {value}
       </p>
-      {sub && <p className="mt-1 text-xs leading-snug text-slate-400">{sub}</p>}
+      {sub && <p className="mt-1 text-xs leading-snug text-[#8B93A6]">{sub}</p>}
     </div>
   );
 }
@@ -900,8 +900,8 @@ function Field({
     <label className="block">
       {(label || hint) && (
         <div className="flex items-baseline justify-between">
-          {label && <span className="text-sm font-medium text-slate-700">{label}</span>}
-          {hint && <span className="text-xs text-slate-400">{hint}</span>}
+          {label && <span className="text-sm font-medium text-[#5B6478]">{label}</span>}
+          {hint && <span className="text-xs text-[#8B93A6]">{hint}</span>}
         </div>
       )}
       <div className={`flex items-center gap-1 ${label || hint ? "mt-1.5" : ""}`}>
@@ -913,11 +913,11 @@ function Field({
             const n = Number(e.target.value.replace(/[^0-9]/g, "")) || 0;
             onChange(max !== undefined ? Math.min(n, max) : n);
           }}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-right text-base tabular-nums"
+          className="w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-3 text-right text-base tabular-nums"
         />
-        {suffix && <span className="shrink-0 text-sm text-slate-400">{suffix}</span>}
+        {suffix && <span className="shrink-0 text-sm text-[#8B93A6]">{suffix}</span>}
       </div>
-      {display && value > 0 && <p className="mt-1 text-xs font-medium text-[#5B67A2]">약 {display(value)}</p>}
+      {display && value > 0 && <p className="mt-1 text-xs font-medium text-[#2E4494]">약 {display(value)}</p>}
     </label>
   );
 }
@@ -940,7 +940,7 @@ function PresetRow({
         v === current ? (
           <span
             key={`cur-${v}`}
-            className="flex-1 rounded-lg border border-[#5B67A2] bg-[#EEF0FA] px-2 py-1.5 text-center text-xs font-semibold text-[#5B67A2]"
+            className="flex-1 rounded-lg border border-[#2E4494] bg-[rgba(46,68,148,0.06)] px-2 py-1.5 text-center text-xs font-semibold text-[#2E4494]"
           >
             기본 {format(v)}
           </span>
@@ -949,7 +949,7 @@ function PresetRow({
             key={v}
             type="button"
             onClick={() => onPick(v)}
-            className="flex-1 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-center text-xs text-slate-500 hover:border-[#7B86AA]"
+            className="flex-1 rounded-lg border border-[rgba(46,68,148,0.14)] bg-white px-2 py-1.5 text-center text-xs text-[#7A8296] hover:border-[#2E4494]"
           >
             {format(v)}
           </button>
@@ -975,7 +975,7 @@ function Slider({
   step: number;
 }) {
   return (
-    <div className="text-sm font-medium text-slate-700">
+    <div className="text-sm font-medium text-[#5B6478]">
       <div className="flex items-center justify-between">
         <span>{label}</span>
         <div className="flex items-center gap-1">
@@ -986,9 +986,9 @@ function Slider({
             step={step}
             value={value}
             onChange={(e) => onChange(Number(e.target.value) || 0)}
-            className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-[#5B67A2]"
+            className="w-16 rounded-lg border border-[rgba(46,68,148,0.22)] px-2 py-1 text-right tabular-nums text-[#2E4494]"
           />
-          <span className="text-[#5B67A2]">%</span>
+          <span className="text-[#2E4494]">%</span>
         </div>
       </div>
       <input
@@ -998,7 +998,7 @@ function Slider({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="mt-2 w-full accent-[#5B67A2]"
+        className="mt-2 w-full accent-[#2E4494]"
       />
     </div>
   );

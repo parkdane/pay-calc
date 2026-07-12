@@ -29,10 +29,10 @@ export default function Page() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           적금·예금 이자 계산기
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           월 납입액(또는 예치금)과 기간, 금리를 넣으면 세후 만기 수령액을
           계산합니다.
         </p>
@@ -42,8 +42,8 @@ export default function Page() {
 
       <AdSlot id="calc-deposit-result" />
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
           적금은 매월 납입 시점부터 만기까지의 기간에 비례해 이자가 붙는 단리
           방식으로 계산합니다. 예금은 예치 원금 전체에 기간만큼 이자가
@@ -52,11 +52,11 @@ export default function Page() {
         </p>
         <p>
           정부 지원이 붙는 정책 적금은 일반 적금보다 훨씬 유리합니다.{" "}
-          <Link href="/calc/youth-save" className="text-[#5B67A2] underline">
+          <Link href="/calc/youth-save" className="text-[#2E4494] underline">
             청년미래적금
           </Link>
           은 정부기여금과 비과세,{" "}
-          <Link href="/calc/soldier-save" className="text-[#5B67A2] underline">
+          <Link href="/calc/soldier-save" className="text-[#2E4494] underline">
             장병내일준비적금
           </Link>
           은 납입원금 100% 매칭을 받을 수 있으니 가입 대상이라면 먼저

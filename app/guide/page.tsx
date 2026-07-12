@@ -12,10 +12,10 @@ export default function Page() {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           가이드
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           봉급·수당·정책 적금을 이해하는 데 도움이 되는 글입니다.
         </p>
       </header>
@@ -25,11 +25,11 @@ export default function Page() {
           <Link
             key={g.slug}
             href={`/guide/${g.slug}`}
-            className="block rounded-xl border border-slate-200 bg-white p-5 transition hover:shadow-md"
+            className="block rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5 transition hover:shadow-md"
           >
-            <h2 className="font-semibold text-slate-900">{g.title}</h2>
-            <p className="mt-1 text-sm text-slate-500">{g.desc}</p>
-            <p className="mt-2 text-xs text-slate-400">{g.date}</p>
+            <h2 className="font-semibold text-[#1B2A4A]">{g.title}</h2>
+            <p className="mt-1 text-sm text-[#7A8296]">{g.desc}</p>
+            <p className="mt-2 text-xs text-[#8B93A6]">{g.date}</p>
           </Link>
         ))}
       </div>

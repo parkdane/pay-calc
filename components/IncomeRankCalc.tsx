@@ -40,8 +40,8 @@ export default function IncomeRankCalc() {
   return (
     <div className="space-y-6">
       {/* 입력 */}
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
-        <label className="block text-sm font-medium text-slate-700">
+      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+        <label className="block text-sm font-medium text-[#5B6478]">
           내 연봉 (세전 총급여, 만원)
           <div className="mt-1 flex gap-2">
             <input
@@ -52,17 +52,17 @@ export default function IncomeRankCalc() {
                 setManwon(Number(e.target.value.replace(/[^0-9]/g, "")) || 0);
                 setSubmitted(false);
               }}
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 tabular-nums"
+              className="w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5 tabular-nums"
               placeholder="예: 4000 (4천만 원)"
             />
             <button
               onClick={() => setSubmitted(true)}
-              className="shrink-0 rounded-lg bg-[#5B67A2] px-5 font-semibold text-white transition hover:bg-[#4A5488]"
+              className="shrink-0 rounded-lg bg-[#2E4494] px-5 font-semibold text-white transition hover:bg-[#1E3068]"
             >
               확인
             </button>
           </div>
-          <span className="mt-1 block text-xs font-normal text-slate-400">
+          <span className="mt-1 block text-xs font-normal text-[#8B93A6]">
             연봉 4,000만 원이면 4000 입력. 세전 기준(비과세 제외)
           </span>
         </label>
@@ -73,8 +73,8 @@ export default function IncomeRankCalc() {
 
       {/* 결과 */}
       {submitted && manwon > 0 && (
-        <div className="overflow-hidden rounded-xl border border-slate-200">
-          <div className="bg-[#5B67A2] px-5 py-6 text-center text-white">
+        <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
+          <div className="bg-[#2E4494] px-5 py-6 text-center text-white">
             <p className="text-sm opacity-80">연봉 {won(result.income)}은</p>
             <p className="mt-1 text-4xl font-bold tabular-nums">
               {result.isTop1 ? "상위 1% 이내" : `상위 ${result.top.toFixed(1)}%`}
@@ -83,7 +83,7 @@ export default function IncomeRankCalc() {
               근로소득자 100명 중 약 {result.rankOf100}등
             </p>
           </div>
-          <div className="space-y-2 bg-white p-5 text-sm text-slate-700">
+          <div className="space-y-2 bg-white p-5 text-sm text-[#5B6478]">
             <p>
               · 대한민국 근로소득자 중위 연봉은{" "}
               <strong className="tabular-nums">{won(data.median)}</strong>
@@ -93,7 +93,7 @@ export default function IncomeRankCalc() {
               </strong>
               입니다.
             </p>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-[#8B93A6]">
               국세청 {data.year}년 귀속 근로소득 백분위(천분위) 자료 기준.
               근로소득자만 포함되며 사업·기타소득은 제외됩니다.
             </p>
@@ -102,16 +102,16 @@ export default function IncomeRankCalc() {
       )}
 
       {/* 참고 구간표 */}
-      <div className="rounded-xl border border-slate-200 bg-white p-5 text-sm">
-        <p className="mb-3 font-semibold text-slate-800">주요 구간 커트라인</p>
-        <dl className="space-y-2 text-slate-600">
+      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5 text-sm">
+        <p className="mb-3 font-semibold text-[#1B2A4A]">주요 구간 커트라인</p>
+        <dl className="space-y-2 text-[#5B6478]">
           {[...data.anchors]
             .filter((a) => a.topPercent < 100)
             .reverse()
             .map((a) => (
               <div key={a.topPercent} className="flex justify-between">
                 <dt>상위 {a.topPercent}%</dt>
-                <dd className="tabular-nums font-medium text-slate-900">
+                <dd className="tabular-nums font-medium text-[#1B2A4A]">
                   {won(a.income)}
                 </dd>
               </div>

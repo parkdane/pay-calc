@@ -9,17 +9,17 @@ export default function SoldierTable({
 }) {
   return (
     <div className="space-y-2">
-      <h3 className="font-semibold text-slate-900">{title}</h3>
+      <h3 className="font-semibold text-[#1B2A4A]">{title}</h3>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {rows.map((r) => (
           <div
             key={r.rank}
-            className="rounded-xl border border-slate-200 bg-white p-4 text-center"
+            className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4 text-center"
           >
-            <p className="text-sm text-slate-500">{r.rank}</p>
-            <p className="mt-1 text-lg font-bold tabular-nums text-slate-900">
+            <p className="text-sm text-[#7A8296]">{r.rank}</p>
+            <p className="mt-1 text-lg font-bold tabular-nums text-[#1B2A4A]">
               {r.pay.toLocaleString("ko-KR")}
-              <span className="text-sm font-normal text-slate-400">원</span>
+              <span className="text-sm font-normal text-[#8B93A6]">원</span>
             </p>
           </div>
         ))}

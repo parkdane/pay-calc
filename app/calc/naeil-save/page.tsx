@@ -33,10 +33,10 @@ export default function Page() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           청년내일저축계좌 계산기
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           소득 구간과 월 저축액을 선택하면 정부지원금을 포함한 3년 만기
           수령액을 계산합니다.
         </p>
@@ -46,8 +46,8 @@ export default function Page() {
 
       <AdSlot id="calc-naeil-save-result" />
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
           만기 수령액은 본인 저축 원금(월 10만~50만 원 × 36개월) + 정부지원금
           + 이자로 구성됩니다. 정부지원금은 본인 저축액과 무관하게 소득
@@ -56,11 +56,11 @@ export default function Page() {
         </p>
         <p>
           소득 요건에 해당하지 않는 청년이라면{" "}
-          <Link href="/calc/youth-save" className="text-[#5B67A2] underline">
+          <Link href="/calc/youth-save" className="text-[#2E4494] underline">
             청년미래적금
           </Link>
           이 대안입니다. 일반 적금과의 수익 차이는{" "}
-          <Link href="/calc/deposit" className="text-[#5B67A2] underline">
+          <Link href="/calc/deposit" className="text-[#2E4494] underline">
             적금 이자 계산기
           </Link>
           에서 비교해볼 수 있습니다.

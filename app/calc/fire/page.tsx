@@ -32,10 +32,10 @@ export default function Page() {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           파이어족 계산기
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           현재 자산과 투자금으로 언제 경제적 자유를 달성해 조기 은퇴할 수
           있는지, 부족 금액과 시나리오까지 계산합니다.
         </p>
@@ -47,8 +47,8 @@ export default function Page() {
         <FireCalc />
       </div>
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
           은퇴 후 연 지출을 안전인출률로 나눠 목표 자산(파이어 넘버)을 구하고,
           현재 자산에 매달 투자금을 더하며 입력한 수익률 그대로 복리 성장시킵니다.
@@ -58,11 +58,11 @@ export default function Page() {
         </p>
         <p>
           은퇴 전 저축 계획은{" "}
-          <Link href="/calc/savings-goal" className="text-[#5B67A2] underline">
+          <Link href="/calc/savings-goal" className="text-[#2E4494] underline">
             저축 목표 시뮬레이터
           </Link>
           에서, 목돈 운용은{" "}
-          <Link href="/calc/deposit" className="text-[#5B67A2] underline">
+          <Link href="/calc/deposit" className="text-[#2E4494] underline">
             예금 계산기
           </Link>
           에서 이어서 확인하세요.

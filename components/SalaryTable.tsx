@@ -8,11 +8,11 @@ export default function SalaryTable({
   rows: Row[];
 }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-200">
+    <div className="overflow-x-auto rounded-xl border border-[rgba(46,68,148,0.14)]">
       <table className="w-full text-xs sm:text-sm">
         <thead>
-          <tr className="bg-slate-50 text-slate-600">
-            <th className="sticky left-0 whitespace-nowrap bg-slate-50 px-2 py-2.5 text-left font-semibold sm:px-3">
+          <tr className="bg-white text-[#5B6478]">
+            <th className="sticky left-0 whitespace-nowrap bg-white px-2 py-2.5 text-left font-semibold sm:px-3">
               호봉
             </th>
             {columns.map((c) => (
@@ -27,8 +27,8 @@ export default function SalaryTable({
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.hobong} className="border-t border-slate-100 hover:bg-[#EEF0FA]/60">
-              <td className="sticky left-0 whitespace-nowrap bg-white px-2 py-2 font-medium text-slate-900 sm:px-3">
+            <tr key={r.hobong} className="border-t border-[rgba(46,68,148,0.10)] hover:bg-[rgba(46,68,148,0.06)]">
+              <td className="sticky left-0 whitespace-nowrap bg-white px-2 py-2 font-medium text-[#1B2A4A] sm:px-3">
                 {r.hobong}
               </td>
               {r.pay.map((p, i) => (
@@ -47,7 +47,7 @@ export default function SalaryTable({
           ))}
         </tbody>
       </table>
-      <p className="border-t border-slate-100 px-3 py-2 text-right text-xs text-slate-400">
+      <p className="border-t border-[rgba(46,68,148,0.10)] px-3 py-2 text-right text-xs text-[#8B93A6]">
         단위: 원 · 좌우로 스크롤
       </p>
     </div>

@@ -33,10 +33,10 @@ export default function Page() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           예금·적금 금리 비교
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           시중·저축·인터넷은행의 정기예금과 적금 최고금리를 매일 갱신해
           비교합니다.
         </p>
@@ -46,8 +46,8 @@ export default function Page() {
 
       <RateTable />
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">금리 비교 시 확인할 점</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">금리 비교 시 확인할 점</h2>
         <p>
           최고금리는 우대조건을 모두 충족해야 적용됩니다. 급여이체, 카드
           사용실적, 첫 거래 여부 등 조건을 본인이 채울 수 있는지 먼저
@@ -58,7 +58,7 @@ export default function Page() {
           이자의 15.4%가 공제되며, 새마을금고·신협의 세금우대(3,000만 원 한도)나
           비과세 상품을 활용하면 세후 수령이 늘어납니다. 마음에 드는 상품을
           찾았다면{" "}
-          <Link href="/calc/deposit" className="text-[#5B67A2] underline">
+          <Link href="/calc/deposit" className="text-[#2E4494] underline">
             적금·예금 이자 계산기
           </Link>
           에서 세후 수령액을 계산해보세요.

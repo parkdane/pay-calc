@@ -29,10 +29,10 @@ export default function Page() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           군인 간부 실수령액 계산기
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           부사관·장교의 계급·호봉과 수당을 입력하면 2026년 기준 세후 월급을
           계산합니다.
         </p>
@@ -42,8 +42,8 @@ export default function Page() {
         <MilitaryNetCalc />
       </div>
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
           기본급(군인 봉급표)에 배우자·자녀 가족수당, 주택수당, 시간외근무수당을
           더한 세전 금액에서 군인연금 기여금(7%), 건강보험료, 장기요양보험료,
@@ -52,7 +52,7 @@ export default function Page() {
         </p>
         <p>
           기본급은{" "}
-          <Link href="/salary/military" className="text-[#5B67A2] underline">
+          <Link href="/salary/military" className="text-[#2E4494] underline">
             2026년 군인 봉급표
           </Link>
           를 기준으로 합니다.

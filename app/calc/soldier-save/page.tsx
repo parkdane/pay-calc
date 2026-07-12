@@ -33,10 +33,10 @@ export default function Page() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           장병내일준비적금 계산기
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           월 납입액과 복무기간을 넣으면 정부 매칭지원금과 비과세 이자를 포함한
           전역 시 수령액을 계산합니다.
         </p>
@@ -46,8 +46,8 @@ export default function Page() {
 
       <AdSlot id="calc-soldier-save-result" />
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
           전역 시 수령액은 내 납입 원금 + 정부 매칭지원금(원금의 100%) + 비과세
           이자로 구성됩니다. 이자는 매월 적립식 단리로 계산하며, 먼저 넣은 돈일수록
@@ -55,7 +55,7 @@ export default function Page() {
         </p>
         <p>
           병사 봉급은{" "}
-          <Link href="/salary/military" className="text-[#5B67A2] underline">
+          <Link href="/salary/military" className="text-[#2E4494] underline">
             2026년 군인 봉급표
           </Link>
           에서 확인할 수 있습니다.

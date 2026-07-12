@@ -87,10 +87,10 @@ export default function Page() {
   return (
     <div className="space-y-10">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           계산기
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           실수령액, 정책 적금, 재테크 도구를 한 곳에서 이용할 수 있습니다.
         </p>
       </header>
@@ -98,18 +98,18 @@ export default function Page() {
       {GROUPS.map((g) => (
         <section key={g.title} className="space-y-4">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">{g.title}</h2>
-            <p className="text-sm text-slate-500">{g.desc}</p>
+            <h2 className="text-lg font-bold text-[#1B2A4A]">{g.title}</h2>
+            <p className="text-sm text-[#7A8296]">{g.desc}</p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {g.items.map((c) => (
               <Link
                 key={c.href}
                 href={c.href}
-                className="rounded-xl border border-[#BFC8EA] bg-[#EEF0FA]/50 p-5 transition hover:shadow-md"
+                className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.05)] p-5 transition hover:shadow-md"
               >
-                <h3 className="font-semibold text-slate-900">{c.title}</h3>
-                <p className="mt-1 text-sm text-slate-500">{c.desc}</p>
+                <h3 className="font-semibold text-[#1B2A4A]">{c.title}</h3>
+                <p className="mt-1 text-sm text-[#7A8296]">{c.desc}</p>
               </Link>
             ))}
           </div>

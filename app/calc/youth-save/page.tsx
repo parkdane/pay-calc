@@ -32,10 +32,10 @@ export default function Page() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           청년미래적금 계산기
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           가입 유형과 월 납입액을 넣으면 정부기여금과 비과세 이자를 포함한 3년
           만기 수령액을 계산합니다.
         </p>
@@ -45,8 +45,8 @@ export default function Page() {
 
       <AdSlot id="calc-youth-save-result" />
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
           만기 수령액은 내 납입 원금 + 정부기여금(월 납입액의 6% 또는 12%, 월
           상한 적용) + 비과세 이자로 구성됩니다. 이자는 저축금액과 정부기여금

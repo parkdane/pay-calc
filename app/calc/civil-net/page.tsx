@@ -33,10 +33,10 @@ export default function Page() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           공무원·경찰·소방 실수령액 계산기
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           직종·직급·호봉을 선택하면 2026년 기준 세후 월급을 계산합니다. 상세
           옵션에서 가족·근속연수·시간외근무까지 반영할 수 있습니다.
         </p>
@@ -46,8 +46,8 @@ export default function Page() {
         <CivilNetCalc />
       </div>
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
           기본급(봉급표)에 정액급식비, 직급별 직급보조비, 가족수당(배우자
           4만·첫째 5만·둘째 8만·셋째부터 각 12만), 근속연수에 따른
@@ -58,15 +58,15 @@ export default function Page() {
         <p>
           소득세는 국세청 근로소득 간이세액표의 연환산 산출 방식을 적용해
           부양가족 수에 따른 인적공제까지 반영합니다. 기본급은{" "}
-          <Link href="/salary/civil" className="text-[#5B67A2] underline">
+          <Link href="/salary/civil" className="text-[#2E4494] underline">
             일반직
           </Link>
           ·
-          <Link href="/salary/police" className="text-[#5B67A2] underline">
+          <Link href="/salary/police" className="text-[#2E4494] underline">
             경찰
           </Link>
           ·
-          <Link href="/salary/fire" className="text-[#5B67A2] underline">
+          <Link href="/salary/fire" className="text-[#2E4494] underline">
             소방
           </Link>{" "}
           봉급표를 기준으로 합니다.

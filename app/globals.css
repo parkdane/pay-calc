@@ -6,9 +6,16 @@
 }
 
 html {
-  background: #ffffff;
+  background: #eef0f4;
 }
 
 body {
-  color: #1e293b;
+  color: #1b2a4a;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+}
+
+h1,
+h2,
+.font-heading {
+  font-family: var(--font-noto-serif-kr), "Noto Serif KR", serif;
 }

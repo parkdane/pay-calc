@@ -33,10 +33,10 @@ export default function Page() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           내 연봉, 상위 몇 %일까?
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           연봉을 입력하면 국세청 근로소득 통계 기준으로 대한민국 근로소득자 중
           내 위치를 알려드립니다.
         </p>
@@ -46,8 +46,8 @@ export default function Page() {
 
       <AdSlot id="calc-income-rank-result" />
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
           국세청이 공개하는 근로소득 백분위(천분위) 자료의 구간별 평균
           총급여를 앵커로 삼고, 구간 사이는 보간하여 상위 %를 추정합니다.
@@ -56,7 +56,7 @@ export default function Page() {
         </p>
         <p>
           내 연봉의 세후 실수령액이 궁금하다면{" "}
-          <Link href="/calc/worker-net" className="text-[#5B67A2] underline">
+          <Link href="/calc/worker-net" className="text-[#2E4494] underline">
             연봉 실수령액 계산기
           </Link>
           에서 확인하고, 연봉별 실수령 비율 그래프도 함께 볼 수 있습니다.

@@ -39,10 +39,10 @@ export default function Page() {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           2026년 봉급표
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           직종을 선택하면 직급·호봉별 봉급표를 확인할 수 있습니다.
         </p>
       </header>
@@ -52,10 +52,10 @@ export default function Page() {
           <Link
             key={c.href}
             href={c.href}
-            className="rounded-xl border border-slate-200 bg-white p-5 transition hover:shadow-md"
+            className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5 transition hover:shadow-md"
           >
-            <h2 className="font-semibold text-slate-900">{c.title}</h2>
-            <p className="mt-1 text-sm text-slate-500">{c.desc}</p>
+            <h2 className="font-semibold text-[#1B2A4A]">{c.title}</h2>
+            <p className="mt-1 text-sm text-[#7A8296]">{c.desc}</p>
           </Link>
         ))}
       </div>

@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
+import { Noto_Serif_KR } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+
+const notoSerifKR = Noto_Serif_KR({
+  subsets: ["latin"],
+  weight: ["700"],
+  variable: "--font-noto-serif-kr",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://moneywatch.kr"),
@@ -42,17 +50,26 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ko">
-      <body className="min-h-screen bg-white text-slate-800 antialiased">
+    <html lang="ko" className={notoSerifKR.variable}>
+      <head>
+        {/* Pretendard 본문 폰트 (CDN) */}
+        <link
+          rel="stylesheet"
+          as="style"
+          crossOrigin="anonymous"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
+        />
+      </head>
+      <body className="min-h-screen bg-[#EEF0F4] text-[#1B2A4A] antialiased">
         {/* 헤더 */}
-        <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
+        <header className="sticky top-0 z-50 border-b border-[rgba(46,68,148,0.14)] bg-white/90 backdrop-blur">
           <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
-            <Link href="/" className="text-lg font-bold tracking-tight text-slate-900">
-              봉급<span className="text-[#5B67A2]">계산소</span>
+            <Link href="/" className="text-lg font-bold tracking-tight text-[#1B2A4A]">
+              봉급<span className="text-[#2E4494]">계산소</span>
             </Link>
-            <nav className="flex gap-5 text-sm font-medium text-slate-600">
+            <nav className="flex gap-5 text-sm font-medium text-[#5B6478]">
               {NAV.map((item) => (
-                <Link key={item.href} href={item.href} className="hover:text-[#5B67A2]">
+                <Link key={item.href} href={item.href} className="hover:text-[#2E4494]">
                   {item.label}
                 </Link>
               ))}
@@ -63,11 +80,11 @@ export default function RootLayout({
         <main className="mx-auto max-w-4xl px-4 py-8">{children}</main>
 
         {/* 푸터 + 면책 */}
-        <footer className="mt-16 border-t border-slate-200 bg-slate-50">
-          <div className="mx-auto max-w-4xl space-y-3 px-4 py-8 text-xs leading-relaxed text-slate-500">
+        <footer className="mt-16 border-t border-[rgba(46,68,148,0.14)] bg-white">
+          <div className="mx-auto max-w-4xl space-y-3 px-4 py-8 text-xs leading-relaxed text-[#7A8296]">
             <p>
               본 사이트의 봉급표·계산 결과는 인사혁신처, 국세청, 금융위원회 등 공개
-              자료를 바탕으로 한 <strong>참고용 추정치</strong>이며 법적 효력이
+              자료를 바탕으로 한 <strong className="text-[#5B6478]">참고용 추정치</strong>이며 법적 효력이
               없습니다. 실제 지급액은 소속 기관·개인 상황에 따라 달라질 수 있으므로
               반드시 공식 기관의 안내를 확인하시기 바랍니다.
             </p>

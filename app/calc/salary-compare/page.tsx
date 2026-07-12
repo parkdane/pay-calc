@@ -31,10 +31,10 @@ export default function Page() {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           대기업 평균연봉 비교
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           국내 대기업의 1인평균급여액을 금융감독원 전자공시(DART) 사업보고서 기준으로 비교합니다. 내 연봉을
           입력하면 비교 대상 기업들 중 어느 위치인지 바로 확인할 수 있습니다.
         </p>
@@ -42,8 +42,8 @@ export default function Page() {
 
       <SalaryCompareCalc />
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
           각 기업의 사업보고서 "직원현황"에 보고된 1인평균급여액을 그대로 사용합니다. 사업부문·성별로 나뉘어
           보고되는 경우(예: DX/DS 사업부문) 인원수를 가중치로 삼아 회사 전체 평균을 계산합니다. 입력한 연봉을

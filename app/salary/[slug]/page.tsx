@@ -44,15 +44,15 @@ export default async function SalaryPage({
   return (
     <article className="space-y-8">
       <header className="space-y-3">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           {d.year}년 {d.title} 봉급표
         </h1>
-        <ul className="space-y-1 text-sm text-slate-600">
+        <ul className="space-y-1 text-sm text-[#5B6478]">
           {d.summary.map((s: string) => (
             <li key={s}>· {s}</li>
           ))}
         </ul>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-[#8B93A6]">
           출처: {d.source} · 최종 갱신 {d.updatedAt}
         </p>
       </header>
@@ -60,7 +60,7 @@ export default async function SalaryPage({
       {/* 계산기 CTA (표 위) */}
       {isMilitary ? (
         <div className="space-y-3">
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+          <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4 text-sm text-[#5B6478]">
             병사 봉급은 비과세로 아래 표 금액이 그대로 지급됩니다. 아래
             계산기는 직업군인(부사관·장교) 실수령액용입니다.
           </div>
@@ -91,21 +91,21 @@ export default async function SalaryPage({
               rows: { hobong: number; pay: (number | null)[] }[];
             }) => (
               <div key={t.title} className="space-y-2">
-                <h3 className="font-semibold text-slate-900">{t.title}</h3>
+                <h3 className="font-semibold text-[#1B2A4A]">{t.title}</h3>
                 <SalaryTable columns={t.columns} rows={t.rows} />
               </div>
             )
           )}
           {d.generalNote && (
-            <p className="text-sm text-slate-500">· {d.generalNote}</p>
+            <p className="text-sm text-[#7A8296]">· {d.generalNote}</p>
           )}
         </div>
       ) : (
         <SalaryTable columns={d.columns} rows={d.rows} />
       )}
 
-      <section className="space-y-3 text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">봉급표 보는 법</h2>
+      <section className="space-y-3 text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">봉급표 보는 법</h2>
         <p>
           위 표의 금액은 기본급(봉급)이며, 실제 월급에는 정액급식비·직급보조비
           등 수당이 더해지고 연금 기여금·건강보험·소득세가 공제됩니다. 따라서

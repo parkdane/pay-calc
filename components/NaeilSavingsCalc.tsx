@@ -40,13 +40,13 @@ export default function NaeilSavingsCalc() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-5">
-        <label className="block text-sm font-medium text-slate-700">
+      <div className="space-y-5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+        <label className="block text-sm font-medium text-[#5B6478]">
           소득 구간
           <select
             value={tierId}
             onChange={(e) => setTierId(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5"
+            className="mt-1 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
           >
             {TIERS.map((t) => (
               <option key={t.id} value={t.id}>
@@ -54,15 +54,15 @@ export default function NaeilSavingsCalc() {
               </option>
             ))}
           </select>
-          <span className="mt-1 block text-xs font-normal text-slate-400">
+          <span className="mt-1 block text-xs font-normal text-[#8B93A6]">
             {tier.hint} · 본인 월 10만 원 이상 저축 유지 조건
           </span>
         </label>
 
         <div>
-          <div className="flex items-center justify-between text-sm font-medium text-slate-700">
+          <div className="flex items-center justify-between text-sm font-medium text-[#5B6478]">
             <span>본인 월 저축액</span>
-            <span className="tabular-nums text-[#5B67A2]">{won(monthly)}</span>
+            <span className="tabular-nums text-[#2E4494]">{won(monthly)}</span>
           </div>
           <input
             type="range"
@@ -71,15 +71,15 @@ export default function NaeilSavingsCalc() {
             step={10000}
             value={monthly}
             onChange={(e) => setMonthly(Number(e.target.value))}
-            className="mt-2 w-full accent-[#5B67A2]"
+            className="mt-2 w-full accent-[#2E4494]"
           />
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-[#8B93A6]">
             월 10만~50만 원. 정부지원금은 저축액과 무관하게 구간별 정액
           </p>
         </div>
 
         <div>
-          <div className="flex items-center justify-between text-sm font-medium text-slate-700">
+          <div className="flex items-center justify-between text-sm font-medium text-[#5B6478]">
             <span>적용 금리 (연)</span>
             <div className="flex items-center gap-1">
               <input
@@ -89,9 +89,9 @@ export default function NaeilSavingsCalc() {
                 step={0.01}
                 value={rate}
                 onChange={(e) => setRate(Number(e.target.value) || 0)}
-                className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-[#5B67A2]"
+                className="w-16 rounded-lg border border-[rgba(46,68,148,0.22)] px-2 py-1 text-right tabular-nums text-[#2E4494]"
               />
-              <span className="text-[#5B67A2]">%</span>
+              <span className="text-[#2E4494]">%</span>
             </div>
           </div>
           <input
@@ -101,7 +101,7 @@ export default function NaeilSavingsCalc() {
             step={0.01}
             value={rate}
             onChange={(e) => setRate(Number(e.target.value))}
-            className="mt-2 w-full accent-[#5B67A2]"
+            className="mt-2 w-full accent-[#2E4494]"
           />
         </div>
       </div>
@@ -110,12 +110,12 @@ export default function NaeilSavingsCalc() {
       <AdSlot id="calc-naeil-save-mid" />
 
       {/* 결과 */}
-      <div className="overflow-hidden rounded-xl border border-slate-200">
-        <div className="bg-[#5B67A2] px-5 py-4 text-white">
+      <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
+        <div className="bg-[#2E4494] px-5 py-4 text-white">
           <p className="text-sm opacity-80">3년 만기 예상 수령액</p>
           <p className="text-3xl font-bold tabular-nums">{won(result.total)}</p>
         </div>
-        <dl className="divide-y divide-slate-100 bg-white text-sm">
+        <dl className="divide-y divide-[rgba(46,68,148,0.10)] bg-white text-sm">
           <Row label={`내 저축 원금 (${MONTHS}개월)`} value={won(result.principal)} />
           <Row
             label={`정부지원금 (월 ${won(tier.match)})`}
@@ -127,7 +127,7 @@ export default function NaeilSavingsCalc() {
         </dl>
       </div>
 
-      <p className="text-xs leading-relaxed text-slate-400">
+      <p className="text-xs leading-relaxed text-[#8B93A6]">
         ※ 참고용 추정치입니다. 정부지원금 수령에는 3년 통장 유지, 근로활동
         지속, 교육 이수, 자금사용계획서 제출 등의 조건이 있습니다. 모집 시기와
         세부 요건은 복지로·자산형성포털에서 확인하세요.
@@ -151,18 +151,18 @@ function Row({
 }) {
   return (
     <div className="flex items-center justify-between px-5 py-2.5">
-      <dt className={muted ? "text-slate-500" : "font-medium text-slate-800"}>
+      <dt className={muted ? "text-[#7A8296]" : "font-medium text-[#1B2A4A]"}>
         {label}
       </dt>
       <dd
         className={`tabular-nums ${
           bold
-            ? "font-bold text-slate-900"
+            ? "font-bold text-[#1B2A4A]"
             : accent
-              ? "font-semibold text-[#5B67A2]"
+              ? "font-semibold text-[#2E4494]"
               : muted
-                ? "text-slate-500"
-                : "text-slate-800"
+                ? "text-[#7A8296]"
+                : "text-[#1B2A4A]"
         }`}
       >
         {value}

@@ -10,7 +10,7 @@ export default function CalcCta({
   return (
     <Link
       href={href}
-      className="block rounded-xl bg-[#5B67A2] px-6 py-4 text-center font-semibold text-white shadow-sm transition hover:bg-[#4A5488]"
+      className="block rounded-xl bg-[#2E4494] px-6 py-4 text-center font-semibold text-white shadow-sm transition hover:bg-[#1E3068]"
     >
       {label} →
     </Link>

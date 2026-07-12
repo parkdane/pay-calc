@@ -29,10 +29,10 @@ export default function Page() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           저축 목표 시뮬레이터
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           월급과 지출을 입력하면 매달 얼마를 저축할 수 있는지, 목표 금액까지
           얼마나 걸리는지 계산합니다.
         </p>
@@ -42,8 +42,8 @@ export default function Page() {
 
       <AdSlot id="calc-savings-goal-result" />
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">사용 방법</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">사용 방법</h2>
         <p>
           월 실수령액에서 고정비(월세·통신비·보험료·구독료 등)와
           변동비(식비·교통·여가 등)를 빼면 저축 가능액이 나옵니다. 목표
@@ -53,15 +53,15 @@ export default function Page() {
         </p>
         <p>
           내 월 실수령액을 모른다면{" "}
-          <Link href="/calc/worker-net" className="text-[#5B67A2] underline">
+          <Link href="/calc/worker-net" className="text-[#2E4494] underline">
             연봉 실수령액 계산기
           </Link>
           에서 먼저 확인하고, 저축 상품은{" "}
-          <Link href="/calc/youth-save" className="text-[#5B67A2] underline">
+          <Link href="/calc/youth-save" className="text-[#2E4494] underline">
             청년미래적금
           </Link>
           과{" "}
-          <Link href="/calc/deposit" className="text-[#5B67A2] underline">
+          <Link href="/calc/deposit" className="text-[#2E4494] underline">
             일반 적금
           </Link>
           을 비교해보세요.

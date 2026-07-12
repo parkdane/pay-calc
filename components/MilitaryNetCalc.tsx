@@ -133,21 +133,21 @@ export default function MilitaryNetCalc() {
       <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
         {/* ═══ 왼쪽: 입력 ═══ */}
         <div className="space-y-4">
-          <div className="space-y-4 rounded-xl border border-[#7B86AA]/20 bg-[#F8F9FC] p-5">
+          <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">기본 입력</p>
-              <p className="mt-0.5 text-base font-bold text-slate-900">계급·호봉</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">기본 입력</p>
+              <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">계급·호봉</p>
             </div>
 
             <label className="block">
-              <span className="text-sm font-medium text-slate-700">계급</span>
+              <span className="text-sm font-medium text-[#5B6478]">계급</span>
               <select
                 value={rankKey}
                 onChange={(e) => {
                   setRankKey(e.target.value);
                   setHobong(1);
                 }}
-                className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-3"
+                className="mt-1.5 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-3"
               >
                 {RANKS.map((r) => (
                   <option key={r.key} value={r.key}>
@@ -158,11 +158,11 @@ export default function MilitaryNetCalc() {
             </label>
 
             <label className="block">
-              <span className="text-sm font-medium text-slate-700">호봉</span>
+              <span className="text-sm font-medium text-[#5B6478]">호봉</span>
               <select
                 value={hobong}
                 onChange={(e) => setHobong(Number(e.target.value))}
-                className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-3"
+                className="mt-1.5 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-3"
               >
                 {availableHobongs.map((h) => (
                   <option key={h} value={h}>
@@ -174,15 +174,15 @@ export default function MilitaryNetCalc() {
           </div>
 
           {/* 수당 옵션 */}
-          <div className="space-y-3 rounded-xl border border-[#7B86AA]/20 bg-[#F8F9FC] p-5">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">수당 입력</p>
-            <p className="text-sm text-slate-600">해당하는 항목만 체크·입력하세요</p>
+          <div className="space-y-3 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">수당 입력</p>
+            <p className="text-sm text-[#5B6478]">해당하는 항목만 체크·입력하세요</p>
             <div className="space-y-3 pt-1">
               {cfg.allowances.map((a) => (
                 <div key={a.id} className="flex items-center justify-between gap-3">
                   <div className="text-sm">
-                    <span className="text-slate-800">{a.label}</span>
-                    <p className="text-xs text-slate-400">{a.hint}</p>
+                    <span className="text-[#1B2A4A]">{a.label}</span>
+                    <p className="text-xs text-[#8B93A6]">{a.hint}</p>
                   </div>
                   {a.type === "checkbox" ? (
                     <input
@@ -199,7 +199,7 @@ export default function MilitaryNetCalc() {
                       value={(inputs[a.id] as number) || ""}
                       placeholder="0"
                       onChange={(e) => setInputs((p) => ({ ...p, [a.id]: Number(e.target.value) || 0 }))}
-                      className="w-20 shrink-0 rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-right"
+                      className="w-20 shrink-0 rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-2 py-1.5 text-right"
                     />
                   )}
                 </div>
@@ -209,24 +209,24 @@ export default function MilitaryNetCalc() {
 
           {/* 상세 옵션 (접이식) */}
           <details
-            className="rounded-xl border border-[#7B86AA]/20 bg-[#F8F9FC] p-4"
+            className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4"
             onToggle={(e) => setUseDetail((e.target as HTMLDetailsElement).open)}
           >
-            <summary className="cursor-pointer text-sm font-semibold text-slate-800">
+            <summary className="cursor-pointer text-sm font-semibold text-[#1B2A4A]">
               상세 옵션 (근속연수) — 정근수당 반영 ▾
             </summary>
             <div className="mt-4">
               <label className="block">
-                <span className="text-sm font-medium text-slate-700">근속연수</span>
+                <span className="text-sm font-medium text-[#5B6478]">근속연수</span>
                 <input
                   type="number"
                   min={0}
                   max={40}
                   value={years === 0 ? "" : years}
                   onChange={(e) => setYears(Number(e.target.value) || 0)}
-                  className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5"
+                  className="mt-1.5 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
                 />
-                <span className="mt-1 block text-xs font-normal text-slate-400">
+                <span className="mt-1 block text-xs font-normal text-[#8B93A6]">
                   실제 근무 햇수(호봉과 다를 수 있음). 정근수당·가산금과 부양가족 소득세 감면이 반영됩니다
                 </span>
               </label>
@@ -237,12 +237,12 @@ export default function MilitaryNetCalc() {
         {/* ═══ 오른쪽: 결과 (sticky) ═══ */}
         <div className="space-y-5 lg:sticky lg:top-20">
           {result ? (
-            <div className="overflow-hidden rounded-xl border border-[#7B86AA]/20">
-              <div className="bg-[#5B67A2] px-5 py-4 text-white">
+            <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
+              <div className="bg-[#2E4494] px-5 py-4 text-white">
                 <p className="text-sm opacity-80">예상 월 실수령액</p>
                 <p className="text-3xl font-bold tabular-nums">{won(result.net)}</p>
               </div>
-              <dl className="divide-y divide-slate-100 bg-white text-sm">
+              <dl className="divide-y divide-[rgba(46,68,148,0.10)] bg-white text-sm">
                 <RowItem label="기본급" value={won(result.base)} />
                 {result.allowanceItems.map((it) => (
                   <RowItem key={it.label} label={it.label} value={"+ " + won(it.value)} muted />
@@ -255,14 +255,14 @@ export default function MilitaryNetCalc() {
               </dl>
             </div>
           ) : (
-            <div className="rounded-xl border border-[#7B86AA]/20 bg-[#F8F9FC] p-6 text-center text-sm text-slate-500">
+            <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-6 text-center text-sm text-[#7A8296]">
               선택한 계급에 해당 호봉이 없습니다. 다른 호봉을 선택하세요.
             </div>
           )}
         </div>
       </div>
 
-      <p className="mt-6 text-xs leading-relaxed text-slate-400">
+      <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
         ※ 위험근무수당(병과별), 특수지 근무수당 등은 개인·부대별 편차가 커 아직 포함되지 않았습니다. 실제
         급여명세서와 차이가 있으며 참고용 추정치입니다.
       </p>
@@ -283,8 +283,8 @@ function RowItem({
 }) {
   return (
     <div className="flex items-center justify-between px-5 py-2.5">
-      <dt className={muted ? "text-slate-500" : "font-medium text-slate-800"}>{label}</dt>
-      <dd className={`tabular-nums ${bold ? "font-bold text-slate-900" : muted ? "text-slate-500" : "text-slate-800"}`}>
+      <dt className={muted ? "text-[#7A8296]" : "font-medium text-[#1B2A4A]"}>{label}</dt>
+      <dd className={`tabular-nums ${bold ? "font-bold text-[#1B2A4A]" : muted ? "text-[#7A8296]" : "text-[#1B2A4A]"}`}>
         {value}
       </dd>
     </div>

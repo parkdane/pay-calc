@@ -54,7 +54,7 @@ export default function DepositCalc() {
   return (
     <div className="space-y-6">
       {fromRates && (
-        <div className="rounded-xl border border-[#BFC8EA] bg-[#EEF0FA] px-4 py-3 text-sm text-[#464F82]">
+        <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.06)] px-4 py-3 text-sm text-[#1E3068]">
           금리 비교에서 선택한 <strong>{rate.toFixed(2)}%</strong>가 적용됐습니다.
           납입액·기간을 넣어 실수령액을 확인하세요.
         </div>
@@ -72,8 +72,8 @@ export default function DepositCalc() {
             onClick={() => setMode(m.id)}
             className={`rounded-lg py-2.5 text-sm font-semibold transition ${
               mode === m.id
-                ? "bg-white text-[#5B67A2] shadow-sm"
-                : "text-slate-500"
+                ? "bg-white text-[#2E4494] shadow-sm"
+                : "text-[#7A8296]"
             }`}
           >
             {m.label}
@@ -82,26 +82,26 @@ export default function DepositCalc() {
       </div>
 
       {/* 입력 */}
-      <div className="space-y-5 rounded-xl border border-slate-200 bg-slate-50 p-5">
+      <div className="space-y-5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
         {mode === "savings" ? (
-          <label className="block text-sm font-medium text-slate-700">
+          <label className="block text-sm font-medium text-[#5B6478]">
             월 납입액
             <MoneyInput value={monthly} onChange={setMonthly} placeholder="예: 300,000" />
           </label>
         ) : (
-          <label className="block text-sm font-medium text-slate-700">
+          <label className="block text-sm font-medium text-[#5B6478]">
             예치 금액
             <MoneyInput value={lump} onChange={setLump} placeholder="예: 10,000,000" />
           </label>
         )}
 
         <div className="grid grid-cols-2 gap-4">
-          <label className="block text-sm font-medium text-slate-700">
+          <label className="block text-sm font-medium text-[#5B6478]">
             기간 (개월)
             <select
               value={months}
               onChange={(e) => setMonths(Number(e.target.value))}
-              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5"
+              className="mt-1 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
             >
               {[6, 12, 18, 24, 36, 48, 60].map((m) => (
                 <option key={m} value={m}>
@@ -110,7 +110,7 @@ export default function DepositCalc() {
               ))}
             </select>
           </label>
-          <div className="text-sm font-medium text-slate-700">
+          <div className="text-sm font-medium text-[#5B6478]">
             <div className="flex items-center justify-between">
               <span>연 금리</span>
               <div className="flex items-center gap-1">
@@ -121,9 +121,9 @@ export default function DepositCalc() {
                   step={0.01}
                   value={rate}
                   onChange={(e) => setRate(Number(e.target.value) || 0)}
-                  className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-[#5B67A2]"
+                  className="w-16 rounded-lg border border-[rgba(46,68,148,0.22)] px-2 py-1 text-right tabular-nums text-[#2E4494]"
                 />
-                <span className="text-[#5B67A2]">%</span>
+                <span className="text-[#2E4494]">%</span>
               </div>
             </div>
             <input
@@ -133,12 +133,12 @@ export default function DepositCalc() {
               step={0.01}
               value={rate}
               onChange={(e) => setRate(Number(e.target.value))}
-              className="mt-3 w-full accent-[#5B67A2]"
+              className="mt-3 w-full accent-[#2E4494]"
             />
           </div>
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-slate-700">
+        <label className="flex items-center gap-2 text-sm text-[#5B6478]">
           <input
             type="checkbox"
             checked={taxFree}
@@ -153,12 +153,12 @@ export default function DepositCalc() {
       <AdSlot id="calc-deposit-mid" />
 
       {/* 결과 */}
-      <div className="overflow-hidden rounded-xl border border-slate-200">
-        <div className="bg-[#5B67A2] px-5 py-4 text-white">
+      <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
+        <div className="bg-[#2E4494] px-5 py-4 text-white">
           <p className="text-sm opacity-80">만기 수령액 (세후)</p>
           <p className="text-3xl font-bold tabular-nums">{won(result.total)}</p>
         </div>
-        <dl className="divide-y divide-slate-100 bg-white text-sm">
+        <dl className="divide-y divide-[rgba(46,68,148,0.10)] bg-white text-sm">
           <Row label="원금" value={won(result.principal)} />
           <Row label="세전 이자" value={"+ " + won(result.interest)} muted />
           {result.tax > 0 && (
@@ -168,7 +168,7 @@ export default function DepositCalc() {
         </dl>
       </div>
 
-      <p className="text-xs leading-relaxed text-slate-400">
+      <p className="text-xs leading-relaxed text-[#8B93A6]">
         ※ 단리 기준 계산입니다. 적금은 매월 납입 시점부터 만기까지의 기간에
         비례해 이자가 붙습니다. 실제 상품의 복리 여부·우대금리에 따라 금액이
         달라질 수 있습니다.
@@ -190,11 +190,11 @@ function Row({
 }) {
   return (
     <div className="flex items-center justify-between px-5 py-2.5">
-      <dt className={muted ? "text-slate-500" : "font-medium text-slate-800"}>
+      <dt className={muted ? "text-[#7A8296]" : "font-medium text-[#1B2A4A]"}>
         {label}
       </dt>
       <dd
-        className={`tabular-nums ${bold ? "font-bold text-slate-900" : muted ? "text-slate-500" : "text-slate-800"}`}
+        className={`tabular-nums ${bold ? "font-bold text-[#1B2A4A]" : muted ? "text-[#7A8296]" : "text-[#1B2A4A]"}`}
       >
         {value}
       </dd>

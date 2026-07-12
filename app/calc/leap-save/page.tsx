@@ -33,10 +33,10 @@ export default function Page() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           청년도약계좌 만기 계산기
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           소득구간과 월 납입액을 선택하면 정부기여금과 비과세 이자를 포함한
           5년 만기 수령액을 계산합니다.
         </p>
@@ -46,8 +46,8 @@ export default function Page() {
 
       <AdSlot id="calc-leap-save-result" />
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
           만기 수령액은 본인 납입 원금(월 최대 70만 원 × 60개월) + 정부기여금
           + 비과세 이자로 구성됩니다. 기여금은 소득구간별 기준한도까지
@@ -56,11 +56,11 @@ export default function Page() {
         </p>
         <p>
           신규 가입이 종료된 상품이므로, 새로 시작한다면 후속 상품인{" "}
-          <Link href="/calc/youth-save" className="text-[#5B67A2] underline">
+          <Link href="/calc/youth-save" className="text-[#2E4494] underline">
             청년미래적금
           </Link>
           을, 저소득 청년이라면{" "}
-          <Link href="/calc/naeil-save" className="text-[#5B67A2] underline">
+          <Link href="/calc/naeil-save" className="text-[#2E4494] underline">
             청년내일저축계좌
           </Link>
           를 확인하세요.

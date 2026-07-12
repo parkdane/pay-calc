@@ -43,12 +43,12 @@ export default function Home() {
   return (
     <div className="space-y-12">
       <section className="space-y-3 pt-4">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+        <h1 className="text-3xl font-bold tracking-tight text-[#1B2A4A]">
           2026년 봉급표, 표만 보지 말고
           <br />
-          <span className="text-[#5B67A2]">실수령액까지 계산</span>하세요
+          <span className="text-[#2E4494]">실수령액까지 계산</span>하세요
         </h1>
-        <p className="text-slate-600">
+        <p className="text-[#5B6478]">
           공무원·군인·경찰·소방·교사 봉급표와 4대보험·세금을 반영한 실수령액
           계산기, 정책 적금 계산기를 무료로 제공합니다.
         </p>
@@ -56,20 +56,20 @@ export default function Home() {
 
       <Link
         href="/rates"
-        className="block rounded-xl border border-[#BFC8EA] bg-[#EEF0FA] p-5 transition hover:shadow-md"
+        className="block rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.06)] p-5 transition hover:shadow-md"
       >
-        <p className="text-sm font-semibold text-[#5B67A2]">📊 매일 갱신</p>
-        <p className="mt-1 font-bold text-slate-900">
+        <p className="text-sm font-semibold text-[#2E4494]">📊 매일 갱신</p>
+        <p className="mt-1 font-bold text-[#1B2A4A]">
           예금·적금 금리 비교 — 오늘 최고금리 보러 가기
         </p>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-[#7A8296]">
           시중·저축·인터넷은행 정기예금·적금 최고금리를 매일 자동 갱신합니다.
         </p>
       </Link>
 
       {CALC_GROUPS.map((g, i) => (
         <section key={g.title} className="space-y-4">
-          <h2 className="text-lg font-bold text-slate-900">{g.title}</h2>
+          <h2 className="text-lg font-bold text-[#1B2A4A]">{g.title}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {g.items.map((c) => (
               <Card key={c.href} {...c} accent />
@@ -80,7 +80,7 @@ export default function Home() {
       ))}
 
       <section className="space-y-4">
-        <h2 className="text-lg font-bold text-slate-900">봉급표</h2>
+        <h2 className="text-lg font-bold text-[#1B2A4A]">봉급표</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           {SALARY.map((c) => (
             <Card key={c.href} {...c} />
@@ -106,11 +106,11 @@ function Card({
     <Link
       href={href}
       className={`rounded-xl border p-5 transition hover:shadow-md ${
-        accent ? "border-[#BFC8EA] bg-[#EEF0FA]/50" : "border-slate-200 bg-white"
+        accent ? "border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.05)]" : "border-[rgba(46,68,148,0.14)] bg-white"
       }`}
     >
-      <h3 className="font-semibold text-slate-900">{title}</h3>
-      <p className="mt-1 text-sm text-slate-500">{desc}</p>
+      <h3 className="font-semibold text-[#1B2A4A]">{title}</h3>
+      <p className="mt-1 text-sm text-[#7A8296]">{desc}</p>
     </Link>
   );
 }

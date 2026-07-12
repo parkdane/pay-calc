@@ -37,7 +37,7 @@ export default function MoneyInput({
       onChange={(e) => handleChange(e.target.value)}
       className={
         className ||
-        "mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 tabular-nums"
+        "mt-1 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5 tabular-nums"
       }
     />
   );

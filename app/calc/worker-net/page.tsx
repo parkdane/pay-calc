@@ -29,10 +29,10 @@ export default function Page() {
   return (
     <article className="space-y-8">
       <header className="space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           연봉 실수령액 계산기
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-[#5B6478]">
           연봉을 입력하면 4대보험·소득세를 뺀 월 실수령액과, 연봉 구간별
           실수령 비율 비교 그래프를 보여드립니다.
         </p>
@@ -45,8 +45,8 @@ export default function Page() {
 
       <AdSlot id="calc-worker-net-result" />
 
-      <section className="space-y-3 text-sm leading-relaxed text-slate-700">
-        <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
           월 세전 급여(연봉÷12)에서 국민연금(4.5%, 기준소득월액 상한 적용),
           건강보험(3.595%), 장기요양보험(건강보험료의 13.14%),
@@ -55,11 +55,11 @@ export default function Page() {
         </p>
         <p>
           내 연봉이 전국에서 어느 위치인지 궁금하다면{" "}
-          <Link href="/calc/income-rank" className="text-[#5B67A2] underline">
+          <Link href="/calc/income-rank" className="text-[#2E4494] underline">
             연봉 순위 계산기
           </Link>
           에서, 실수령액으로 목돈을 모으는 계획은{" "}
-          <Link href="/calc/savings-goal" className="text-[#5B67A2] underline">
+          <Link href="/calc/savings-goal" className="text-[#2E4494] underline">
             저축 목표 시뮬레이터
           </Link>
           에서 확인하세요.
