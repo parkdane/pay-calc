@@ -34,6 +34,11 @@ const GROUPS = [
     desc: "정부가 돈을 얹어주는 상품",
     items: [
       {
+        href: "/calc/youth-compare",
+        title: "청년 정책 적금 비교",
+        desc: "4개 상품 + 일반적금 한눈에 비교",
+      },
+      {
         href: "/calc/youth-save",
         title: "청년미래적금",
         desc: "기여금 6~12% + 비과세, 3년 만기",

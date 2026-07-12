@@ -31,6 +31,7 @@ const CALC_GROUPS = [
   {
     title: "정책 적금·지원금",
     items: [
+      { href: "/calc/youth-compare", title: "청년 정책 적금 비교", desc: "4개 상품 + 일반적금 한눈에 비교" },
       { href: "/calc/youth-save", title: "청년미래적금", desc: "정부기여금 포함 3년 만기액" },
       { href: "/calc/naeil-save", title: "청년내일저축계좌", desc: "정부지원 월 30만 포함" },
       { href: "/calc/leap-save", title: "청년도약계좌", desc: "기존 가입자 만기 계산" },
