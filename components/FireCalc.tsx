@@ -110,28 +110,26 @@ export default function FireCalc() {
         import("html2canvas-pro"),
         import("jspdf"),
       ]);
-      const canvas = await html2canvas(captureRef.current, {
+      const el = captureRef.current;
+      const canvas = await html2canvas(el, {
         scale: 2,
         backgroundColor: "#ffffff",
         useCORS: true,
         foreignObjectRendering: true,
+        windowWidth: el.scrollWidth,
+        width: el.scrollWidth,
       });
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new JsPDF("p", "mm", "a4");
-      const pageWidth = 210;
-      const pageHeight = 297;
-      const imgWidth = pageWidth;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
+      // 캡처된 화면 비율 그대로 mm로 환산해 페이지 크기를 잡는다 (scale:2 보정, 96dpi 기준)
+      const pxToMm = (px: number) => (px / 2) * (25.4 / 96);
+      const imgWidthMm = pxToMm(canvas.width);
+      const imgHeightMm = pxToMm(canvas.height);
+      const pdf = new JsPDF({
+        orientation: imgWidthMm >= imgHeightMm ? "l" : "p",
+        unit: "mm",
+        format: [imgWidthMm, imgHeightMm],
+      });
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidthMm, imgHeightMm);
       pdf.save(`파이어계산기_${Math.round(age)}세_결과.pdf`);
     } catch (err) {
       console.error("PDF 저장 실패:", err);
