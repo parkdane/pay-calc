@@ -41,7 +41,9 @@ export default function Page() {
         </p>
       </header>
 
-      <YouthSavingsCalc />
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <YouthSavingsCalc />
+      </div>
 
       <AdSlot id="calc-youth-save-result" />
 

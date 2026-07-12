@@ -40,7 +40,9 @@ export default function Page() {
         </p>
       </header>
 
-      <SalaryCompareCalc />
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <SalaryCompareCalc />
+      </div>
 
       <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
         <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>

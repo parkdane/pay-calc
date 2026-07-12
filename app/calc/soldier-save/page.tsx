@@ -42,7 +42,9 @@ export default function Page() {
         </p>
       </header>
 
-      <SoldierSavingsCalc />
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <SoldierSavingsCalc />
+      </div>
 
       <AdSlot id="calc-soldier-save-result" />
 

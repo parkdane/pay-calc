@@ -38,7 +38,9 @@ export default function Page() {
         </p>
       </header>
 
-      <DepositCalc />
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <DepositCalc />
+      </div>
 
       <AdSlot id="calc-deposit-result" />
 

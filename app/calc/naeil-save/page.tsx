@@ -42,7 +42,9 @@ export default function Page() {
         </p>
       </header>
 
-      <NaeilSavingsCalc />
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <NaeilSavingsCalc />
+      </div>
 
       <AdSlot id="calc-naeil-save-result" />
 

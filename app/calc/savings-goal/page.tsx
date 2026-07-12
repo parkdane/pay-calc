@@ -38,7 +38,9 @@ export default function Page() {
         </p>
       </header>
 
-      <SavingsGoalSim />
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <SavingsGoalSim />
+      </div>
 
       <AdSlot id="calc-savings-goal-result" />
 

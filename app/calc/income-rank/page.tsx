@@ -42,7 +42,9 @@ export default function Page() {
         </p>
       </header>
 
-      <IncomeRankCalc />
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <IncomeRankCalc />
+      </div>
 
       <AdSlot id="calc-income-rank-result" />
 

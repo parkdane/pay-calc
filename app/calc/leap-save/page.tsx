@@ -42,7 +42,9 @@ export default function Page() {
         </p>
       </header>
 
-      <LeapAccountCalc />
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <LeapAccountCalc />
+      </div>
 
       <AdSlot id="calc-leap-save-result" />
 

@@ -28,6 +28,25 @@ const leapMatchRound = (n: number) => Math.floor(n / 100) * 100;
 
 const TAX_RATE = 0.154;
 
+// 월 납입액 + 만기 수령액을 알 때, "사실상 연 몇 %짜리 저축인가"를 이분탐색으로 역산
+// (정부기여금·비과세 효과까지 전부 포함한 실효 수익률 — 기간이 다른 상품끼리도 공정하게 비교 가능)
+function solveEffectiveAnnualRate(monthly: number, months: number, total: number): number {
+  if (monthly <= 0 || months <= 0) return 0;
+  const fv = (r: number) => {
+    if (Math.abs(r) < 1e-9) return monthly * months;
+    return monthly * ((Math.pow(1 + r, months) - 1) / r);
+  };
+  let lo = -0.1,
+    hi = 1;
+  for (let i = 0; i < 100; i++) {
+    const mid = (lo + hi) / 2;
+    if (fv(mid) < total) lo = mid;
+    else hi = mid;
+  }
+  const monthlyRate = (lo + hi) / 2;
+  return (Math.pow(1 + monthlyRate, 12) - 1) * 100;
+}
+
 type Row = {
   key: string;
   name: string;
@@ -39,6 +58,7 @@ type Row = {
   matching: number;
   tax: number;
   total: number;
+  effectiveAnnualRate: number;
 };
 
 // 진짜 선택 갈등이 있는 상황별로만 묶는다 (기간·자격이 다른 상품을 억지로 섞지 않음)
@@ -49,7 +69,7 @@ const GROUPS = [
 ] as const;
 type GroupId = (typeof GROUPS)[number]["id"];
 
-function calcFuture(monthly: number, futureType: string, futureRate: number): Row {
+function calcFuture(monthly: number, futureType: string, futureRate: number): Omit<Row, "effectiveAnnualRate"> {
   const type = futureCfg.types.find((t) => t.id === futureType)!;
   const months = futureCfg.months;
   const m = Math.min(monthly, futureCfg.maxMonthly);
@@ -73,7 +93,7 @@ function calcFuture(monthly: number, futureType: string, futureRate: number): Ro
   };
 }
 
-function calcLeap(monthly: number, leapTier: string, leapRate: number): Row {
+function calcLeap(monthly: number, leapTier: string, leapRate: number): Omit<Row, "effectiveAnnualRate"> {
   const tier = LEAP_TIERS.find((t) => t.id === leapTier)!;
   const m = Math.min(monthly, LEAP_CAP);
   const principal = m * LEAP_MONTHS;
@@ -97,7 +117,7 @@ function calcLeap(monthly: number, leapTier: string, leapRate: number): Row {
   };
 }
 
-function calcNaeil(monthly: number, naeilTier: string, naeilRate: number): Row {
+function calcNaeil(monthly: number, naeilTier: string, naeilRate: number): Omit<Row, "effectiveAnnualRate"> {
   const tier = NAEIL_TIERS.find((t) => t.id === naeilTier)!;
   const principal = monthly * NAEIL_MONTHS;
   const matching = tier.match * NAEIL_MONTHS;
@@ -117,7 +137,7 @@ function calcNaeil(monthly: number, naeilTier: string, naeilRate: number): Row {
   };
 }
 
-function calcSoldier(monthly: number, soldierMonths: number, soldierRate: number): Row {
+function calcSoldier(monthly: number, soldierMonths: number, soldierRate: number): Omit<Row, "effectiveAnnualRate"> {
   const m = Math.min(monthly, soldierCfg.maxMonthly);
   const principal = m * soldierMonths;
   const matching = principal * soldierCfg.matchRate;
@@ -137,7 +157,7 @@ function calcSoldier(monthly: number, soldierMonths: number, soldierRate: number
   };
 }
 
-function calcDeposit(monthly: number, depositMonths: number, depositRate: number): Row {
+function calcDeposit(monthly: number, depositMonths: number, depositRate: number): Omit<Row, "effectiveAnnualRate"> {
   const principal = monthly * depositMonths;
   const mr = depositRate / 100 / 12;
   const grossInterest = monthly * mr * ((depositMonths * (depositMonths + 1)) / 2);
@@ -176,20 +196,25 @@ export default function YouthSavingsCompareCalc() {
   const [includeDeposit, setIncludeDeposit] = useState(true);
 
   const rows = useMemo(() => {
-    const list: Row[] = [];
+    const raw: Omit<Row, "effectiveAnnualRate">[] = [];
 
     if (group === "general") {
-      list.push(calcFuture(monthly, futureType, futureRate));
-      list.push(calcLeap(monthly, leapTier, leapRate));
-      if (includeDeposit) list.push(calcDeposit(monthly, futureCfg.months, depositRate)); // 3년 기준 비교
+      raw.push(calcFuture(monthly, futureType, futureRate));
+      raw.push(calcLeap(monthly, leapTier, leapRate));
+      if (includeDeposit) raw.push(calcDeposit(monthly, futureCfg.months, depositRate)); // 3년 기준 비교
     } else if (group === "low") {
-      list.push(calcNaeil(monthly, naeilTier, naeilRate));
-      list.push(calcFuture(monthly, futureType, futureRate));
-      if (includeDeposit) list.push(calcDeposit(monthly, NAEIL_MONTHS, depositRate));
+      raw.push(calcNaeil(monthly, naeilTier, naeilRate));
+      raw.push(calcFuture(monthly, futureType, futureRate));
+      if (includeDeposit) raw.push(calcDeposit(monthly, NAEIL_MONTHS, depositRate));
     } else if (group === "soldier") {
-      list.push(calcSoldier(monthly, soldierMonths, soldierRate));
-      if (includeDeposit) list.push(calcDeposit(monthly, soldierMonths, depositRate));
+      raw.push(calcSoldier(monthly, soldierMonths, soldierRate));
+      if (includeDeposit) raw.push(calcDeposit(monthly, soldierMonths, depositRate));
     }
+
+    const list: Row[] = raw.map((r) => ({
+      ...r,
+      effectiveAnnualRate: solveEffectiveAnnualRate(r.monthlyUsed, r.months, r.total),
+    }));
 
     return list.sort((a, b) => b.total - a.total);
   }, [
@@ -203,35 +228,42 @@ export default function YouthSavingsCompareCalc() {
   ]);
 
   const best = rows[0];
+  const bestByRate = rows.length > 0 ? rows.slice().sort((a, b) => b.effectiveAnnualRate - a.effectiveAnnualRate)[0] : null;
   const depositRow = rows.find((r) => r.key === "deposit");
   const totalMatching = rows.reduce((s, r) => s + r.matching, 0);
   const chartMax = rows.length > 0 ? Math.max(...rows.map((r) => r.total)) : 1;
   const sameDuration = rows.every((r) => r.months === rows[0].months);
 
   return (
-    <div className="space-y-6">
-      {/* 상황 선택 */}
-      <div className="flex flex-wrap gap-1.5">
-        {GROUPS.map((g) => (
-          <button
-            key={g.id}
-            onClick={() => setGroup(g.id)}
-            className={`rounded-lg border px-3 py-2 text-left text-xs font-medium transition ${
-              group === g.id
-                ? "border-[#2E4494] bg-[rgba(46,68,148,0.06)] text-[#2E4494]"
-                : "border-[rgba(46,68,148,0.22)] bg-white text-[#5B6478] hover:border-[#2E4494]"
-            }`}
-          >
-            <span className="block font-semibold">{g.label}</span>
-            <span className="block text-[10px] font-normal text-[#8B93A6]">{g.hint}</span>
-          </button>
-        ))}
-      </div>
+    <div className="mx-auto max-w-[1280px] px-4">
+      {/* 광고 (전체 폭) */}
+      <AdSlot id="calc-youth-compare-mid" />
 
-      {/* 월 납입액 */}
-      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
-        <label className="block text-sm font-medium text-[#5B6478]">
-          월 납입액
+      <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
+        {/* ═══ 왼쪽: 입력 ═══ */}
+        <div className="space-y-4">
+          {/* 상황 선택 */}
+          <div className="flex flex-wrap gap-1.5">
+            {GROUPS.map((g) => (
+              <button
+                key={g.id}
+                onClick={() => setGroup(g.id)}
+                className={`rounded-lg border px-3 py-2 text-left text-xs font-medium transition ${
+                  group === g.id
+                    ? "border-[#2E4494] bg-[rgba(46,68,148,0.06)] text-[#2E4494]"
+                    : "border-[rgba(46,68,148,0.22)] bg-white text-[#5B6478] hover:border-[#2E4494]"
+                }`}
+              >
+                <span className="block font-semibold">{g.label}</span>
+                <span className="block text-[10px] font-normal text-[#8B93A6]">{g.hint}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* 월 납입액 */}
+          <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
+            <label className="block text-sm font-medium text-[#5B6478]">
+              월 납입액
           <div className="mt-1.5">
             <input
               type="text"
@@ -410,15 +442,17 @@ export default function YouthSavingsCompareCalc() {
           </label>
         </div>
       </div>
+        </div>
 
-      <AdSlot id="calc-youth-compare-mid" />
+        {/* ═══ 오른쪽: 결과 (sticky) ═══ */}
+        <div className="space-y-5 lg:sticky lg:top-20">
 
       {/* 핵심 지표 */}
       {rows.length > 0 && (
         <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.06)] p-5">
           <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">핵심 지표</p>
           <p className="mt-1 text-lg font-bold text-[#1B2A4A]">
-            가장 유리한 상품: {best.name} — 만기 수령액 {won(best.total)}
+            총액 기준 1위: {best.name} — 만기 수령액 {won(best.total)}
           </p>
           {depositRow && best.key !== "deposit" && (
             <p className="mt-1 text-sm leading-relaxed text-[#5B6478]">
@@ -426,10 +460,28 @@ export default function YouthSavingsCompareCalc() {
               더 받습니다. 정부기여금 합계는 <strong className="tabular-nums">{won(totalMatching)}</strong>입니다.
             </p>
           )}
+
+          {bestByRate && bestByRate.key !== best.key && (
+            <div className="mt-3 rounded-lg border border-[#2E4494]/30 bg-white p-3">
+              <p className="text-sm font-semibold text-[#2E4494]">
+                근데 "연간 효율"로 보면 얘기가 다릅니다
+              </p>
+              <p className="mt-1 text-sm leading-relaxed text-[#5B6478]">
+                {best.name}은 만기 기간이 {best.months}개월로 길어서 총액이 커 보이지만, 정부기여금·이자를 전부
+                반영해 연 이자율로 환산하면 실제로는 연{" "}
+                <strong className="tabular-nums">{best.effectiveAnnualRate.toFixed(2)}%</strong>짜리 저축입니다.
+                반면 {bestByRate.name}({bestByRate.months}개월)은 연{" "}
+                <strong className="tabular-nums">{bestByRate.effectiveAnnualRate.toFixed(2)}%</strong>로, 같은
+                기간 동안 돈이 불어나는 속도 자체는 이쪽이 더 빠릅니다. 만기까지 오래 묶어둘 수 있으면{" "}
+                {best.name}, 짧은 기간에 최대한 효율을 뽑고 싶으면 {bestByRate.name}이 유리합니다.
+              </p>
+            </div>
+          )}
+
           {!sameDuration && (
             <p className="mt-2 text-xs text-[#8B93A6]">
-              비교 대상 만기 기간이 서로 다릅니다(아래 표 "만기" 열 확인). 기간이 긴 상품은 총액이 자연히 커지니
-              단순 액수보다 조건이 실제로 맞는지를 먼저 보세요.
+              비교 대상 만기 기간이 서로 다릅니다(아래 표 "만기"·"연환산 수익률" 열 확인). 기간이 긴 상품은
+              총액이 자연히 커지니 단순 액수보다 연환산 수익률로 효율을 비교하세요.
             </p>
           )}
         </div>
@@ -477,6 +529,7 @@ export default function YouthSavingsCompareCalc() {
                   <th className="px-4 py-2 text-right font-medium">이자</th>
                   <th className="px-4 py-2 text-right font-medium">정부기여금</th>
                   <th className="px-4 py-2 text-right font-medium">만기 수령액</th>
+                  <th className="px-4 py-2 text-right font-medium">연환산 수익률</th>
                 </tr>
               </thead>
               <tbody>
@@ -489,7 +542,12 @@ export default function YouthSavingsCompareCalc() {
                       {r.name}
                       {r.key === best.key && (
                         <span className="ml-1.5 rounded bg-[#2E4494] px-1.5 py-0.5 text-[10px] font-bold text-white">
-                          최고
+                          총액 1위
+                        </span>
+                      )}
+                      {bestByRate && r.key === bestByRate.key && bestByRate.key !== best.key && (
+                        <span className="ml-1.5 rounded bg-emerald-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                          연환산 1위
                         </span>
                       )}
                     </td>
@@ -504,6 +562,9 @@ export default function YouthSavingsCompareCalc() {
                       {r.matching > 0 ? won(r.matching) : "-"}
                     </td>
                     <td className="px-4 py-2 text-right font-semibold tabular-nums text-[#2E4494]">{won(r.total)}</td>
+                    <td className="px-4 py-2 text-right tabular-nums text-[#5B6478]">
+                      {r.effectiveAnnualRate.toFixed(2)}%
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -511,21 +572,25 @@ export default function YouthSavingsCompareCalc() {
           </div>
         </div>
       )}
+        </div>
+      </div>
 
-      {/* 안내 */}
-      <section className="space-y-1.5 rounded-xl bg-[rgba(46,68,148,0.03)] p-4 text-sm text-[#5B6478]">
-        <p className="font-semibold text-[#1B2A4A]">비교 전에 꼭 확인하세요</p>
-        <p>
-          같은 상황(소득 구간, 복무 여부)에서 실제로 고민할 만한 상품끼리만 묶었습니다. 그래도 세부 가입 자격은
-          매년 바뀔 수 있으니 신청 전 공식 공고를 다시 확인하세요. 이미 다른 계좌에 가입돼 있다면 중도해지 시
-          정부기여금을 반환해야 할 수 있으니, 갈아타기 전에 기존 상품의 중도해지 조건부터 확인하세요.
+      {/* 안내 (grid 밖, 전체 폭) */}
+      <div className="mt-6 space-y-6">
+        <section className="space-y-1.5 rounded-xl bg-[rgba(46,68,148,0.03)] p-4 text-sm text-[#5B6478]">
+          <p className="font-semibold text-[#1B2A4A]">비교 전에 꼭 확인하세요</p>
+          <p>
+            같은 상황(소득 구간, 복무 여부)에서 실제로 고민할 만한 상품끼리만 묶었습니다. 그래도 세부 가입 자격은
+            매년 바뀔 수 있으니 신청 전 공식 공고를 다시 확인하세요. 이미 다른 계좌에 가입돼 있다면 중도해지 시
+            정부기여금을 반환해야 할 수 있으니, 갈아타기 전에 기존 상품의 중도해지 조건부터 확인하세요.
+          </p>
+        </section>
+
+        <p className="text-xs leading-relaxed text-[#8B93A6]">
+          ※ 참고용 추정치입니다. 정부기여금·금리·비과세 적용 여부는 신청 시점의 공식 공고와 은행 상품설명서가
+          우선합니다.
         </p>
-      </section>
-
-      <p className="text-xs leading-relaxed text-[#8B93A6]">
-        ※ 참고용 추정치입니다. 정부기여금·금리·비과세 적용 여부는 신청 시점의 공식 공고와 은행 상품설명서가
-        우선합니다.
-      </p>
+      </div>
     </div>
   );
 }
