@@ -1,0 +1,25 @@
+name = "moneywatch-salary-worker"
+main = "salary-worker.js"
+compatibility_date = "2025-01-01"
+
+# 매주 월요일 새벽 6시 KST (= 전날 21:00 UTC 일요일)
+[triggers]
+crons = ["0 21 * * 0"]
+
+# ─────────────────────────────────────────────────────────────
+# 환경변수는 이 파일에 넣지 않는다. (git에 올라가면 유출됨)
+# 아래 두 종류를 Cloudflare 대시보드 또는 wrangler secret으로 등록:
+#
+# [Secret - 민감정보, 대시보드 Settings > Variables and Secrets 에서 "Secret"으로]
+#   DART_API_KEY     Open DART 오픈API 인증키 (opendart.fss.or.kr)
+#   GH_TOKEN         GitHub Personal Access Token (repo 권한) — rate-worker와 동일 값 사용 가능
+#   CF_DEPLOY_HOOK   Cloudflare Pages Deploy Hook URL — rate-worker와 동일 값 사용 가능
+#
+# [일반 변수 - 민감하지 않음, 아래 [vars]에 두거나 대시보드 "Text"로]
+#   GH_REPO = "parkdane/pay-calc"
+#   GH_PATH = "data/salary-compare.json"
+# ─────────────────────────────────────────────────────────────
+
+[vars]
+GH_REPO = "parkdane/pay-calc"
+GH_PATH = "data/salary-compare.json"

@@ -70,6 +70,11 @@ const GROUPS = [
         desc: "국세청 통계 기준 연봉 순위",
       },
       {
+        href: "/calc/salary-compare",
+        title: "대기업 평균연봉 비교",
+        desc: "금감원 DART 공시 기준 실제 데이터",
+      },
+      {
         href: "/calc/savings-goal",
         title: "저축 목표 시뮬레이터",
         desc: "월급·지출 입력 → 1억까지 걸리는 기간",
