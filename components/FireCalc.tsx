@@ -130,18 +130,24 @@ export default function FireCalc() {
       fireTypeDesc = "여행·취미 여유가 있는 풍족형 시나리오입니다.";
     }
 
-    // 자산 소진 나이
+    // 자산 소진 나이 + 연도별 경로 (재정 수명 차트용)
     let depletionAge: number | null = null;
+    const depletionPath: { age: number; asset: number }[] = [];
     if (reachAge !== null) {
       let c = fireNumber;
       const exp = netMonthly * 10000;
       let m = 0;
       const cap = 12 * 60;
+      depletionPath.push({ age: reachAge, asset: Math.max(c, 0) });
       while (c > 0 && m < cap) {
         c = c * (1 + mRet) - exp;
         m++;
+        if (m % 12 === 0) depletionPath.push({ age: reachAge + m / 12, asset: Math.max(c, 0) });
       }
       depletionAge = m >= cap ? null : reachAge + m / 12;
+      if (depletionAge !== null && depletionPath[depletionPath.length - 1].asset > 0) {
+        depletionPath.push({ age: depletionAge, asset: 0 });
+      }
     }
 
     return {
@@ -156,6 +162,7 @@ export default function FireCalc() {
       fireType,
       fireTypeDesc,
       depletionAge,
+      depletionPath,
       annualExpense,
       netMonthly,
       path,
@@ -372,6 +379,9 @@ export default function FireCalc() {
         {/* 성장 차트 */}
         <GrowthChart path={r.path} reachAge={r.reachAge} />
 
+        {/* 재정 수명 차트 */}
+        <DepletionChart path={r.depletionPath} depletionAge={r.depletionAge} />
+
         {/* 시나리오 비교 */}
         <div className="overflow-hidden rounded-xl border border-slate-200">
           <div className="border-b border-slate-100 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800">
@@ -576,6 +586,124 @@ function GrowthChart({
           })()}
 
         {/* X축 라벨 */}
+        {xTicks.map((a, i) => (
+          <text key={`x-${i}`} x={x(a)} y={H - 8} fontSize="10" fill="#94a3b8" textAnchor="middle">
+            {Math.round(a)}세
+          </text>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+// ── 재정 수명 차트: 은퇴(FIRE 달성) 후 자산이 얼마나 버티는지 ──
+function DepletionChart({
+  path,
+  depletionAge,
+}: {
+  path: { age: number; asset: number }[];
+  depletionAge: number | null;
+}) {
+  const [hover, setHover] = useState<number | null>(null);
+  if (path.length < 2) {
+    return (
+      <div className="rounded-xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-400">
+        FIRE 달성 시점이 계산되면 재정 수명 차트가 표시됩니다.
+      </div>
+    );
+  }
+  const W = 560,
+    H = 260,
+    padL = 46,
+    padR = 12,
+    padT = 20,
+    padB = 30;
+  const maxVal = Math.max(...path.map((p) => p.asset));
+  const minAge = path[0].age,
+    maxAge = path[path.length - 1].age;
+  const x = (a: number) => padL + ((a - minAge) / (maxAge - minAge || 1)) * (W - padL - padR);
+  const y = (v: number) => H - padB - (v / (maxVal || 1)) * (H - padT - padB);
+  const line = path.map((p, i) => `${i === 0 ? "M" : "L"} ${x(p.age).toFixed(1)} ${y(p.asset).toFixed(1)}`).join(" ");
+  const eokShort = (n: number) =>
+    n / 100000000 >= 1 ? (n / 100000000).toFixed(1) + "억" : Math.round(n / 10000).toLocaleString("ko-KR") + "만";
+
+  const span = maxAge - minAge;
+  const step = span <= 20 ? 5 : span <= 50 ? 10 : 20;
+  const xTicks: number[] = [];
+  for (let a = Math.ceil(minAge / step) * step; a <= maxAge; a += step) xTicks.push(a);
+  if (xTicks.length === 0 || xTicks[0] - minAge > step * 0.4) xTicks.unshift(Math.round(minAge));
+  if (maxAge - xTicks[xTicks.length - 1] > step * 0.4) xTicks.push(Math.round(maxAge));
+
+  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((f) => f * maxVal);
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <p className="mb-1 text-sm font-semibold text-slate-800">재정 수명 차트</p>
+      <p className="mb-3 text-xs text-slate-400">
+        <span className="text-rose-500">■</span> 은퇴 후 자산 잔액 · FIRE 달성 시점부터 적립을 멈추고 생활비를
+        인출한다고 가정합니다. 점에 마우스를 올려보세요
+      </p>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="xMidYMid meet">
+        {yTicks.map((v, i) => (
+          <g key={`y-${i}`}>
+            <line x1={padL} y1={y(v)} x2={W - padR} y2={y(v)} stroke="#f1f5f9" />
+            <text x={padL - 6} y={y(v) + 3} fontSize="9" fill="#94a3b8" textAnchor="end">
+              {v === 0 ? "0" : eokShort(v)}
+            </text>
+          </g>
+        ))}
+        <line x1={padL} y1={H - padB} x2={W - padR} y2={H - padB} stroke="#cbd5e1" />
+
+        {depletionAge !== null && depletionAge >= minAge && depletionAge <= maxAge && (
+          <g>
+            <line
+              x1={x(depletionAge)}
+              y1={padT}
+              x2={x(depletionAge)}
+              y2={H - padB}
+              stroke="#e11d48"
+              strokeDasharray="3 3"
+              strokeOpacity="0.4"
+            />
+            <text x={x(depletionAge)} y={padT - 6} fontSize="9" fill="#e11d48" textAnchor="middle">
+              소진 {Math.round(depletionAge)}세
+            </text>
+          </g>
+        )}
+
+        <path d={line} fill="none" stroke="#e11d48" strokeWidth="2.5" />
+
+        {path.map((p, i) => (
+          <circle
+            key={i}
+            cx={x(p.age)}
+            cy={y(p.asset)}
+            r={hover === i ? 5 : 3}
+            fill="#e11d48"
+            onMouseEnter={() => setHover(i)}
+            onMouseLeave={() => setHover(null)}
+            style={{ cursor: "pointer" }}
+          />
+        ))}
+
+        {hover !== null &&
+          (() => {
+            const p = path[hover];
+            const boxX = Math.min(x(p.age) + 6, W - 108);
+            const boxY = Math.max(y(p.asset) - 44, 2);
+            return (
+              <g>
+                <rect x={boxX} y={boxY} width="104" height="38" rx="4" fill="#1e293b" />
+                <text x={boxX + 6} y={boxY + 16} fontSize="11" fill="#fff">
+                  {Math.round(p.age)}세
+                </text>
+                <text x={boxX + 6} y={boxY + 30} fontSize="11" fill="#fda4af">
+                  잔액 {eokShort(p.asset)}
+                </text>
+              </g>
+            );
+          })()}
+
         {xTicks.map((a, i) => (
           <text key={`x-${i}`} x={x(a)} y={H - 8} fontSize="10" fill="#94a3b8" textAnchor="middle">
             {Math.round(a)}세
