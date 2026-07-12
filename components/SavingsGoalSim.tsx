@@ -66,7 +66,7 @@ export default function SavingsGoalSim() {
   return (
     <div className="space-y-6">
       {/* 입력 */}
-      <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+      <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
         <div className="grid grid-cols-3 gap-3">
           <NumInput label="월 실수령" value={income} onChange={setIncome} hint="만원" />
           <NumInput label="고정비" value={fixedCost} onChange={setFixedCost} hint="월세·통신 등" />

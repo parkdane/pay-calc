@@ -90,7 +90,7 @@ export default function WorkerNetCalc() {
       <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
         {/* ═══ 왼쪽: 입력 ═══ */}
         <div className="space-y-4">
-          <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+          <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">기본 입력</p>
               <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">연봉과 부양가족</p>

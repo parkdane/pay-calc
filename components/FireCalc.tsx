@@ -324,7 +324,7 @@ export default function FireCalc() {
       {/* ═══ 왼쪽: 입력 ═══ */}
       <div className="space-y-4">
         {/* 기본 입력 */}
-        <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+        <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">기본 입력</p>
             <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">은퇴 목표와 자산 속도</p>
@@ -372,7 +372,7 @@ export default function FireCalc() {
         </div>
 
         {/* 생활비 기준 */}
-        <div className="space-y-3 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+        <div className="space-y-3 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">생활비 기준</p>
             <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">은퇴 후 월 생활비</p>
@@ -409,7 +409,7 @@ export default function FireCalc() {
         </div>
 
         {/* 가정 옵션 */}
-        <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+        <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">가정 옵션</p>
             <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">수익률과 인출률 조정</p>
@@ -520,7 +520,7 @@ export default function FireCalc() {
         <DepletionChart path={r.depletionPath} depletionAge={r.depletionAge} />
 
         {/* 계산 방식 설명 */}
-        <div className="space-y-1.5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4 text-xs leading-relaxed text-[#7A8296]">
+        <div className="space-y-1.5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 text-xs leading-relaxed text-[#7A8296]">
           <p className="font-semibold text-[#5B6478]">이 차트는 이렇게 계산됩니다</p>
           <p>
             자산(파랑 선)은 입력한 기대수익률 그대로 매달 복리로 불어나고, 목표 자산(주황 선)은 물가상승률만큼
@@ -535,7 +535,7 @@ export default function FireCalc() {
 
         {/* 시나리오 비교 */}
         <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
-          <div className="border-b border-[rgba(46,68,148,0.10)] bg-white px-4 py-2.5 text-sm font-semibold text-[#1B2A4A]">
+          <div className="border-b border-[rgba(46,68,148,0.10)] bg-[rgba(46,68,148,0.03)] px-4 py-2.5 text-sm font-semibold text-[#1B2A4A]">
             시나리오 비교 (수익률별 달성 나이)
           </div>
           <table className="w-full text-sm">
@@ -562,7 +562,7 @@ export default function FireCalc() {
 
         {/* CAGR 참고 */}
         <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
-          <div className="border-b border-[rgba(46,68,148,0.10)] bg-white px-4 py-2.5 text-sm font-semibold text-[#1B2A4A]">
+          <div className="border-b border-[rgba(46,68,148,0.10)] bg-[rgba(46,68,148,0.03)] px-4 py-2.5 text-sm font-semibold text-[#1B2A4A]">
             수익률 감 잡기 (대표 자산 장기 CAGR)
           </div>
           <table className="w-full text-sm">
@@ -585,7 +585,7 @@ export default function FireCalc() {
 
     {/* ═══ 하단 전체 폭 (grid 밖으로 분리 — sticky 오른쪽 컬럼과 겹치는 문제 방지) ═══ */}
     <div className="mt-6 space-y-6">
-      <section className="space-y-1.5 rounded-xl bg-white p-4 text-sm text-[#5B6478]">
+      <section className="space-y-1.5 rounded-xl bg-[rgba(46,68,148,0.03)] p-4 text-sm text-[#5B6478]">
         <p className="font-semibold text-[#1B2A4A]">파이어 넘버란?</p>
         <p>
           은퇴 후 연 지출의 25배(4% 룰 기준)를 모으면, 자산을 원금 손실 없이 매년 인출하며 살 수 있다는

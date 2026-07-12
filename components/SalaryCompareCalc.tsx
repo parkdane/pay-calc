@@ -125,7 +125,7 @@ export default function SalaryCompareCalc() {
   return (
     <div className="space-y-6">
       {/* 입력 */}
-      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
         <label className="block text-sm font-medium text-[#5B6478]">
           내 연봉 (세전, 만원)
           <div className="mt-1 flex items-center gap-1">
@@ -254,7 +254,7 @@ export default function SalaryCompareCalc() {
 
       {/* 표 */}
       <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
-        <div className="border-b border-[rgba(46,68,148,0.10)] bg-white px-4 py-2.5 text-sm font-semibold text-[#1B2A4A]">
+        <div className="border-b border-[rgba(46,68,148,0.10)] bg-[rgba(46,68,148,0.03)] px-4 py-2.5 text-sm font-semibold text-[#1B2A4A]">
           기업별 상세
         </div>
         <table className="w-full text-sm">
@@ -286,7 +286,7 @@ export default function SalaryCompareCalc() {
       </div>
 
       {/* 안내 */}
-      <section className="space-y-1.5 rounded-xl bg-white p-4 text-sm text-[#5B6478]">
+      <section className="space-y-1.5 rounded-xl bg-[rgba(46,68,148,0.03)] p-4 text-sm text-[#5B6478]">
         <p className="font-semibold text-[#1B2A4A]">이 데이터는 어떻게 만들어지나요?</p>
         <p>
           비교 대상 기업이 금융감독원 전자공시시스템(DART)에 제출한 사업보고서 "직원현황"의 1인평균급여액을

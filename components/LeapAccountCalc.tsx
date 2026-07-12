@@ -45,7 +45,7 @@ export default function LeapAccountCalc() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+      <div className="space-y-5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
         <label className="block text-sm font-medium text-[#5B6478]">
           개인소득 구간 (가입 시 심사 기준)
           <select

@@ -60,7 +60,7 @@ export default function RootLayout({
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
         />
       </head>
-      <body className="min-h-screen bg-[#EEF0F4] text-[#1B2A4A] antialiased">
+      <body className="min-h-screen bg-white text-[#1B2A4A] antialiased">
         {/* 헤더 */}
         <header className="sticky top-0 z-50 border-b border-[rgba(46,68,148,0.14)] bg-white/90 backdrop-blur">
           <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
@@ -80,7 +80,7 @@ export default function RootLayout({
         <main className="mx-auto max-w-4xl px-4 py-8">{children}</main>
 
         {/* 푸터 + 면책 */}
-        <footer className="mt-16 border-t border-[rgba(46,68,148,0.14)] bg-white">
+        <footer className="mt-16 border-t border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)]">
           <div className="mx-auto max-w-4xl space-y-3 px-4 py-8 text-xs leading-relaxed text-[#7A8296]">
             <p>
               본 사이트의 봉급표·계산 결과는 인사혁신처, 국세청, 금융위원회 등 공개

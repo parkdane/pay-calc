@@ -40,7 +40,7 @@ export default function IncomeRankCalc() {
   return (
     <div className="space-y-6">
       {/* 입력 */}
-      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
         <label className="block text-sm font-medium text-[#5B6478]">
           내 연봉 (세전 총급여, 만원)
           <div className="mt-1 flex gap-2">

@@ -152,7 +152,7 @@ export default function CivilNetCalc() {
       <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
         {/* ═══ 왼쪽: 입력 ═══ */}
         <div className="space-y-4">
-          <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+          <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">기본 입력</p>
               <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">직종·직급·호봉</p>
@@ -226,7 +226,7 @@ export default function CivilNetCalc() {
 
           {/* 상세 옵션 (접이식) */}
           <details
-            className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4"
+            className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4"
             onToggle={(e) => setUseDetail((e.target as HTMLDetailsElement).open)}
           >
             <summary className="cursor-pointer text-sm font-semibold text-[#1B2A4A]">
@@ -314,7 +314,7 @@ export default function CivilNetCalc() {
               </div>
 
               {/* 연간 환산 */}
-              <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5 text-sm">
+              <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5 text-sm">
                 <p className="font-semibold text-[#1B2A4A]">연간 환산</p>
                 <div className="mt-2 space-y-1 text-[#5B6478]">
                   <p>
@@ -332,7 +332,7 @@ export default function CivilNetCalc() {
               </div>
             </>
           ) : (
-            <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-6 text-center text-sm text-[#8B93A6]">
+            <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-6 text-center text-sm text-[#8B93A6]">
               입력값을 확인해주세요.
             </div>
           )}

@@ -133,7 +133,7 @@ export default function MilitaryNetCalc() {
       <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
         {/* ═══ 왼쪽: 입력 ═══ */}
         <div className="space-y-4">
-          <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+          <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">기본 입력</p>
               <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">계급·호봉</p>
@@ -174,7 +174,7 @@ export default function MilitaryNetCalc() {
           </div>
 
           {/* 수당 옵션 */}
-          <div className="space-y-3 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+          <div className="space-y-3 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
             <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">수당 입력</p>
             <p className="text-sm text-[#5B6478]">해당하는 항목만 체크·입력하세요</p>
             <div className="space-y-3 pt-1">
@@ -209,7 +209,7 @@ export default function MilitaryNetCalc() {
 
           {/* 상세 옵션 (접이식) */}
           <details
-            className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4"
+            className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4"
             onToggle={(e) => setUseDetail((e.target as HTMLDetailsElement).open)}
           >
             <summary className="cursor-pointer text-sm font-semibold text-[#1B2A4A]">
@@ -255,7 +255,7 @@ export default function MilitaryNetCalc() {
               </dl>
             </div>
           ) : (
-            <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-6 text-center text-sm text-[#7A8296]">
+            <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-6 text-center text-sm text-[#7A8296]">
               선택한 계급에 해당 호봉이 없습니다. 다른 호봉을 선택하세요.
             </div>
           )}

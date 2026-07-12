@@ -32,7 +32,7 @@ export default function SoldierSavingsCalc() {
   return (
     <div className="space-y-6">
       {/* 입력 */}
-      <div className="space-y-5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+      <div className="space-y-5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
         {/* 월 납입액 */}
         <div>
           <div className="flex items-center justify-between text-sm font-medium text-[#5B6478]">
