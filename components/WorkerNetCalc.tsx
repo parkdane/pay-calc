@@ -2,7 +2,9 @@
 
 import { useMemo, useState } from "react";
 import { monthlyIncomeTax } from "@/lib/incomeTax";
+import { topPercentOf, incomePercentileMeta } from "@/lib/incomePercentile";
 import AdSlot from "@/components/AdSlot";
+import Link from "next/link";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const manwon = (n: number) => Math.round(n / 10000).toLocaleString("ko-KR") + "만";
@@ -62,6 +64,9 @@ export default function WorkerNetCalc() {
     () => calcNet(annualManwon * 10000, dependents),
     [annualManwon, dependents]
   );
+
+  const topPct = useMemo(() => topPercentOf(annualManwon * 10000), [annualManwon]);
+  const vsMedian = (annualManwon * 10000) / incomePercentileMeta.median;
 
   const bars = useMemo(() => {
     const list = COMPARE.includes(annualManwon)
@@ -136,6 +141,26 @@ export default function WorkerNetCalc() {
           ))}
           <Row label="공제 합계" value={"- " + won(my.totalDeduction)} bold />
         </dl>
+      </div>
+
+      {/* 핵심 지표 */}
+      <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">핵심 지표</p>
+        <p className="mt-1 text-lg font-bold text-slate-900">
+          내 연봉은 근로소득자 상위 {topPct <= 1 ? "1% 이내" : `${topPct.toFixed(1)}%`}
+        </p>
+        <p className="mt-1 text-sm leading-relaxed text-slate-600">
+          {incomePercentileMeta.year}년 귀속 근로소득자 중위 연봉은{" "}
+          <strong className="tabular-nums">{won(incomePercentileMeta.median)}</strong>입니다.
+          입력한 연봉은 중위의 <strong className="tabular-nums">{vsMedian.toFixed(1)}배</strong>입니다.
+        </p>
+        <Link
+          href="/calc/income-rank"
+          className="mt-2 inline-block text-xs font-medium text-blue-700 underline underline-offset-2"
+        >
+          연봉순위 계산기에서 자세히 보기 →
+        </Link>
+        <p className="mt-2 text-xs text-slate-400">{incomePercentileMeta.source}</p>
       </div>
 
       {/* 연봉별 실수령 비교 막대그래프 */}
