@@ -205,8 +205,8 @@ export default function FireCalc() {
     : `현재 조건으로는 70년 내 목표 달성이 어렵습니다. 저축을 늘리거나 목표 지출을 줄여보세요.`;
 
   return (
-    <div className="mx-auto max-w-5xl">
-    <div className="grid gap-6 lg:grid-cols-[400px_1fr] lg:items-start">
+    <div className="mx-auto max-w-7xl">
+    <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
       {/* ═══ 왼쪽: 입력 ═══ */}
       <div className="space-y-4">
         {/* 기본 입력 */}
@@ -420,24 +420,24 @@ export default function FireCalc() {
           </p>
         </div>
       </div>
+    </div>
 
-      {/* ═══ 하단 전체 폭 ═══ */}
-      <div className="space-y-6 lg:col-span-2">
-        <section className="space-y-1.5 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
-          <p className="font-semibold text-slate-800">파이어 넘버란?</p>
-          <p>
-            은퇴 후 연 지출의 25배(4% 룰 기준)를 모으면, 자산을 원금 손실 없이 매년 인출하며 살 수 있다는
-            개념입니다. 인출률을 낮출수록 안전하지만 목표 금액이 커집니다. 국민연금·배당 등 반복 수입은 월
-            부수입·연금에 넣으면 목표 자산이 줄어듭니다.
-          </p>
-        </section>
-        <p className="text-xs leading-relaxed text-slate-400">
-          ※ 물가를 반영한 실질 수익률 기준 추정치입니다. 실제 수익률은 매년 변동하며 세금·건강보험료는 반영하지
-          않았습니다. 보수적 수익률(5~7%)로 함께 비교하는 것이 안전합니다.
+    {/* ═══ 하단 전체 폭 (grid 밖으로 분리 — sticky 오른쪽 컬럼과 겹치는 문제 방지) ═══ */}
+    <div className="mt-6 space-y-6">
+      <section className="space-y-1.5 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
+        <p className="font-semibold text-slate-800">파이어 넘버란?</p>
+        <p>
+          은퇴 후 연 지출의 25배(4% 룰 기준)를 모으면, 자산을 원금 손실 없이 매년 인출하며 살 수 있다는
+          개념입니다. 인출률을 낮출수록 안전하지만 목표 금액이 커집니다. 국민연금·배당 등 반복 수입은 월
+          부수입·연금에 넣으면 목표 자산이 줄어듭니다.
         </p>
-      </div>
+      </section>
+      <p className="text-xs leading-relaxed text-slate-400">
+        ※ 물가를 반영한 실질 수익률 기준 추정치입니다. 실제 수익률은 매년 변동하며 세금·건강보험료는 반영하지
+        않았습니다. 보수적 수익률(5~7%)로 함께 비교하는 것이 안전합니다.
+      </p>
     </div>
-    </div>
+  </div>
   );
 }
 
