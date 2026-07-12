@@ -110,6 +110,7 @@ export default function FireCalc() {
         scale: 2,
         backgroundColor: "#ffffff",
         useCORS: true,
+        foreignObjectRendering: true,
       });
       const imgData = canvas.toDataURL("image/png");
       const pdf = new JsPDF("p", "mm", "a4");
