@@ -1,430 +1,376 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
-const eok = (n: number) => {
-  const e = n / 100000000;
-  if (e >= 1) return `${e.toFixed(1)}억원`;
-  return Math.round(n / 10000).toLocaleString("ko-KR") + "만원";
+const eokFull = (n: number) => {
+  const eok = Math.floor(n / 100000000);
+  const man = Math.round((n % 100000000) / 10000);
+  if (eok >= 1) return `${eok}억 ${man.toLocaleString("ko-KR")}만원`;
+  return man.toLocaleString("ko-KR") + "만원";
 };
 
-// 생활비 프리셋 (만원)
 const EXPENSE_PRESETS = [
-  { id: "lean", label: "Lean FIRE", value: 180, desc: "절제형" },
-  { id: "single", label: "1인 기본", value: 250, desc: "1인 가구" },
-  { id: "couple", label: "2인 기본", value: 320, desc: "부부" },
-  { id: "family", label: "3~4인", value: 450, desc: "자녀 있음" },
-  { id: "rich", label: "여유형", value: 600, desc: "여행·취미" },
+  { id: "lean", label: "Lean FIRE", value: 180 },
+  { id: "single", label: "1인 기본", value: 250 },
+  { id: "couple", label: "2인 기본", value: 320 },
+  { id: "family", label: "3~4인", value: 450 },
+  { id: "rich", label: "여유형", value: 600 },
 ];
 
-// 수익률 참고 (연 %)
 const RETURN_PRESETS = [
   { label: "채권 수준", value: 4 },
   { label: "S&P500", value: 10 },
   { label: "나스닥", value: 12 },
 ];
 
+// CAGR 참고 (과거 장기 연평균, 참고용)
+const CAGR_TABLE = [
+  { name: "예금·채권", cagr: 4, note: "안전자산" },
+  { name: "S&P500", cagr: 10, note: "미국 대형주 지수" },
+  { name: "나스닥100", cagr: 13, note: "기술주 중심" },
+  { name: "워런 버핏", cagr: 20, note: "재현 매우 어려움" },
+  { name: "피터 린치", cagr: 29, note: "역대 최고 수준" },
+];
+
 export default function FireCalc() {
   const [age, setAge] = useState(35);
   const [retireAge, setRetireAge] = useState(50);
-  const [asset, setAsset] = useState(18000); // 만원
-  const [monthlySave, setMonthlySave] = useState(150); // 만원
-  const [monthlyExpense, setMonthlyExpense] = useState(300); // 만원
+  const [asset, setAsset] = useState(18000);
+  const [monthlySave, setMonthlySave] = useState(150);
+  const [monthlyExpense, setMonthlyExpense] = useState(300);
   const [returnRate, setReturnRate] = useState(7);
   const [inflation, setInflation] = useState(2.5);
   const [withdrawRate, setWithdrawRate] = useState(4);
-  const [sideIncome, setSideIncome] = useState(0); // 월 부수입 만원
-  const [pension, setPension] = useState(0); // 월 연금 만원
+  const [sideIncome, setSideIncome] = useState(0);
+  const [pension, setPension] = useState(0);
 
   const r = useMemo(() => {
-    // 순 필요 생활비 = 생활비 - 부수입 - 연금 (연 단위)
     const netMonthly = Math.max(0, monthlyExpense - sideIncome - pension);
     const annualExpense = netMonthly * 10000 * 12;
     const fireNumber = annualExpense / (withdrawRate / 100);
-
-    // 실질 수익률
     const realReturn = (1 + returnRate / 100) / (1 + inflation / 100) - 1;
     const mRet = realReturn / 12;
     const save = monthlySave * 10000;
+    const targetGrowth = Math.pow(1 + inflation / 100, 1 / 12);
 
-    // 자산 성장 시뮬 (월 단위), 차트용 연도별 포인트도 수집
     let cur = asset * 10000;
     let months = 0;
     const maxMonths = 12 * 70;
-    const growthPath: { age: number; asset: number; target: number }[] = [];
+    const path: { age: number; asset: number; target: number }[] = [
+      { age, asset: cur, target: fireNumber },
+    ];
     let target = fireNumber;
-    const targetMonthlyGrowth = Math.pow(1 + inflation / 100, 1 / 12);
-
     const already = cur >= fireNumber;
+
     while (cur < target && months < maxMonths) {
       cur = cur * (1 + mRet) + save;
-      target = target * targetMonthlyGrowth;
+      target = target * targetGrowth;
       months++;
-      if (months % 12 === 0) {
-        growthPath.push({ age: age + months / 12, asset: cur, target });
-      }
+      if (months % 12 === 0) path.push({ age: age + months / 12, asset: cur, target });
     }
-    if (growthPath.length === 0) {
-      growthPath.push({ age, asset: asset * 10000, target: fireNumber });
-    }
-
     const reached = cur >= target && months < maxMonths;
-    const reachAge = reached ? age + months / 12 : null;
+    const reachAge = already ? age : reached ? age + months / 12 : null;
 
-    // 추가 필요 월 투자금: 목표 은퇴나이까지 목표 달성하려면? (이분탐색)
+    // 목표 은퇴나이까지 필요한 월 투자금 (이분탐색)
     let extraSave: number | null = null;
+    let shortfall: number | null = null;
     if (retireAge > age) {
-      const targetMonths = (retireAge - age) * 12;
-      let lo = 0,
-        hi = 50000000; // 월 최대 5천만
-      for (let iter = 0; iter < 40; iter++) {
+      const tM = (retireAge - age) * 12;
+      // 목표시점 필요자산
+      let tgt = fireNumber;
+      for (let m = 0; m < tM; m++) tgt = tgt * targetGrowth;
+      // 현재 저축으로 도달하는 자산
+      let projected = asset * 10000;
+      for (let m = 0; m < tM; m++) projected = projected * (1 + mRet) + save;
+      shortfall = Math.max(0, tgt - projected);
+
+      let lo = 0, hi = 50000000;
+      for (let it = 0; it < 40; it++) {
         const mid = (lo + hi) / 2;
-        let c = asset * 10000;
-        let t = fireNumber;
-        for (let m = 0; m < targetMonths; m++) {
-          c = c * (1 + mRet) + mid;
-          t = t * targetMonthlyGrowth;
-        }
-        if (c >= t) hi = mid;
-        else lo = mid;
+        let c = asset * 10000, t = fireNumber;
+        for (let m = 0; m < tM; m++) { c = c * (1 + mRet) + mid; t = t * targetGrowth; }
+        if (c >= t) hi = mid; else lo = mid;
       }
-      extraSave = hi;
+      extraSave = Math.max(0, hi - save);
     }
 
-    // 은퇴 후 월 인출 가능액 = 목표자산 × 인출률 / 12
     const monthlyWithdraw = (fireNumber * (withdrawRate / 100)) / 12;
 
-    // FIRE 유형 판정
-    let fireType = "일반 FIRE";
-    if (monthlyExpense <= 200) fireType = "Lean FIRE (절제형)";
-    else if (monthlyExpense >= 500) fireType = "Fat FIRE (여유형)";
+    let fireType = "Regular FIRE";
+    let fireTypeDesc = "일반적인 생활비 기준의 표준 시나리오입니다.";
+    if (monthlyExpense <= 200) { fireType = "Lean FIRE"; fireTypeDesc = "지출을 단단히 줄인 절제형 시나리오입니다."; }
+    else if (monthlyExpense >= 500) { fireType = "Fat FIRE"; fireTypeDesc = "여행·취미 여유가 있는 풍족형 시나리오입니다."; }
 
-    // 자산 소진 나이: 은퇴 후 인출하면서 자산이 0 되는 시점
+    // 자산 소진 나이
     let depletionAge: number | null = null;
-    if (reached || retireAge > age) {
-      const startAge = reachAge ?? retireAge;
+    if (reachAge !== null) {
       let c = fireNumber;
-      const monthlyExp = netMonthly * 10000;
-      let m = 0;
-      const cap = 12 * 60;
-      while (c > 0 && m < cap) {
-        c = c * (1 + mRet) - monthlyExp;
-        m++;
-      }
-      depletionAge = m >= cap ? null : startAge + m / 12; // null = 소진 안 됨(영구 유지)
+      const exp = netMonthly * 10000;
+      let m = 0; const cap = 12 * 60;
+      while (c > 0 && m < cap) { c = c * (1 + mRet) - exp; m++; }
+      depletionAge = m >= cap ? null : reachAge + m / 12;
     }
 
     return {
-      fireNumber,
-      months: already ? 0 : reached ? months : null,
-      reachAge: already ? age : reachAge,
-      already,
-      realReturn,
-      extraSave,
-      monthlyWithdraw,
-      fireType,
-      depletionAge,
-      annualExpense,
-      growthPath,
+      fireNumber, months: already ? 0 : reached ? months : null,
+      reachAge, already, realReturn, extraSave, shortfall,
+      monthlyWithdraw, fireType, fireTypeDesc, depletionAge,
+      annualExpense, netMonthly, path,
     };
-  }, [
-    age, retireAge, asset, monthlySave, monthlyExpense,
-    returnRate, inflation, withdrawRate, sideIncome, pension,
-  ]);
+  }, [age, retireAge, asset, monthlySave, monthlyExpense, returnRate, inflation, withdrawRate, sideIncome, pension]);
 
-  const fmtDuration = (m: number) => {
-    const y = Math.floor(m / 12);
-    const mo = m % 12;
-    return y > 0 ? `${y}년 ${mo}개월` : `${mo}개월`;
-  };
-
-  // 시나리오 비교 (보수 5% / 기본 7% / 공격 9%)
   const scenarios = useMemo(() => {
     return [5, 7, 9].map((rate) => {
       const netMonthly = Math.max(0, monthlyExpense - sideIncome - pension);
       const fireNum = (netMonthly * 10000 * 12) / (withdrawRate / 100);
       const realR = (1 + rate / 100) / (1 + inflation / 100) - 1;
       const mRet = realR / 12;
-      const targetGrowth = Math.pow(1 + inflation / 100, 1 / 12);
-      let cur = asset * 10000;
-      let target = fireNum;
-      let months = 0;
-      const max = 12 * 70;
-      while (cur < target && months < max) {
-        cur = cur * (1 + mRet) + monthlySave * 10000;
-        target = target * targetGrowth;
-        months++;
-      }
-      return {
-        rate,
-        label: rate === 5 ? "보수적" : rate === 7 ? "기본" : "공격적",
-        reachAge: months < max ? age + Math.floor(months / 12) : null,
-        fireNum,
-      };
+      const tg = Math.pow(1 + inflation / 100, 1 / 12);
+      let cur = asset * 10000, target = fireNum, months = 0; const max = 12 * 70;
+      while (cur < target && months < max) { cur = cur * (1 + mRet) + monthlySave * 10000; target = target * tg; months++; }
+      return { rate, label: rate === 5 ? "보수적" : rate === 7 ? "기본" : "공격적", reachAge: months < max ? age + Math.floor(months / 12) : null };
     });
   }, [age, asset, monthlySave, monthlyExpense, inflation, withdrawRate, sideIncome, pension]);
+
+  const fmtDur = (m: number) => {
+    const y = Math.floor(m / 12), mo = m % 12;
+    return y > 0 ? `${y}년 ${mo}개월` : `${mo}개월`;
+  };
+
+  // 한줄 요약
+  const summary = r.already
+    ? `현재 자산이 이미 목표 ${eokFull(r.fireNumber)}를 넘어 FIRE 달성 상태입니다.`
+    : r.reachAge !== null
+    ? `현재 조건이라면 약 ${r.reachAge.toFixed(1)}세 전후 FIRE 가능성이 보입니다.` +
+      (r.shortfall && r.shortfall > 0
+        ? ` ${retireAge}세 목표까지 약 ${eokFull(r.shortfall)} 부족하고, 이를 메우려면 월 ${Math.round((r.extraSave ?? 0) / 10000).toLocaleString("ko-KR")}만원 정도 추가 적립이 필요합니다.`
+        : ` ${retireAge}세 목표를 현재 저축으로 달성할 수 있습니다.`)
+    : `현재 조건으로는 70년 내 목표 달성이 어렵습니다. 저축을 늘리거나 목표 지출을 줄여보세요.`;
 
   return (
     <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
       {/* ═══ 왼쪽: 입력 ═══ */}
       <div className="space-y-4">
-      {/* ── 기본 입력 ── */}
-      <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
-        <p className="text-sm font-semibold text-slate-800">은퇴 목표와 자산</p>
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="현재 나이" value={age} onChange={setAge} suffix="세" />
-          <Field label="목표 은퇴 나이" value={retireAge} onChange={setRetireAge} suffix="세" />
+        <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
+          <p className="text-sm font-semibold text-slate-800">은퇴 목표와 자산</p>
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="현재 나이" value={age} onChange={setAge} suffix="세" />
+            <Field label="목표 은퇴 나이" value={retireAge} onChange={setRetireAge} suffix="세" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="현재 순자산" value={asset} onChange={setAsset} suffix="만원" />
+            <Field label="월 투자 가능액" value={monthlySave} onChange={setMonthlySave} suffix="만원" />
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="현재 순자산" value={asset} onChange={setAsset} suffix="만원" />
-          <Field label="월 투자 가능액" value={monthlySave} onChange={setMonthlySave} suffix="만원" />
-        </div>
-      </div>
 
-      {/* ── 생활비 + 프리셋 ── */}
-      <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
-        <p className="text-sm font-semibold text-slate-800">은퇴 후 월 생활비</p>
-        <Field label="" value={monthlyExpense} onChange={setMonthlyExpense} suffix="만원" />
-        <div className="flex flex-wrap gap-2">
-          {EXPENSE_PRESETS.map((p) => (
-            <button
-              key={p.id}
-              onClick={() => setMonthlyExpense(p.value)}
-              className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
-                monthlyExpense === p.value
-                  ? "border-blue-500 bg-blue-50 text-blue-700"
-                  : "border-slate-300 bg-white text-slate-600 hover:border-blue-300"
-              }`}
-            >
-              {p.label} <span className="text-slate-400">{p.value}만</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* ── 가정 옵션 ── */}
-      <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
-        <p className="text-sm font-semibold text-slate-800">수익률·인출률 조정</p>
-        <div>
-          <Slider label="기대 연수익률" value={returnRate} onChange={setReturnRate} min={1} max={15} step={0.5} />
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {RETURN_PRESETS.map((p) => (
-              <button
-                key={p.label}
-                onClick={() => setReturnRate(p.value)}
-                className="rounded-md bg-white border border-slate-200 px-2 py-1 text-xs text-slate-500 hover:border-blue-300"
-              >
-                {p.label} {p.value}%
+        <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
+          <p className="text-sm font-semibold text-slate-800">은퇴 후 월 생활비</p>
+          <Field label="" value={monthlyExpense} onChange={setMonthlyExpense} suffix="만원" />
+          <div className="flex flex-wrap gap-2">
+            {EXPENSE_PRESETS.map((p) => (
+              <button key={p.id} onClick={() => setMonthlyExpense(p.value)}
+                className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition ${monthlyExpense === p.value ? "border-blue-500 bg-blue-50 text-blue-700" : "border-slate-300 bg-white text-slate-600 hover:border-blue-300"}`}>
+                {p.label} <span className="text-slate-400">{p.value}만</span>
               </button>
             ))}
           </div>
-          {returnRate > 15 && (
-            <p className="mt-2 text-xs text-amber-600">
-              ⚠ 15% 초과는 투자의 대가도 달성하기 어려운 수준입니다. 참고용으로만.
-            </p>
-          )}
         </div>
-        <Slider label="물가상승률" value={inflation} onChange={setInflation} min={0} max={6} step={0.1} />
-        <Slider label="안전인출률" value={withdrawRate} onChange={setWithdrawRate} min={2.5} max={5} step={0.5} />
-        <div className="grid grid-cols-2 gap-4 border-t border-slate-200 pt-4">
-          <Field label="월 부수입" value={sideIncome} onChange={setSideIncome} suffix="만원" />
-          <Field label="월 연금 예상액" value={pension} onChange={setPension} suffix="만원" />
+
+        <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
+          <p className="text-sm font-semibold text-slate-800">수익률·인출률 조정</p>
+          <div>
+            <Slider label="기대 연수익률" value={returnRate} onChange={setReturnRate} min={1} max={15} step={0.5} />
+            <div className="mt-2 flex flex-wrap gap-1.5">
+              {RETURN_PRESETS.map((p) => (
+                <button key={p.label} onClick={() => setReturnRate(p.value)}
+                  className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-500 hover:border-blue-300">
+                  {p.label} {p.value}%
+                </button>
+              ))}
+            </div>
+            {returnRate > 15 && <p className="mt-2 text-xs text-amber-600">⚠ 15% 초과는 대가들도 어려운 수준입니다. 참고용으로만.</p>}
+          </div>
+          <Slider label="물가상승률" value={inflation} onChange={setInflation} min={0} max={6} step={0.1} />
+          <Slider label="안전인출률" value={withdrawRate} onChange={setWithdrawRate} min={2.5} max={5} step={0.5} />
+          <div className="grid grid-cols-2 gap-4 border-t border-slate-200 pt-4">
+            <Field label="월 부수입" value={sideIncome} onChange={setSideIncome} suffix="만원" />
+            <Field label="월 연금 예상액" value={pension} onChange={setPension} suffix="만원" />
+          </div>
         </div>
       </div>
 
-      </div>
-      {/* ═══ 왼쪽 입력 끝 ═══ */}
-
-      {/* ═══ 오른쪽: 결과 (데스크톱에서 스크롤 따라옴) ═══ */}
-      <div className="space-y-6 lg:sticky lg:top-20">
-      {/* ── 결과 카드 ── */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <ResultCard
-          highlight
-          label="FIRE 목표 자산"
-          value={eok(r.fireNumber)}
-        />
-        <ResultCard
-          highlight
-          label="예상 달성 시점"
-          value={
-            r.already ? "달성 완료" : r.months !== null ? `${Math.round(r.reachAge!)}세` : "70년+"
-          }
-          sub={r.months ? fmtDuration(r.months) + " 후" : undefined}
-        />
-        <ResultCard
-          label="은퇴 후 월 인출액"
-          value={won(r.monthlyWithdraw)}
-        />
-        <ResultCard
-          label="추가 필요 월 투자금"
-          value={r.extraSave !== null ? won(r.extraSave) : "-"}
-          sub={r.extraSave !== null ? `${retireAge}세 은퇴 목표 시` : undefined}
-        />
-        <ResultCard
-          label="자산 소진 나이"
-          value={r.depletionAge === null ? "영구 유지" : `${Math.round(r.depletionAge)}세`}
-        />
-        <ResultCard label="FIRE 유형" value={r.fireType} />
-      </div>
-
-      {/* ── 자산 성장 차트 (SVG) ── */}
-      <GrowthChart path={r.growthPath} currentAge={age} />
-
-      {/* ── 시나리오 비교표 ── */}
-      <div className="overflow-hidden rounded-xl border border-slate-200">
-        <div className="border-b border-slate-100 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800">
-          시나리오 비교 (수익률별 달성 나이)
+      {/* ═══ 오른쪽: 결과 (sticky) ═══ */}
+      <div className="space-y-5 lg:sticky lg:top-20">
+        {/* 한줄 요약 */}
+        <div className="rounded-xl bg-blue-700 px-5 py-4 text-sm leading-relaxed text-white">
+          {summary}
         </div>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-slate-500">
+
+        {/* 결과 카드 */}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <Card highlight label="FIRE 목표 자산" value={eokFull(r.fireNumber)}
+            sub={`순 생활비 ${(r.netMonthly * 12).toLocaleString("ko-KR")}만원 / 인출률 ${withdrawRate.toFixed(1)}%`} />
+          <Card label="예상 달성 시점"
+            value={r.already ? "달성 완료" : r.reachAge !== null ? `${r.reachAge.toFixed(1)}세` : "70년+"}
+            sub={r.months ? `${fmtDur(r.months)} 후` : "-"} />
+          <Card label="부족 금액"
+            value={r.shortfall && r.shortfall > 0 ? eokFull(r.shortfall) : "없음"}
+            sub={`${retireAge}세 기준 부족분`} />
+          <Card label="추가 필요 월 투자금"
+            value={r.extraSave ? Math.round(r.extraSave / 10000).toLocaleString("ko-KR") + "만원" : "불필요"}
+            sub="목표 시점에 맞추려면 추가 적립" />
+          <Card label="은퇴 후 월 인출액" value={won(r.monthlyWithdraw)} sub="목표 자산 기준 월 인출 가능액" />
+          <Card label="자산 소진 나이"
+            value={r.depletionAge === null ? "80세+" : `${Math.round(r.depletionAge)}세`}
+            sub={r.depletionAge === null ? "장기간 자산 유지" : "이 나이에 자산 소진 예상"} />
+          <Card label="FIRE 유형" value={r.fireType} sub={r.fireTypeDesc} />
+        </div>
+
+        {/* 성장 차트 */}
+        <GrowthChart path={r.path} />
+
+        {/* 시나리오 비교 */}
+        <div className="overflow-hidden rounded-xl border border-slate-200">
+          <div className="border-b border-slate-100 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800">
+            시나리오 비교 (수익률별 달성 나이)
+          </div>
+          <table className="w-full text-sm">
+            <thead><tr className="text-slate-500">
               <th className="px-4 py-2 text-left font-medium">시나리오</th>
               <th className="px-4 py-2 text-right font-medium">수익률</th>
               <th className="px-4 py-2 text-right font-medium">달성 나이</th>
-            </tr>
-          </thead>
-          <tbody>
-            {scenarios.map((s) => (
+            </tr></thead>
+            <tbody>{scenarios.map((s) => (
               <tr key={s.rate} className="border-t border-slate-100">
                 <td className="px-4 py-2 font-medium text-slate-800">{s.label}</td>
                 <td className="px-4 py-2 text-right tabular-nums text-slate-600">연 {s.rate}%</td>
-                <td className="px-4 py-2 text-right tabular-nums font-semibold text-blue-700">
-                  {s.reachAge ? `${s.reachAge}세` : "70년+"}
-                </td>
+                <td className="px-4 py-2 text-right font-semibold tabular-nums text-blue-700">{s.reachAge ? `${s.reachAge}세` : "70년+"}</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      </div>
-      {/* ═══ 오른쪽 결과 끝 ═══ */}
+            ))}</tbody>
+          </table>
+        </div>
 
-      {/* ── 하단 전체 폭: 설명·면책·광고 ── */}
+        {/* CAGR 참고 */}
+        <div className="overflow-hidden rounded-xl border border-slate-200">
+          <div className="border-b border-slate-100 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800">
+            수익률 감 잡기 (대표 자산 장기 CAGR)
+          </div>
+          <table className="w-full text-sm">
+            <tbody>{CAGR_TABLE.map((c) => (
+              <tr key={c.name} className="border-t border-slate-100">
+                <td className="px-4 py-2 font-medium text-slate-800">{c.name}</td>
+                <td className="px-4 py-2 text-right font-semibold tabular-nums text-blue-700">{c.cagr}%</td>
+                <td className="px-4 py-2 text-right text-xs text-slate-400">{c.note}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+          <p className="border-t border-slate-100 px-4 py-2 text-xs text-slate-400">
+            과거 장기 연평균 수익률 참고치입니다. 미래 수익을 보장하지 않으며 대가들의 수치는 재현 난이도가 매우 높습니다.
+          </p>
+        </div>
+      </div>
+
+      {/* ═══ 하단 전체 폭 ═══ */}
       <div className="space-y-6 lg:col-span-2">
-      <section className="space-y-1.5 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
-        <p className="font-semibold text-slate-800">파이어 넘버란?</p>
-        <p>
-          은퇴 후 연 지출의 25배(4% 룰 기준)를 모으면, 자산을 원금 손실 없이
-          매년 인출하며 살 수 있다는 개념입니다. 인출률을 낮출수록 안전하지만
-          목표 금액이 커집니다. 국민연금·배당 등 반복 수입은 월 부수입·연금에
-          넣으면 목표 자산이 줄어듭니다.
+        <section className="space-y-1.5 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
+          <p className="font-semibold text-slate-800">파이어 넘버란?</p>
+          <p>은퇴 후 연 지출의 25배(4% 룰 기준)를 모으면, 자산을 원금 손실 없이 매년 인출하며 살 수 있다는 개념입니다. 인출률을 낮출수록 안전하지만 목표 금액이 커집니다. 국민연금·배당 등 반복 수입은 월 부수입·연금에 넣으면 목표 자산이 줄어듭니다.</p>
+        </section>
+        <p className="text-xs leading-relaxed text-slate-400">
+          ※ 물가를 반영한 실질 수익률 기준 추정치입니다. 실제 수익률은 매년 변동하며 세금·건강보험료는 반영하지 않았습니다. 보수적 수익률(5~7%)로 함께 비교하는 것이 안전합니다.
         </p>
-      </section>
-
-      <p className="text-xs leading-relaxed text-slate-400">
-        ※ 물가를 반영한 실질 수익률 기준 추정치입니다. 실제 수익률은 매년
-        변동하며 세금·건강보험료는 반영하지 않았습니다. 보수적 수익률(5~7%)로
-        함께 비교하는 것이 안전합니다.
-      </p>
-
-      <AdSlot id="calc-fire-bottom" />
       </div>
     </div>
   );
 }
 
-// ── SVG 자산 성장 차트 ──
-function GrowthChart({
-  path,
-  currentAge,
-}: {
-  path: { age: number; asset: number; target: number }[];
-  currentAge: number;
-}) {
-  if (path.length < 2) return null;
-  const W = 600, H = 220, pad = 40;
+// ── SVG 차트 (나이별 점 + 호버 툴팁) ──
+function GrowthChart({ path }: { path: { age: number; asset: number; target: number }[] }) {
+  const [hover, setHover] = useState<number | null>(null);
+  if (path.length < 2) {
+    return (
+      <div className="rounded-xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-400">
+        이미 목표를 달성했거나 입력값을 조정해 주세요.
+      </div>
+    );
+  }
+  const W = 560, H = 260, padL = 10, padR = 10, padT = 20, padB = 28;
   const maxVal = Math.max(...path.map((p) => Math.max(p.asset, p.target)));
-  const minAge = currentAge;
-  const maxAge = path[path.length - 1].age;
-  const x = (a: number) => pad + ((a - minAge) / (maxAge - minAge)) * (W - pad * 2);
-  const y = (v: number) => H - pad - (v / maxVal) * (H - pad * 2);
-
-  const line = (key: "asset" | "target") =>
-    path.map((p, i) => `${i === 0 ? "M" : "L"} ${x(p.age).toFixed(1)} ${y(p[key]).toFixed(1)}`).join(" ");
+  const minAge = path[0].age, maxAge = path[path.length - 1].age;
+  const x = (a: number) => padL + ((a - minAge) / (maxAge - minAge || 1)) * (W - padL - padR);
+  const y = (v: number) => H - padB - (v / maxVal) * (H - padT - padB);
+  const line = (k: "asset" | "target") => path.map((p, i) => `${i === 0 ? "M" : "L"} ${x(p.age).toFixed(1)} ${y(p[k]).toFixed(1)}`).join(" ");
+  const eokShort = (n: number) => (n / 100000000 >= 1 ? (n / 100000000).toFixed(1) + "억" : Math.round(n / 10000).toLocaleString("ko-KR") + "만");
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4">
-      <p className="mb-2 text-sm font-semibold text-slate-800">자산 성장 시뮬레이션</p>
+      <p className="mb-1 text-sm font-semibold text-slate-800">자산 성장 시뮬레이션</p>
       <p className="mb-3 text-xs text-slate-400">
-        <span className="text-blue-600">■</span> 내 예상 자산 &nbsp;
-        <span className="text-amber-500">■</span> 필요 목표 자산(물가 반영)
+        <span className="text-blue-600">■</span> 내 예상 자산 &nbsp; <span className="text-amber-500">■</span> 필요 목표 자산(물가 반영) · 점에 마우스를 올려보세요
       </p>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="xMidYMid meet">
-        <line x1={pad} y1={H - pad} x2={W - pad} y2={H - pad} stroke="#e2e8f0" />
-        <line x1={pad} y1={pad} x2={pad} y2={H - pad} stroke="#e2e8f0" />
+        <line x1={padL} y1={H - padB} x2={W - padR} y2={H - padB} stroke="#e2e8f0" />
         <path d={line("target")} fill="none" stroke="#f59e0b" strokeWidth="2" />
         <path d={line("asset")} fill="none" stroke="#2563eb" strokeWidth="2.5" />
-        <text x={pad} y={H - pad + 16} fontSize="10" fill="#94a3b8">{Math.round(minAge)}세</text>
-        <text x={W - pad} y={H - pad + 16} fontSize="10" fill="#94a3b8" textAnchor="end">{Math.round(maxAge)}세</text>
+        {path.map((p, i) => (
+          <g key={i}>
+            <circle cx={x(p.age)} cy={y(p.asset)} r={hover === i ? 5 : 3} fill="#2563eb"
+              onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} style={{ cursor: "pointer" }} />
+            {hover === i && (
+              <g>
+                <rect x={Math.min(x(p.age) + 6, W - 120)} y={y(p.asset) - 42} width="116" height="38" rx="4" fill="#1e293b" />
+                <text x={Math.min(x(p.age) + 12, W - 114)} y={y(p.asset) - 26} fontSize="11" fill="#fff">{Math.round(p.age)}세</text>
+                <text x={Math.min(x(p.age) + 12, W - 114)} y={y(p.asset) - 12} fontSize="11" fill="#93c5fd">자산 {eokShort(p.asset)}</text>
+              </g>
+            )}
+          </g>
+        ))}
+        <text x={padL} y={H - 8} fontSize="10" fill="#94a3b8">{Math.round(minAge)}세</text>
+        <text x={W - padR} y={H - 8} fontSize="10" fill="#94a3b8" textAnchor="end">{Math.round(maxAge)}세</text>
       </svg>
     </div>
   );
 }
 
-function ResultCard({
-  label, value, sub, highlight,
-}: {
-  label: string; value: string; sub?: string; highlight?: boolean;
-}) {
+function Card({ label, value, sub, highlight }: { label: string; value: string; sub?: string; highlight?: boolean }) {
   return (
     <div className={`rounded-xl border p-4 ${highlight ? "border-blue-200 bg-blue-50" : "border-slate-200 bg-white"}`}>
       <p className="text-xs text-slate-500">{label}</p>
-      <p className={`mt-1 font-bold tabular-nums ${highlight ? "text-lg text-blue-700" : "text-base text-slate-900"}`}>
-        {value}
-      </p>
-      {sub && <p className="mt-0.5 text-xs text-slate-400">{sub}</p>}
+      <p className={`mt-1 font-bold tabular-nums ${highlight ? "text-lg text-blue-700" : "text-base text-slate-900"}`}>{value}</p>
+      {sub && <p className="mt-1 text-xs leading-snug text-slate-400">{sub}</p>}
     </div>
   );
 }
 
-function Field({
-  label, value, onChange, suffix,
-}: {
-  label: string; value: number; onChange: (n: number) => void; suffix?: string;
-}) {
+function Field({ label, value, onChange, suffix }: { label: string; value: number; onChange: (n: number) => void; suffix?: string }) {
   return (
     <label className="block text-sm font-medium text-slate-700">
       {label}
       <div className={`flex items-center gap-1 ${label ? "mt-1" : ""}`}>
-        <input
-          type="text"
-          inputMode="numeric"
-          value={value === 0 ? "" : value.toLocaleString("ko-KR")}
+        <input type="text" inputMode="numeric" value={value === 0 ? "" : value.toLocaleString("ko-KR")}
           onChange={(e) => onChange(Number(e.target.value.replace(/[^0-9]/g, "")) || 0)}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-right tabular-nums"
-        />
+          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-right tabular-nums" />
         {suffix && <span className="shrink-0 text-sm text-slate-400">{suffix}</span>}
       </div>
     </label>
   );
 }
 
-function Slider({
-  label, value, onChange, min, max, step,
-}: {
-  label: string; value: number; onChange: (n: number) => void; min: number; max: number; step: number;
-}) {
+function Slider({ label, value, onChange, min, max, step }: { label: string; value: number; onChange: (n: number) => void; min: number; max: number; step: number }) {
   return (
     <div className="text-sm font-medium text-slate-700">
       <div className="flex items-center justify-between">
         <span>{label}</span>
         <div className="flex items-center gap-1">
-          <input
-            type="number" min={min} max={max} step={step} value={value}
+          <input type="number" min={min} max={max} step={step} value={value}
             onChange={(e) => onChange(Number(e.target.value) || 0)}
-            className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-blue-700"
-          />
+            className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-blue-700" />
           <span className="text-blue-700">%</span>
         </div>
       </div>
-      <input
-        type="range" min={min} max={max} step={step} value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="mt-2 w-full accent-blue-700"
-      />
+      <input type="range" min={min} max={max} step={step} value={value}
+        onChange={(e) => onChange(Number(e.target.value))} className="mt-2 w-full accent-blue-700" />
     </div>
   );
 }
