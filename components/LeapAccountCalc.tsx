@@ -130,6 +130,29 @@ export default function LeapAccountCalc() {
         </div>
       </div>
 
+      {/* 판단 보조 */}
+      <div className="mt-6 space-y-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
+          <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">청년도약계좌 유지·전환 체크</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {DECISION_CARDS.map((card) => (
+            <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+              <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
+                {card.tag}
+              </span>
+              <p className="mt-2 text-sm font-bold text-[#1B2A4A]">{card.title}</p>
+              <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#5B6478]">
+                {card.bullets.map((b) => (
+                  <li key={b}>· {b}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
         ※ 참고용 추정치입니다. 신규 가입은 2025년 12월 종료되어 기존 가입자의 만기 예상 확인용입니다. 기여금은
         2025년 1월 확대 기준(모든 구간 매칭한도 70만 원, 확대구간 3.0%)이며, 3년 이상 유지 후 중도해지 시
@@ -138,6 +161,36 @@ export default function LeapAccountCalc() {
     </div>
   );
 }
+
+const DECISION_CARDS = [
+  {
+    tag: "3년 이내",
+    title: "3년 안에 목돈이 필요하다",
+    bullets: [
+      "5년을 다 못 채우면 기여금을 온전히 못 받습니다",
+      "청년미래적금(3년)의 실효수익률이 더 높을 수 있습니다",
+      "청년 정책 적금 비교 계산기에서 직접 확인해보세요",
+    ],
+  },
+  {
+    tag: "5년 유지",
+    title: "월 70만 원, 5년 유지가 가능하다",
+    bullets: [
+      "정부기여금을 최대로 받는 조건입니다",
+      "5년 후 원금+기여금+비과세 이자를 온전히 수령",
+      "중도 해지 계획이 없어야 유리합니다",
+    ],
+  },
+  {
+    tag: "전환 고민",
+    title: "이미 가입했는데 갈아탈지 고민 중이다",
+    bullets: [
+      "3년 미만 중도해지 시 기여금 손실 폭이 큽니다",
+      "3년 이상 유지했다면 기여금 60%가 유지됩니다",
+      "남은 기간과 새 상품 혜택을 반드시 비교 후 결정하세요",
+    ],
+  },
+];
 
 // 기여금은 원 단위 절사 근사
 function basePartRound(n: number) {
