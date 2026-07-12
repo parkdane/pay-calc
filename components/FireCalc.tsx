@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const eokFull = (n: number) => {
@@ -204,7 +205,8 @@ export default function FireCalc() {
     : `현재 조건으로는 70년 내 목표 달성이 어렵습니다. 저축을 늘리거나 목표 지출을 줄여보세요.`;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+    <div className="mx-auto max-w-5xl">
+    <div className="grid gap-6 lg:grid-cols-[400px_1fr] lg:items-start">
       {/* ═══ 왼쪽: 입력 ═══ */}
       <div className="space-y-4">
         {/* 기본 입력 */}
@@ -325,6 +327,9 @@ export default function FireCalc() {
             <Field label="월 연금 예상액" value={pension} onChange={setPension} suffix="만원" />
           </div>
         </div>
+
+        {/* 광고 (입력 아래) */}
+        <AdSlot id="calc-fire-mid" />
       </div>
 
       {/* ═══ 오른쪽: 결과 (sticky) ═══ */}
@@ -431,6 +436,7 @@ export default function FireCalc() {
           않았습니다. 보수적 수익률(5~7%)로 함께 비교하는 것이 안전합니다.
         </p>
       </div>
+    </div>
     </div>
   );
 }

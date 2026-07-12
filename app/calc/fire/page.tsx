@@ -41,10 +41,8 @@ export default function Page() {
         </p>
       </header>
 
-      {/* 넓은 폭으로 확장 (2단 레이아웃) */}
-      <div className="lg:mx-[calc(50%-45vw)] lg:max-w-[90vw]">
-        <FireCalc />
-      </div>
+      {/* FireCalc 내부에서 자체적으로 max-w-5xl 적용됨 (90vw 강제 확장 제거) */}
+      <FireCalc />
 
       <section className="space-y-3 text-sm leading-relaxed text-slate-700">
         <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
