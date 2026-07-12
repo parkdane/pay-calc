@@ -41,8 +41,11 @@ export default function Page() {
         </p>
       </header>
 
-      {/* FireCalc 내부에서 자체적으로 max-w-5xl 적용됨 (90vw 강제 확장 제거) */}
-      <FireCalc />
+      {/* 넓은 폭으로 확장 (2단 레이아웃) */}
+      {/* 전역 max-w-4xl(896px) 제한을 벗어나 전체 폭 확보. 실제 표시 폭은 FireCalc.tsx의 max-w-[1440px]가 결정 */}
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <FireCalc />
+      </div>
 
       <section className="space-y-3 text-sm leading-relaxed text-slate-700">
         <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>
