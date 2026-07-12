@@ -38,7 +38,9 @@ export default function Page() {
         </p>
       </header>
 
-      <MilitaryNetCalc />
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <MilitaryNetCalc />
+      </div>
 
       <section className="space-y-3 text-sm leading-relaxed text-slate-700">
         <h2 className="text-xl font-bold text-slate-900">계산 방식</h2>

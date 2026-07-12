@@ -59,7 +59,6 @@ export default function MilitaryNetCalc() {
         amt = a.amount;
       } else if (a.type === "number" && typeof v === "number" && v > 0) {
         if (a.formula === "overtime") {
-          // 시간외수당 = 기본급 × (1/209) × 1.5 × 시간
           amt = (base / 209) * 1.5 * v;
         } else if (a.perUnit) {
           amt = a.perUnit * v;
@@ -73,8 +72,8 @@ export default function MilitaryNetCalc() {
     }
 
     const gross = base + allowanceTotal;
+    void gross;
 
-    // 상세 옵션: 정근수당 가산금 + 정근수당(월환산)
     if (useDetail) {
       const addon =
         cfg.regularBonusAddon.brackets.find((b) => years < b.underYears)?.amount ??
@@ -95,15 +94,11 @@ export default function MilitaryNetCalc() {
 
     const grossFinal = base + allowanceTotal;
 
-    // 공제
     const pension = base * cfg.pension.rate;
     const health = grossFinal * cfg.health.rate;
     const longTermCare = health * cfg.longTermCare.rateOfHealth;
-    const bracket = null; // (구버전 구간세율 미사용)
-    void bracket;
     const spouseDep = inputs["spouse"] === true ? 1 : 0;
-    const childrenDep =
-      typeof inputs["children"] === "number" ? (inputs["children"] as number) : 0;
+    const childrenDep = typeof inputs["children"] === "number" ? (inputs["children"] as number) : 0;
     const deps = useDetail ? spouseDep + childrenDep : 0;
     const incomeTax = monthlyIncomeTax(grossFinal, pension, deps);
     const localTax = Math.floor(incomeTax * cfg.localTaxRateOfIncomeTax);
@@ -131,141 +126,145 @@ export default function MilitaryNetCalc() {
   }, [rankKey, hobong, inputs, years, useDetail]);
 
   return (
-    <div className="space-y-6">
-      {/* 계급 / 호봉 */}
-      <div className="grid grid-cols-2 gap-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
-        <label className="space-y-1.5 text-sm font-medium text-slate-700">
-          계급
-          <select
-            value={rankKey}
-            onChange={(e) => {
-              setRankKey(e.target.value);
-              setHobong(1);
-            }}
-            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5"
-          >
-            {RANKS.map((r) => (
-              <option key={r.key} value={r.key}>
-                {r.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="space-y-1.5 text-sm font-medium text-slate-700">
-          호봉
-          <select
-            value={hobong}
-            onChange={(e) => setHobong(Number(e.target.value))}
-            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5"
-          >
-            {availableHobongs.map((h) => (
-              <option key={h} value={h}>
-                {h}호봉
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      {/* 수당 옵션 (JSON 배열 자동 렌더링) */}
-      <div className="space-y-3 rounded-xl border border-slate-200 p-5">
-        <p className="text-sm font-semibold text-slate-800">
-          수당 입력 (해당하는 항목만)
-        </p>
-        {cfg.allowances.map((a) => (
-          <div key={a.id} className="flex items-center justify-between gap-3">
-            <div className="text-sm">
-              <span className="text-slate-800">{a.label}</span>
-              <p className="text-xs text-slate-400">{a.hint}</p>
-            </div>
-            {a.type === "checkbox" ? (
-              <input
-                type="checkbox"
-                checked={inputs[a.id] === true}
-                onChange={(e) =>
-                  setInputs((p) => ({ ...p, [a.id]: e.target.checked }))
-                }
-                className="h-5 w-5 shrink-0"
-              />
-            ) : (
-              <input
-                type="number"
-                min={0}
-                max={a.max ?? 99}
-                value={(inputs[a.id] as number) || ""}
-                placeholder="0"
-                onChange={(e) =>
-                  setInputs((p) => ({
-                    ...p,
-                    [a.id]: Number(e.target.value) || 0,
-                  }))
-                }
-                className="w-20 shrink-0 rounded-lg border border-slate-300 px-2 py-1.5 text-right"
-              />
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* 광고 (수당 입력 아래) */}
+    <div className="mx-auto max-w-[1280px] px-4">
+      {/* 광고 (입력칸 위, 전체 폭) */}
       <AdSlot id="calc-military-net-mid" />
 
-      {/* 상세 옵션 (접이식) */}
-      <details
-        className="rounded-xl border border-slate-200 p-4"
-        onToggle={(e) => setUseDetail((e.target as HTMLDetailsElement).open)}
-      >
-        <summary className="cursor-pointer text-sm font-semibold text-slate-800">
-          상세 옵션 (근속연수) — 정근수당 반영 ▾
-        </summary>
-        <div className="mt-4">
-          <label className="block text-sm font-medium text-slate-700">
-            근속연수
-            <input
-              type="number"
-              min={0}
-              max={40}
-              value={years === 0 ? "" : years}
-              onChange={(e) => setYears(Number(e.target.value) || 0)}
-              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2.5"
-            />
-            <span className="text-xs font-normal text-slate-400">
-              실제 근무 햇수(호봉과 다를 수 있음). 정근수당·가산금과 부양가족
-              소득세 감면이 반영됩니다
-            </span>
-          </label>
-        </div>
-      </details>
+      <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
+        {/* ═══ 왼쪽: 입력 ═══ */}
+        <div className="space-y-4">
+          <div className="space-y-4 rounded-xl border border-[#7B86AA]/20 bg-[#F8F9FC] p-5">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">기본 입력</p>
+              <p className="mt-0.5 text-base font-bold text-slate-900">계급·호봉</p>
+            </div>
 
-      {/* 결과 */}
-      {result ? (
-        <div className="overflow-hidden rounded-xl border border-slate-200">
-          <div className="bg-blue-700 px-5 py-4 text-white">
-            <p className="text-sm opacity-80">예상 월 실수령액</p>
-            <p className="text-3xl font-bold tabular-nums">{won(result.net)}</p>
+            <label className="block">
+              <span className="text-sm font-medium text-slate-700">계급</span>
+              <select
+                value={rankKey}
+                onChange={(e) => {
+                  setRankKey(e.target.value);
+                  setHobong(1);
+                }}
+                className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-3"
+              >
+                {RANKS.map((r) => (
+                  <option key={r.key} value={r.key}>
+                    {r.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="block">
+              <span className="text-sm font-medium text-slate-700">호봉</span>
+              <select
+                value={hobong}
+                onChange={(e) => setHobong(Number(e.target.value))}
+                className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-3"
+              >
+                {availableHobongs.map((h) => (
+                  <option key={h} value={h}>
+                    {h}호봉
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
-          <dl className="divide-y divide-slate-100 bg-white text-sm">
-            <RowItem label="기본급" value={won(result.base)} />
-            {result.allowanceItems.map((it) => (
-              <RowItem key={it.label} label={it.label} value={"+ " + won(it.value)} muted />
-            ))}
-            <RowItem label="세전 합계" value={won(result.gross)} bold />
-            {result.deductions.map((d) => (
-              <RowItem key={d.label} label={d.label} value={"- " + won(d.value)} muted />
-            ))}
-            <RowItem label="공제 합계" value={"- " + won(result.totalDeduction)} bold />
-          </dl>
-        </div>
-      ) : (
-        <p className="rounded-xl bg-slate-50 p-5 text-sm text-slate-500">
-          선택한 계급에 해당 호봉이 없습니다. 다른 호봉을 선택하세요.
-        </p>
-      )}
 
-      <p className="text-xs leading-relaxed text-slate-400">
-        ※ 위험근무수당(병과별), 특수지 근무수당 등은 개인·부대별 편차가 커
-        아직 포함되지 않았습니다. 실제 급여명세서와 차이가 있으며 참고용
-        추정치입니다.
+          {/* 수당 옵션 */}
+          <div className="space-y-3 rounded-xl border border-[#7B86AA]/20 bg-[#F8F9FC] p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">수당 입력</p>
+            <p className="text-sm text-slate-600">해당하는 항목만 체크·입력하세요</p>
+            <div className="space-y-3 pt-1">
+              {cfg.allowances.map((a) => (
+                <div key={a.id} className="flex items-center justify-between gap-3">
+                  <div className="text-sm">
+                    <span className="text-slate-800">{a.label}</span>
+                    <p className="text-xs text-slate-400">{a.hint}</p>
+                  </div>
+                  {a.type === "checkbox" ? (
+                    <input
+                      type="checkbox"
+                      checked={inputs[a.id] === true}
+                      onChange={(e) => setInputs((p) => ({ ...p, [a.id]: e.target.checked }))}
+                      className="h-5 w-5 shrink-0"
+                    />
+                  ) : (
+                    <input
+                      type="number"
+                      min={0}
+                      max={a.max ?? 99}
+                      value={(inputs[a.id] as number) || ""}
+                      placeholder="0"
+                      onChange={(e) => setInputs((p) => ({ ...p, [a.id]: Number(e.target.value) || 0 }))}
+                      className="w-20 shrink-0 rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-right"
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 상세 옵션 (접이식) */}
+          <details
+            className="rounded-xl border border-[#7B86AA]/20 bg-[#F8F9FC] p-4"
+            onToggle={(e) => setUseDetail((e.target as HTMLDetailsElement).open)}
+          >
+            <summary className="cursor-pointer text-sm font-semibold text-slate-800">
+              상세 옵션 (근속연수) — 정근수당 반영 ▾
+            </summary>
+            <div className="mt-4">
+              <label className="block">
+                <span className="text-sm font-medium text-slate-700">근속연수</span>
+                <input
+                  type="number"
+                  min={0}
+                  max={40}
+                  value={years === 0 ? "" : years}
+                  onChange={(e) => setYears(Number(e.target.value) || 0)}
+                  className="mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5"
+                />
+                <span className="mt-1 block text-xs font-normal text-slate-400">
+                  실제 근무 햇수(호봉과 다를 수 있음). 정근수당·가산금과 부양가족 소득세 감면이 반영됩니다
+                </span>
+              </label>
+            </div>
+          </details>
+        </div>
+
+        {/* ═══ 오른쪽: 결과 (sticky) ═══ */}
+        <div className="space-y-5 lg:sticky lg:top-20">
+          {result ? (
+            <div className="overflow-hidden rounded-xl border border-[#7B86AA]/20">
+              <div className="bg-[#5B67A2] px-5 py-4 text-white">
+                <p className="text-sm opacity-80">예상 월 실수령액</p>
+                <p className="text-3xl font-bold tabular-nums">{won(result.net)}</p>
+              </div>
+              <dl className="divide-y divide-slate-100 bg-white text-sm">
+                <RowItem label="기본급" value={won(result.base)} />
+                {result.allowanceItems.map((it) => (
+                  <RowItem key={it.label} label={it.label} value={"+ " + won(it.value)} muted />
+                ))}
+                <RowItem label="세전 합계" value={won(result.gross)} bold />
+                {result.deductions.map((d) => (
+                  <RowItem key={d.label} label={d.label} value={"- " + won(d.value)} muted />
+                ))}
+                <RowItem label="공제 합계" value={"- " + won(result.totalDeduction)} bold />
+              </dl>
+            </div>
+          ) : (
+            <div className="rounded-xl border border-[#7B86AA]/20 bg-[#F8F9FC] p-6 text-center text-sm text-slate-500">
+              선택한 계급에 해당 호봉이 없습니다. 다른 호봉을 선택하세요.
+            </div>
+          )}
+        </div>
+      </div>
+
+      <p className="mt-6 text-xs leading-relaxed text-slate-400">
+        ※ 위험근무수당(병과별), 특수지 근무수당 등은 개인·부대별 편차가 커 아직 포함되지 않았습니다. 실제
+        급여명세서와 차이가 있으며 참고용 추정치입니다.
       </p>
     </div>
   );
@@ -284,12 +283,8 @@ function RowItem({
 }) {
   return (
     <div className="flex items-center justify-between px-5 py-2.5">
-      <dt className={muted ? "text-slate-500" : "font-medium text-slate-800"}>
-        {label}
-      </dt>
-      <dd
-        className={`tabular-nums ${bold ? "font-bold text-slate-900" : muted ? "text-slate-500" : "text-slate-800"}`}
-      >
+      <dt className={muted ? "text-slate-500" : "font-medium text-slate-800"}>{label}</dt>
+      <dd className={`tabular-nums ${bold ? "font-bold text-slate-900" : muted ? "text-slate-500" : "text-slate-800"}`}>
         {value}
       </dd>
     </div>
