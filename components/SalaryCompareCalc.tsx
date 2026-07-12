@@ -125,8 +125,8 @@ export default function SalaryCompareCalc() {
   return (
     <div className="space-y-6">
       {/* 입력 */}
-      <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
-        <label className="block text-sm font-medium text-slate-700">
+      <div className="rounded-xl border border-transparent bg-[#02343F] p-5">
+        <label className="block text-sm font-medium text-white">
           내 연봉 (세전, 만원)
           <div className="mt-1 flex items-center gap-1">
             <input
@@ -136,14 +136,14 @@ export default function SalaryCompareCalc() {
               onChange={(e) => setManwonInput(Number(e.target.value.replace(/[^0-9]/g, "")) || 0)}
               className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-right tabular-nums"
             />
-            <span className="shrink-0 text-sm text-slate-400">만원</span>
+            <span className="shrink-0 text-sm text-slate-300">만원</span>
           </div>
-          <span className="mt-1 block text-xs font-normal text-slate-400">계약연봉 기준. 6천만 원이면 6000</span>
+          <span className="mt-1 block text-xs font-normal text-slate-300">계약연봉 기준. 6천만 원이면 6000</span>
         </label>
         <button
           type="button"
           onClick={copyLink}
-          className="mt-3 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:border-blue-300"
+          className="mt-3 rounded-lg border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white hover:bg-white/20"
         >
           {copied ? "링크 복사됨" : "링크 복사"}
         </button>
@@ -254,7 +254,7 @@ export default function SalaryCompareCalc() {
 
       {/* 표 */}
       <div className="overflow-hidden rounded-xl border border-slate-200">
-        <div className="border-b border-slate-100 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-800">
+        <div className="border-b border-transparent bg-[#02343F] px-4 py-2.5 text-sm font-semibold text-white">
           기업별 상세
         </div>
         <table className="w-full text-sm">
@@ -286,8 +286,8 @@ export default function SalaryCompareCalc() {
       </div>
 
       {/* 안내 */}
-      <section className="space-y-1.5 rounded-xl bg-slate-50 p-4 text-sm text-slate-600">
-        <p className="font-semibold text-slate-800">이 데이터는 어떻게 만들어지나요?</p>
+      <section className="space-y-1.5 rounded-xl bg-[#02343F] p-4 text-sm text-slate-200">
+        <p className="font-semibold text-white">이 데이터는 어떻게 만들어지나요?</p>
         <p>
           비교 대상 기업이 금융감독원 전자공시시스템(DART)에 제출한 사업보고서 "직원현황"의 1인평균급여액을
           그대로 가져옵니다. 커뮤니티 추정치가 아니라 기업이 법적으로 공시해야 하는 자료입니다. 사업부문·성별로
