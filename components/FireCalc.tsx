@@ -272,6 +272,56 @@ export default function FireCalc() {
     };
   }, [age, retireAge, asset, monthlySave, monthlyExpense, returnRate, inflation, withdrawRate, sideIncome, pension, growSavings]);
 
+  // 몬테카를로 시뮬레이션: 매달 수익률을 고정값이 아니라 변동성 있는 랜덤값으로 뽑아
+  // 은퇴 후 30년 동안 자산이 몇 %의 확률로 안 바닥나는지 계산한다
+  const monteCarlo = useMemo(() => {
+    if (r.reachAge === null) return null;
+    const TRIALS = 500;
+    const HORIZON_YEARS = 30;
+    const ANNUAL_VOL = 0.15; // 주식 비중 높은 포트폴리오 기준 연 변동성 가정(단순화)
+    const monthlyMean = returnRate / 100 / 12;
+    const monthlySd = ANNUAL_VOL / Math.sqrt(12);
+    const months = HORIZON_YEARS * 12;
+    const startCapital = r.fireNumber;
+    const monthlyWithdraw = r.netMonthly * 10000;
+
+    const randNormal = () => {
+      let u = 0,
+        v = 0;
+      while (u === 0) u = Math.random();
+      while (v === 0) v = Math.random();
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    };
+
+    let successCount = 0;
+    const finalBalances: number[] = [];
+    for (let t = 0; t < TRIALS; t++) {
+      let c = startCapital;
+      let survived = true;
+      for (let m = 0; m < months; m++) {
+        const ret = monthlyMean + randNormal() * monthlySd;
+        c = c * (1 + ret) - monthlyWithdraw;
+        if (c <= 0) {
+          survived = false;
+          c = 0;
+          break;
+        }
+      }
+      if (survived) successCount++;
+      finalBalances.push(c);
+    }
+    finalBalances.sort((a, b) => a - b);
+    const median = finalBalances[Math.floor(TRIALS / 2)];
+
+    return {
+      trials: TRIALS,
+      successRate: (successCount / TRIALS) * 100,
+      horizonYears: HORIZON_YEARS,
+      medianFinalBalance: median,
+      vol: ANNUAL_VOL,
+    };
+  }, [r.reachAge, r.fireNumber, r.netMonthly, returnRate]);
+
   const scenarios = useMemo(() => {
     return [5, 7, 9].map((rate) => {
       const netMonthly = Math.max(0, monthlyExpense - sideIncome - pension);
@@ -518,6 +568,35 @@ export default function FireCalc() {
 
         {/* 재정 수명 차트 */}
         <DepletionChart path={r.depletionPath} depletionAge={r.depletionAge} />
+
+        {/* 몬테카를로 시뮬레이션 */}
+        {monteCarlo &&
+          (() => {
+            const status = monteCarlo.successRate >= 85 ? "good" : monteCarlo.successRate >= 60 ? "warn" : "bad";
+            const COLOR = {
+              good: { box: "border-emerald-200 bg-emerald-50", text: "text-emerald-700" },
+              warn: { box: "border-amber-200 bg-amber-50", text: "text-amber-700" },
+              bad: { box: "border-rose-200 bg-rose-50", text: "text-rose-700" },
+            }[status];
+            const successCount = Math.round((monteCarlo.trials * monteCarlo.successRate) / 100);
+            return (
+              <div className={`rounded-xl border p-5 ${COLOR.box}`}>
+                <p className={`text-xs font-semibold uppercase tracking-wide ${COLOR.text}`}>몬테카를로 시뮬레이션</p>
+                <p className={`mt-1 text-2xl font-bold ${COLOR.text}`}>성공 확률 {monteCarlo.successRate.toFixed(0)}%</p>
+                <p className="mt-1 text-sm leading-relaxed text-[#5B6478]">
+                  은퇴 후 {monteCarlo.horizonYears}년 동안 매년 수익률이 평균 {returnRate}%를 중심으로 표준편차{" "}
+                  {(monteCarlo.vol * 100).toFixed(0)}%p만큼 무작위로 변동한다고 가정하고 {monteCarlo.trials}번
+                  반복 시뮬레이션했습니다. {monteCarlo.trials}번 중 <strong>{successCount}번</strong>은{" "}
+                  {monteCarlo.horizonYears}년 내내 자산이 유지됐습니다.
+                </p>
+                <p className="mt-2 text-xs text-[#8B93A6]">
+                  고정 수익률 가정과 달리, 실제 시장처럼 오르내리는 해가 섞여 있어도 계획이 버틸 수 있는지를
+                  확률로 보여줍니다. 연 변동성 15%는 주식 비중이 높은 포트폴리오를 가정한 단순화입니다. 85%
+                  이상이면 안전, 60~85%면 주의, 60% 미만이면 계획을 다시 볼 필요가 있습니다.
+                </p>
+              </div>
+            );
+          })()}
 
         {/* 계산 방식 설명 */}
         <div className="space-y-1.5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 text-xs leading-relaxed text-[#7A8296]">
