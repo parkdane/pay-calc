@@ -103,7 +103,7 @@ export default function FireCalc() {
     setExporting(true);
     try {
       const [{ default: html2canvas }, { default: JsPDF }] = await Promise.all([
-        import("html2canvas"),
+        import("html2canvas-pro"),
         import("jspdf"),
       ]);
       const canvas = await html2canvas(captureRef.current, {
@@ -128,6 +128,9 @@ export default function FireCalc() {
         heightLeft -= pageHeight;
       }
       pdf.save(`파이어계산기_${Math.round(age)}세_결과.pdf`);
+    } catch (err) {
+      console.error("PDF 저장 실패:", err);
+      window.alert("PDF 저장에 실패했습니다. 잠시 후 다시 시도해주세요.");
     } finally {
       setExporting(false);
     }
