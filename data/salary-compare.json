@@ -1,14 +1,38 @@
 {
-  "updatedAt": "2026-07-12T04:52:47.559Z",
+  "updatedAt": "2026-07-12T04:53:29.654Z",
   "source": "OpenDART(금융감독원 전자공시) 사업보고서 직원현황, 1인평균급여액 기준",
   "note": "회사 전체 임직원(신입~임원) 평균이며 특정 연차·직급 기준이 아닙니다. 사업부문·성별별 인원수 가중평균으로 계산했습니다.",
   "companies": [
+    {
+      "name": "KB금융",
+      "corpCode": "00688996",
+      "avgSalary": 197951389,
+      "employeeCount": 144,
+      "avgTenure": null,
+      "year": 2025
+    },
     {
       "name": "SK하이닉스",
       "corpCode": "00164779",
       "avgSalary": 185004892,
       "employeeCount": 34549,
       "avgTenure": 13.4,
+      "year": 2025
+    },
+    {
+      "name": "신한지주",
+      "corpCode": "00382199",
+      "avgSalary": 178025641,
+      "employeeCount": 195,
+      "avgTenure": null,
+      "year": 2025
+    },
+    {
+      "name": "SK텔레콤",
+      "corpCode": "00159023",
+      "avgSalary": 162961061,
+      "employeeCount": 5316,
+      "avgTenure": 13.7,
       "year": 2025
     },
     {
@@ -20,11 +44,59 @@
       "year": 2025
     },
     {
+      "name": "POSCO홀딩스",
+      "corpCode": "00155319",
+      "avgSalary": 147389313,
+      "employeeCount": 524,
+      "avgTenure": 12.5,
+      "year": 2025
+    },
+    {
       "name": "NAVER",
       "corpCode": "00266961",
       "avgSalary": 145516148,
       "employeeCount": 5047,
       "avgTenure": 7.7,
+      "year": 2025
+    },
+    {
+      "name": "GS",
+      "corpCode": "00500254",
+      "avgSalary": 141625000,
+      "employeeCount": 96,
+      "avgTenure": 4.2,
+      "year": 2025
+    },
+    {
+      "name": "S-Oil",
+      "corpCode": "00138279",
+      "avgSalary": 138637226,
+      "employeeCount": 3537,
+      "avgTenure": 17.4,
+      "year": 2025
+    },
+    {
+      "name": "삼성에스디에스",
+      "corpCode": "00126186",
+      "avgSalary": 138288172,
+      "employeeCount": 11219,
+      "avgTenure": 17.2,
+      "year": 2025
+    },
+    {
+      "name": "현대모비스",
+      "corpCode": "00164788",
+      "avgSalary": 136955086,
+      "employeeCount": 12535,
+      "avgTenure": 13.1,
+      "year": 2025
+    },
+    {
+      "name": "기아",
+      "corpCode": "00106641",
+      "avgSalary": 134011705,
+      "employeeCount": 36566,
+      "avgTenure": 20.8,
       "year": 2025
     },
     {
@@ -36,13 +108,94 @@
       "year": 2025
     },
     {
+      "name": "KT",
+      "corpCode": "00190321",
+      "avgSalary": 118603428,
+      "employeeCount": 14701,
+      "avgTenure": 19.3,
+      "year": 2025
+    },
+    {
+      "name": "LG전자",
+      "corpCode": "00401731",
+      "avgSalary": 117590675,
+      "employeeCount": 34144,
+      "avgTenure": 13.8,
+      "year": 2025
+    },
+    {
+      "name": "엔씨소프트",
+      "corpCode": "00261443",
+      "avgSalary": 116866953,
+      "employeeCount": 3262,
+      "avgTenure": 7.5,
+      "year": 2025
+    },
+    {
+      "name": "현대글로비스",
+      "corpCode": "00360595",
+      "avgSalary": 114994844,
+      "employeeCount": 2319,
+      "avgTenure": 7,
+      "year": 2025
+    },
+    {
+      "name": "삼성바이오로직스",
+      "corpCode": "00877059",
+      "avgSalary": 114320807,
+      "employeeCount": 5455,
+      "avgTenure": 4.9,
+      "year": 2025
+    },
+    {
+      "name": "현대건설",
+      "corpCode": "00164478",
+      "avgSalary": 112097681,
+      "employeeCount": 6900,
+      "avgTenure": 13.8,
+      "year": 2025
+    },
+    {
       "name": "카카오",
       "corpCode": "00258801",
       "avgSalary": 108721061,
       "employeeCount": 3922,
       "avgTenure": null,
       "year": 2025
+    },
+    {
+      "name": "LG화학",
+      "corpCode": "00356361",
+      "avgSalary": 107023467,
+      "employeeCount": 12869,
+      "avgTenure": null,
+      "year": 2025
+    },
+    {
+      "name": "LG이노텍",
+      "corpCode": "00105961",
+      "avgSalary": 92627877,
+      "employeeCount": 12211,
+      "avgTenure": 9.4,
+      "year": 2025
+    },
+    {
+      "name": "CJ제일제당",
+      "corpCode": "00635134",
+      "avgSalary": 84107993,
+      "employeeCount": 8232,
+      "avgTenure": 9.3,
+      "year": 2025
     }
   ],
-  "failed": []
+  "failed": [
+    {
+      "name": "HD현대중공업",
+      "reason": "no_salary_field"
+    },
+    {
+      "name": "삼성물산",
+      "reason": "013"
+    }
+  ]
 }
