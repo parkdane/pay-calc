@@ -36,6 +36,36 @@ const CAGR_TABLE = [
   { name: "워런 버핏", cagr: 20, note: "재현 매우 어려움" },
 ].sort((a, b) => a.cagr - b.cagr);
 
+const FIRE_DECISION_CARDS = [
+  {
+    tag: "부족 금액 있음",
+    title: "부족 금액이 크게 나온다",
+    bullets: [
+      "월 투자금을 늘리거나 목표 지출(생활비)을 줄이면 부족분이 줄어듭니다",
+      "목표 은퇴 나이를 몇 년 늦추는 것만으로도 필요 저축액이 크게 줄 수 있습니다",
+      "\"추가 필요 월 투자금\" 카드에 나온 금액만큼만 더 저축해도 목표 나이를 맞출 수 있습니다",
+    ],
+  },
+  {
+    tag: "성공확률 낮음",
+    title: "몬테카를로 성공 확률이 60% 미만이다",
+    bullets: [
+      "안전인출률을 4%에서 3.5%·3%로 낮추면 목표 자산이 커지는 대신 실패 확률이 줄어듭니다",
+      "기대수익률을 지나치게 낙관적으로 잡지 않았는지 CAGR 참고표와 비교해보세요",
+      "은퇴 나이를 1~2년만 늦춰도 성공 확률이 눈에 띄게 올라가는 경우가 많습니다",
+    ],
+  },
+  {
+    tag: "이미 달성",
+    title: "이미 목표를 달성했거나 임박했다",
+    bullets: [
+      "인출을 시작하기 전에 안전인출률(4%)이 지금 상황에도 적절한지 다시 점검하세요",
+      "건강보험료·세금은 이 계산기에 포함되지 않아 실제 순인출액은 이보다 적을 수 있습니다",
+      "재정 수명 차트에서 자산이 언제 소진되는지 먼저 확인한 뒤 인출 계획을 세우세요",
+    ],
+  },
+];
+
 export default function FireCalc() {
   const [age, setAge] = useState(35);
   const [retireAge, setRetireAge] = useState(50);
@@ -617,6 +647,29 @@ export default function FireCalc() {
             매년 인상" 옵션을 켜면 승진·연봉 인상으로 저축 여력이 함께 늘어나는 경우까지 반영해 다시 계산합니다 —
             같은 조건이라도 이 옵션 하나로 달성 시점이 꽤 앞당겨질 수 있습니다.
           </p>
+        </div>
+
+        {/* 판단 보조 */}
+        <div className="space-y-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
+            <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">결과별로 다음에 뭘 봐야 하나</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {FIRE_DECISION_CARDS.map((card) => (
+              <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+                <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
+                  {card.tag}
+                </span>
+                <p className="mt-2 text-sm font-bold text-[#1B2A4A]">{card.title}</p>
+                <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#5B6478]">
+                  {card.bullets.map((b) => (
+                    <li key={b}>· {b}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* 시나리오 비교 */}

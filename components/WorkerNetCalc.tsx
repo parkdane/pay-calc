@@ -220,6 +220,29 @@ export default function WorkerNetCalc() {
         </div>
       </div>
 
+      {/* 판단 보조 */}
+      <div className="mt-6 space-y-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
+          <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">이런 상황이면 이렇게 보세요</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {WORKER_DECISION_CARDS.map((card) => (
+            <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+              <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
+                {card.tag}
+              </span>
+              <p className="mt-2 text-sm font-bold text-[#1B2A4A]">{card.title}</p>
+              <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#5B6478]">
+                {card.bullets.map((b) => (
+                  <li key={b}>· {b}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ═══ 하단 전체 폭 (grid 밖으로 분리 — sticky 오른쪽 컬럼과 겹치는 문제 방지) ═══ */}
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
         ※ 참고용 추정치입니다. 소득세는 간이세액표 산출 방식(연환산) 근사이며, 비과세 식대, 연말정산 공제 항목,
@@ -228,6 +251,36 @@ export default function WorkerNetCalc() {
     </div>
   );
 }
+
+const WORKER_DECISION_CARDS = [
+  {
+    tag: "이직 협상",
+    title: "이직 제안을 받아 연봉을 비교 중이다",
+    bullets: [
+      "세전 연봉만 비교하면 실제 인상 체감을 놓칩니다",
+      "연봉이 오를수록 높은 세율 구간이 늘어 실수령 인상폭은 항상 더 작습니다",
+      "두 회사 연봉을 각각 넣어 월 실수령액 차이로 비교하세요",
+    ],
+  },
+  {
+    tag: "프리랜서 전환",
+    title: "프리랜서·사업소득 전환을 고민 중이다",
+    bullets: [
+      "4대보험을 회사와 반씩 내던 구조에서 전액 본인 부담으로 바뀝니다",
+      "매년 5월 종합소득세 신고가 필요해 원천징수 구조와 다릅니다",
+      "단순 실수령액 비교보다 세후 순수입 기준으로 다시 계산해야 합니다",
+    ],
+  },
+  {
+    tag: "연말정산",
+    title: "부양가족·소득공제를 최적화하고 싶다",
+    bullets: [
+      "부양가족 수를 바꿔가며 매월 원천징수 소득세 변화를 확인해보세요",
+      "월 실수령액과 연말정산 환급액은 별개로, 원천징수를 적게 하면 환급이 늘 수 있습니다",
+      "정확한 공제 항목은 국세청 홈택스 연말정산 미리보기에서 확인하세요",
+    ],
+  },
+];
 
 function Row({
   label,

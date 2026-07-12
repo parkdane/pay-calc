@@ -152,6 +152,29 @@ export default function SavingsGoalSim() {
         </div>
       </div>
 
+      {/* 판단 보조 */}
+      <div className="mt-6 space-y-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
+          <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">이런 상황이면 이렇게 보세요</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {GOAL_DECISION_CARDS.map((card) => (
+            <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+              <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
+                {card.tag}
+              </span>
+              <p className="mt-2 text-sm font-bold text-[#1B2A4A]">{card.title}</p>
+              <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#5B6478]">
+                {card.bullets.map((b) => (
+                  <li key={b}>· {b}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
         ※ 월복리 적립 기준 추정치이며 세금(이자소득세 15.4%)은 반영하지 않았습니다. 목표 기간은 저축액이
         일정하다는 가정이므로 연봉 인상이나 지출 변화에 따라 달라집니다.
@@ -159,6 +182,36 @@ export default function SavingsGoalSim() {
     </div>
   );
 }
+
+const GOAL_DECISION_CARDS = [
+  {
+    tag: "기간이 너무 김",
+    title: "목표 달성 기간이 너무 길게 나온다",
+    bullets: [
+      "변동비를 줄이면 저축액이 늘어 기간이 눈에 띄게 짧아집니다",
+      "정책 적금(정부기여금 있는 상품)을 활용하면 같은 저축액으로도 더 빨리 모을 수 있습니다",
+      "목표 금액을 단계적으로 나눠 1차 목표부터 달성하는 것도 방법입니다",
+    ],
+  },
+  {
+    tag: "저축이 마이너스",
+    title: "저축 가능액이 마이너스로 나온다",
+    bullets: [
+      "고정비(월세·통신·구독 등)부터 줄일 수 있는 항목이 있는지 점검하세요",
+      "실수령액 자체가 부족하다면 실수령액 계산기로 소득 구조를 먼저 확인하세요",
+      "지출을 줄이는 것이 어렵다면 부수입을 늘리는 방향도 함께 고려하세요",
+    ],
+  },
+  {
+    tag: "빠르게 달성하고 싶다",
+    title: "최대한 빠르게 목표를 달성하고 싶다",
+    bullets: [
+      "저축 금리를 높이는 것보다 매월 저축액을 늘리는 쪽이 기간 단축 효과가 더 큽니다",
+      "정부기여금이 있는 청년 정책 적금을 함께 활용하면 기간이 크게 줄어듭니다",
+      "청년 정책 적금 비교 계산기에서 나에게 맞는 상품을 먼저 찾아보세요",
+    ],
+  },
+];
 
 function NumInput({
   label,

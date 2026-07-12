@@ -339,6 +339,29 @@ export default function CivilNetCalc() {
         </div>
       </div>
 
+      {/* 판단 보조 */}
+      <div className="mt-6 space-y-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
+          <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">이런 상황이면 이렇게 보세요</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {CIVIL_DECISION_CARDS.map((card) => (
+            <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+              <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
+                {card.tag}
+              </span>
+              <p className="mt-2 text-sm font-bold text-[#1B2A4A]">{card.title}</p>
+              <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#5B6478]">
+                {card.bullets.map((b) => (
+                  <li key={b}>· {b}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
         ※ 참고용 추정치입니다. 소득세는 간이세액표 산출 방식(연환산)으로 계산했으며, 정근수당(연 2회)은 월 단위
         분산 환산, 명절휴가비(봉급의 60%×연 2회)는 연간 환산에만 포함됩니다. 성과상여금 등 개인·기관별 변동
@@ -347,6 +370,36 @@ export default function CivilNetCalc() {
     </div>
   );
 }
+
+const CIVIL_DECISION_CARDS = [
+  {
+    tag: "이직 고민",
+    title: "일반 기업과 이직을 저울질 중이다",
+    bullets: [
+      "실수령액만 비교하면 공무원연금(9%)과 국민연금(4.5%)의 구조 차이를 놓칩니다",
+      "공무원연금은 기여율이 높은 대신 노후 수령액이 더 안정적입니다",
+      "정년 보장·연금까지 포함한 장기 관점으로 비교하세요",
+    ],
+  },
+  {
+    tag: "승진 대비",
+    title: "곧 승진·진급을 앞두고 있다",
+    bullets: [
+      "호봉과 직급이 동시에 오르면 직급보조비도 함께 바뀝니다",
+      "정근수당은 근속연수 구간이 바뀔 때 가산금이 늘어납니다",
+      "상세 옵션에서 근속연수를 바꿔가며 인상 체감폭을 미리 확인하세요",
+    ],
+  },
+  {
+    tag: "가족 변화",
+    title: "결혼·출산 등으로 가족 구성이 바뀐다",
+    bullets: [
+      "가족수당(배우자 4만·자녀별 5만~12만)이 매월 추가됩니다",
+      "부양가족 수가 늘면 소득세 인적공제로 실수령액이 조금 더 늘어납니다",
+      "상세 옵션에서 배우자·자녀 수를 넣어 바뀐 실수령액을 확인하세요",
+    ],
+  },
+];
 
 function Row({
   label,

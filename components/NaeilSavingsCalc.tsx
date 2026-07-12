@@ -116,6 +116,29 @@ export default function NaeilSavingsCalc() {
         </div>
       </div>
 
+      {/* 판단 보조 */}
+      <div className="mt-6 space-y-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
+          <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">이런 상황이면 이렇게 보세요</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {NAEIL_DECISION_CARDS.map((card) => (
+            <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+              <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
+                {card.tag}
+              </span>
+              <p className="mt-2 text-sm font-bold text-[#1B2A4A]">{card.title}</p>
+              <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#5B6478]">
+                {card.bullets.map((b) => (
+                  <li key={b}>· {b}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
         ※ 참고용 추정치입니다. 정부지원금 수령에는 3년 통장 유지, 근로활동 지속, 교육 이수, 자금사용계획서
         제출 등의 조건이 있습니다. 모집 시기와 세부 요건은 복지로·자산형성포털에서 확인하세요.
@@ -123,6 +146,36 @@ export default function NaeilSavingsCalc() {
     </div>
   );
 }
+
+const NAEIL_DECISION_CARDS = [
+  {
+    tag: "소득 구간 애매",
+    title: "내 소득 구간이 어디인지 애매하다",
+    bullets: [
+      "기준중위소득은 가구원 수에 따라 금액이 달라집니다",
+      "본인 소득만이 아니라 가구 전체 소득으로 판단합니다",
+      "정확한 구간은 복지로 모의계산에서 먼저 확인해보세요",
+    ],
+  },
+  {
+    tag: "3년 유지 자신없음",
+    title: "3년을 다 채울 자신이 없다",
+    bullets: [
+      "중도해지 시 정부지원금을 돌려줘야 하는 경우가 많습니다",
+      "지원금 없이도 유지 가능한 저축액으로 시작하는 것이 안전합니다",
+      "이직·소득 변화 가능성이 크다면 신중히 결정하세요",
+    ],
+  },
+  {
+    tag: "근로 유지 조건",
+    title: "일하면서 준비하고 있다",
+    bullets: [
+      "근로활동 지속이 지원금 수령 조건 중 하나입니다",
+      "이직 공백기가 길어지면 자격을 잃을 수 있어 주의가 필요합니다",
+      "구체적인 근로 인정 기준은 담당 주민센터에 문의하세요",
+    ],
+  },
+];
 
 function Row({
   label,

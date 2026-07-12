@@ -23,6 +23,36 @@ function topPercentOf(income: number): number {
   return 100;
 }
 
+const INCOME_RANK_DECISION_CARDS = [
+  {
+    tag: "이직 협상용",
+    title: "이직·연봉 협상 자료로 쓰고 싶다",
+    bullets: [
+      "이 데이터는 전체 근로소득자 대비 순위로, 협상 근거로는 참고용입니다",
+      "특정 기업과 비교하고 싶다면 대기업 평균연봉 비교 계산기가 더 정확합니다",
+      "협상에는 시장 데이터보다 본인의 성과·기여도를 함께 제시하는 것이 효과적입니다",
+    ],
+  },
+  {
+    tag: "상위권인데 체감 안 됨",
+    title: "상위권으로 나오는데 체감이 안 된다",
+    bullets: [
+      "연봉이 높을수록 세금·건강보험료 부담도 커져 실수령액 증가폭은 작아집니다",
+      "실수령액 계산기에서 세후 금액을 확인하면 체감과의 차이를 알 수 있습니다",
+      "고연봉 구간은 표준편차가 커서 같은 상위 %라도 실제 격차가 클 수 있습니다",
+    ],
+  },
+  {
+    tag: "중위보다 낮음",
+    title: "중위 연봉보다 낮게 나온다",
+    bullets: [
+      "연차·경력이 짧다면 자연스러운 결과일 수 있습니다",
+      "이 통계는 근로소득만 포함해 사업소득·자산소득은 반영되지 않습니다",
+      "한 시점의 순위보다 몇 년 뒤 연봉 상승 추이를 함께 보는 것이 더 의미 있습니다",
+    ],
+  },
+];
+
 export default function IncomeRankCalc() {
   const [manwon, setManwon] = useState(4000);
   const [submitted, setSubmitted] = useState(false);
@@ -114,6 +144,29 @@ export default function IncomeRankCalc() {
                 ))}
             </dl>
           </div>
+        </div>
+      </div>
+
+      {/* 판단 보조 */}
+      <div className="mt-6 space-y-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
+          <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">이런 상황이면 이렇게 보세요</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {INCOME_RANK_DECISION_CARDS.map((card) => (
+            <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+              <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
+                {card.tag}
+              </span>
+              <p className="mt-2 text-sm font-bold text-[#1B2A4A]">{card.title}</p>
+              <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#5B6478]">
+                {card.bullets.map((b) => (
+                  <li key={b}>· {b}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
     </div>

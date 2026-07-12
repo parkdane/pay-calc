@@ -62,6 +62,36 @@ const TIER_COLOR: Record<string, string> = {
 
 type SortKey = "high" | "low" | "name";
 
+const SALARY_COMPARE_DECISION_CARDS = [
+  {
+    tag: "이직 협상용",
+    title: "이직 협상 자료로 쓰고 싶다",
+    bullets: [
+      "여기 나온 평균은 전 직원(신입~임원) 평균이라 신입 초봉과는 다릅니다",
+      "같은 업종·비슷한 연차대 기업끼리 비교하는 것이 더 의미 있습니다",
+      "협상에는 공식 채용공고나 잡코리아·사람인의 초봉 정보를 함께 참고하세요",
+    ],
+  },
+  {
+    tag: "특정 기업 목표",
+    title: "특정 기업 입사를 목표로 하고 있다",
+    bullets: [
+      "삼성전자처럼 사업부문이 나뉜 회사는 부문별 편차가 회사 평균보다 클 수 있습니다",
+      "평균연봉 하나보다 평균근속연수도 함께 보면 그 회사의 안정성을 가늠할 수 있습니다",
+      "연봉 외에 워라밸·성장성 등 다른 요소도 함께 고려하는 것을 권장합니다",
+    ],
+  },
+  {
+    tag: "업종 비교",
+    title: "업종을 바꿔서 이직할지 고민 중이다",
+    bullets: [
+      "업종 필터로 반도체·IT·금융 등 관심 업종끼리만 따로 비교해보세요",
+      "업종 평균이 높아도 개별 기업 편차가 크니 상세표에서 개별 기업도 확인하세요",
+      "티어(S/A/B/C)는 이 목록 안에서의 상대적 위치이지 절대적 평가가 아닙니다",
+    ],
+  },
+];
+
 export default function SalaryCompareCalc() {
   const [manwonInput, setManwonInput] = useState(6000);
   const [industry, setIndustry] = useState("전체");
@@ -301,6 +331,29 @@ export default function SalaryCompareCalc() {
 
       {/* 안내 (grid 밖, 전체 폭) */}
       <div className="mt-6 space-y-4">
+        {/* 판단 보조 */}
+        <div className="space-y-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
+            <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">이런 상황이면 이렇게 보세요</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {SALARY_COMPARE_DECISION_CARDS.map((card) => (
+              <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+                <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
+                  {card.tag}
+                </span>
+                <p className="mt-2 text-sm font-bold text-[#1B2A4A]">{card.title}</p>
+                <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#5B6478]">
+                  {card.bullets.map((b) => (
+                    <li key={b}>· {b}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <section className="space-y-1.5 rounded-xl bg-[rgba(46,68,148,0.03)] p-4 text-sm text-[#5B6478]">
           <p className="font-semibold text-[#1B2A4A]">이 데이터는 어떻게 만들어지나요?</p>
           <p>

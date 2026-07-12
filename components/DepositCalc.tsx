@@ -173,6 +173,29 @@ export default function DepositCalc() {
         </div>
       </div>
 
+      {/* 판단 보조 */}
+      <div className="mt-6 space-y-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
+          <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">이런 상황이면 이렇게 보세요</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {DEPOSIT_DECISION_CARDS.map((card) => (
+            <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+              <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
+                {card.tag}
+              </span>
+              <p className="mt-2 text-sm font-bold text-[#1B2A4A]">{card.title}</p>
+              <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#5B6478]">
+                {card.bullets.map((b) => (
+                  <li key={b}>· {b}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
         ※ 단리 기준 계산입니다. 적금은 매월 납입 시점부터 만기까지의 기간에 비례해 이자가 붙습니다. 실제 상품의
         복리 여부·우대금리에 따라 금액이 달라질 수 있습니다.
@@ -180,6 +203,36 @@ export default function DepositCalc() {
     </div>
   );
 }
+
+const DEPOSIT_DECISION_CARDS = [
+  {
+    tag: "목돈이 있다",
+    title: "한 번에 넣을 목돈이 이미 있다",
+    bullets: [
+      "예금(목돈 예치) 모드로 바꿔서 계산해보세요",
+      "적금보다 예금이 원금 전체에 이자가 붙어 같은 금리라면 총 이자가 더 큽니다",
+      "단, 목돈을 나눠 여러 상품에 예치하면 예금자보호 한도(5천만 원) 분산에도 유리합니다",
+    ],
+  },
+  {
+    tag: "매달 여윳돈",
+    title: "매달 일정 금액을 모으고 싶다",
+    bullets: [
+      "적금(매월 납입) 모드가 강제 저축 효과가 있어 목돈 만들기에 유리합니다",
+      "정책 적금(청년미래적금·청년도약계좌 등) 대상이라면 일반 적금보다 정부기여금만큼 더 유리합니다",
+      "청년 정책 적금 비교 계산기에서 대상 여부를 먼저 확인해보세요",
+    ],
+  },
+  {
+    tag: "금리 비교",
+    title: "어느 은행이 금리가 높은지 모르겠다",
+    bullets: [
+      "이 계산기 결과는 금리를 알고 있을 때의 만기액 계산용입니다",
+      "실제 최고금리는 매일 갱신되는 금리 비교 페이지에서 먼저 확인하세요",
+      "확인한 금리를 그대로 가져와 이 계산기에 적용할 수 있습니다",
+    ],
+  },
+];
 
 function Row({
   label,

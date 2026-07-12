@@ -262,6 +262,29 @@ export default function MilitaryNetCalc() {
         </div>
       </div>
 
+      {/* 판단 보조 */}
+      <div className="mt-6 space-y-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
+          <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">이런 상황이면 이렇게 보세요</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {MILITARY_DECISION_CARDS.map((card) => (
+            <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+              <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
+                {card.tag}
+              </span>
+              <p className="mt-2 text-sm font-bold text-[#1B2A4A]">{card.title}</p>
+              <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#5B6478]">
+                {card.bullets.map((b) => (
+                  <li key={b}>· {b}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
         ※ 위험근무수당(병과별), 특수지 근무수당 등은 개인·부대별 편차가 커 아직 포함되지 않았습니다. 실제
         급여명세서와 차이가 있으며 참고용 추정치입니다.
@@ -269,6 +292,36 @@ export default function MilitaryNetCalc() {
     </div>
   );
 }
+
+const MILITARY_DECISION_CARDS = [
+  {
+    tag: "장기복무 고민",
+    title: "의무복무 연장 후 장기복무를 고민 중이다",
+    bullets: [
+      "장기복무 전환 시 호봉·수당이 계속 안정적으로 쌓입니다",
+      "군인연금 개시 시점과 수령액이 일반 사기업 퇴직연금과 크게 다릅니다",
+      "당장의 월급보다 장기 복무 기간 전체의 누적 소득으로 비교하세요",
+    ],
+  },
+  {
+    tag: "전역 준비",
+    title: "곧 전역을 앞두고 있다",
+    bullets: [
+      "전역 후에는 각종 수당이 사라져 체감 소득이 줄어들 수 있습니다",
+      "장병내일준비적금은 전역 시점에 맞춰 만기가 오도록 가입 시기를 계획하세요",
+      "전역 직후 공백기 생활비를 별도로 준비해두는 것이 안전합니다",
+    ],
+  },
+  {
+    tag: "특수수당 대상",
+    title: "위험근무수당 등 특수수당 대상이다",
+    bullets: [
+      "이 계산기는 병과별 위험근무수당·특수지근무수당을 포함하지 않습니다",
+      "해당 수당이 있다면 실제 급여명세서 금액이 이 계산 결과보다 높을 수 있습니다",
+      "정확한 금액은 소속 부대 인사·재정 담당자에게 확인하세요",
+    ],
+  },
+];
 
 function RowItem({
   label,

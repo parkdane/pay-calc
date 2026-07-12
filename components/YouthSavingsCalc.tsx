@@ -121,6 +121,29 @@ export default function YouthSavingsCalc() {
         </div>
       </div>
 
+      {/* 판단 보조 */}
+      <div className="mt-6 space-y-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
+          <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">이런 상황이면 이렇게 보세요</p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {FUTURE_DECISION_CARDS.map((card) => (
+            <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
+              <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
+                {card.tag}
+              </span>
+              <p className="mt-2 text-sm font-bold text-[#1B2A4A]">{card.title}</p>
+              <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#5B6478]">
+                {card.bullets.map((b) => (
+                  <li key={b}>· {b}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
         ※ 참고용 추정치입니다. 정부기여금은 소득 유형별 심사로 결정되며, 중도해지 시 기여금·비과세 혜택을
         받을 수 없습니다. 실제 금리·수령액은 취급 은행과 서민금융진흥원에서 확인하세요.
@@ -128,6 +151,36 @@ export default function YouthSavingsCalc() {
     </div>
   );
 }
+
+const FUTURE_DECISION_CARDS = [
+  {
+    tag: "소득 요건 확인",
+    title: "우대형·일반형 중 뭐가 맞는지 헷갈린다",
+    bullets: [
+      "우대형은 중소기업 재직·신규취업 등 별도 요건이 있어 기여금이 2배(12%)입니다",
+      "요건이 애매하면 일단 일반형(6%)으로 가입하고 추후 확인하는 방법도 있습니다",
+      "정확한 대상 여부는 서민금융진흥원 홈페이지에서 확인하세요",
+    ],
+  },
+  {
+    tag: "5년 vs 3년",
+    title: "청년도약계좌와 어느 쪽이 나을지 고민된다",
+    bullets: [
+      "이 상품은 3년 만기로, 5년짜리 도약계좌보다 짧게 목돈을 만들 수 있습니다",
+      "총액은 도약계좌가 크지만, 연 환산 수익률은 이 상품이 더 높을 수 있습니다",
+      "청년 정책 적금 비교 계산기에서 두 상품을 직접 비교해보세요",
+    ],
+  },
+  {
+    tag: "3년 유지 가능성",
+    title: "3년을 다 채울 수 있을지 자신없다",
+    bullets: [
+      "중도해지 시 정부기여금과 비과세 혜택이 모두 사라집니다",
+      "중도 해지 가능성이 크다면 유동성 높은 일반 적금과 병행하는 것도 방법입니다",
+      "월 납입액을 무리하지 않는 선에서 정해야 끝까지 유지하기 쉽습니다",
+    ],
+  },
+];
 
 function Row({
   label,
