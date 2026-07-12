@@ -144,7 +144,8 @@ export default function FireCalc() {
 
     const startAsset = asset * 10000;
     const already = startAsset >= fireNumber;
-    const maxMonths = 12 * 70;
+    // 100세까지만 시뮬레이션 (그 이후는 의미 없음)
+    const maxMonths = Math.max(0, Math.round((100 - age) * 12));
 
     // 1) 달성 시점 계산 (통계용)
     let cur = startAsset;
@@ -161,7 +162,7 @@ export default function FireCalc() {
     const reachAge = already ? age : reached ? age + months / 12 : null;
     const reachMonths = already ? 0 : reached ? months : null;
 
-    // 2) 차트용 경로: 달성 시점(또는 70년 한도) 이후 10년을 더 이어서 추세를 보여줌
+    // 2) 차트용 경로: 달성 시점(또는 100세 한도) 이후 10년을 더 이어서 추세를 보여줌
     const path: { age: number; asset: number; target: number }[] = [
       { age, asset: startAsset, target: fireNumber },
     ];
@@ -224,7 +225,8 @@ export default function FireCalc() {
       let c = fireNumber;
       const exp = netMonthly * 10000;
       let m = 0;
-      const cap = 12 * 60;
+      // 100세까지만 시뮬레이션
+      const cap = Math.max(0, Math.round((100 - reachAge) * 12));
       depletionPath.push({ age: reachAge, asset: Math.max(c, 0) });
       while (c > 0 && m < cap) {
         c = c * (1 + mRet) - exp;
@@ -266,7 +268,7 @@ export default function FireCalc() {
       let cur = asset * 10000,
         target = fireNum,
         months = 0;
-      const max = 12 * 70;
+      const max = Math.max(0, Math.round((100 - age) * 12));
       while (cur < target && months < max) {
         cur = cur * (1 + mRet) + monthlySave * 10000;
         target = target * tg;
@@ -296,7 +298,7 @@ export default function FireCalc() {
             (r.extraSave ?? 0) / 10000
           ).toLocaleString("ko-KR")}만원 정도 추가 적립이 필요합니다.`
         : ` ${retireAge}세 목표를 현재 저축으로 달성할 수 있습니다.`)
-    : `현재 조건으로는 70년 내 목표 달성이 어렵습니다. 저축을 늘리거나 목표 지출을 줄여보세요.`;
+    : `현재 조건으로는 100세까지 목표 달성이 어렵습니다. 저축을 늘리거나 목표 지출을 줄여보세요.`;
 
   return (
     <div className="mx-auto max-w-[1280px] px-4">
@@ -316,8 +318,8 @@ export default function FireCalc() {
             </p>
           </div>
 
-          <Field label="현재 나이" hint="20세~70세" value={age} onChange={setAge} suffix="세" />
-          <Field label="목표 은퇴 나이" hint="현재 나이보다 높게 입력" value={retireAge} onChange={setRetireAge} suffix="세" />
+          <Field label="현재 나이" hint="20세~100세" value={age} onChange={setAge} suffix="세" max={100} />
+          <Field label="목표 은퇴 나이" hint="현재 나이보다 높게, 최대 100세" value={retireAge} onChange={setRetireAge} suffix="세" max={100} />
 
           <div>
             <Field
@@ -460,7 +462,7 @@ export default function FireCalc() {
           />
           <Card
             label="예상 달성 시점"
-            value={r.already ? "달성 완료" : r.reachAge !== null ? `${r.reachAge.toFixed(1)}세` : "70년+"}
+            value={r.already ? "달성 완료" : r.reachAge !== null ? `${r.reachAge.toFixed(1)}세` : "100세+"}
             sub={r.months ? `${fmtDur(r.months)} 후` : "-"}
           />
           <Card
@@ -476,7 +478,7 @@ export default function FireCalc() {
           <Card label="은퇴 후 월 인출액" value={won(r.monthlyWithdraw)} sub="목표 자산 기준 월 인출 가능액" />
           <Card
             label="자산 소진 나이"
-            value={r.depletionAge === null ? "80세+" : `${Math.round(r.depletionAge)}세`}
+            value={r.depletionAge === null ? "100세+" : `${Math.round(r.depletionAge)}세`}
             sub={r.depletionAge === null ? "장기간 자산 유지" : "이 나이에 자산 소진 예상"}
           />
           <Card label="FIRE 유형" value={r.fireType} sub={r.fireTypeDesc} />
@@ -507,7 +509,7 @@ export default function FireCalc() {
                   <td className="px-4 py-2 font-medium text-slate-800">{s.label}</td>
                   <td className="px-4 py-2 text-right tabular-nums text-slate-600">연 {s.rate}%</td>
                   <td className="px-4 py-2 text-right font-semibold tabular-nums text-blue-700">
-                    {s.reachAge ? `${s.reachAge}세` : "70년+"}
+                    {s.reachAge ? `${s.reachAge}세` : "100세+"}
                   </td>
                 </tr>
               ))}
@@ -714,7 +716,7 @@ function DepletionChart({
   if (path.length < 2) {
     return (
       <div className="rounded-xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-400">
-        현재 조건으로는 70년 내 FIRE 목표 자산에 도달하지 못해 은퇴 후 자산 소진 시뮬레이션을 계산할 수 없습니다.
+        현재 조건으로는 100세까지 FIRE 목표 자산에 도달하지 못해 은퇴 후 자산 소진 시뮬레이션을 계산할 수 없습니다.
         저축을 늘리거나 목표 지출을 줄이면 여기에 표시됩니다.
       </div>
     );
@@ -840,6 +842,7 @@ function Field({
   onChange,
   suffix,
   display,
+  max,
 }: {
   label: string;
   hint?: string;
@@ -847,6 +850,7 @@ function Field({
   onChange: (n: number) => void;
   suffix?: string;
   display?: (n: number) => string;
+  max?: number;
 }) {
   return (
     <label className="block">
@@ -861,7 +865,10 @@ function Field({
           type="text"
           inputMode="numeric"
           value={value === 0 ? "" : value.toLocaleString("ko-KR")}
-          onChange={(e) => onChange(Number(e.target.value.replace(/[^0-9]/g, "")) || 0)}
+          onChange={(e) => {
+            const n = Number(e.target.value.replace(/[^0-9]/g, "")) || 0;
+            onChange(max !== undefined ? Math.min(n, max) : n);
+          }}
           className="w-full rounded-lg border border-slate-300 bg-white px-3 py-3 text-right text-base tabular-nums"
         />
         {suffix && <span className="shrink-0 text-sm text-slate-400">{suffix}</span>}
