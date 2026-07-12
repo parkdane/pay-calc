@@ -9,6 +9,37 @@ export const metadata: Metadata = {
 
 const GROUPS = [
   {
+    title: "재테크 도구",
+    desc: "저축·자산 계획",
+    items: [
+      {
+        href: "/calc/deposit",
+        title: "적금·예금 이자 계산기",
+        desc: "세후 만기 수령액 (15.4% 반영)",
+      },
+      {
+        href: "/calc/income-rank",
+        title: "내 연봉 상위 몇 %?",
+        desc: "국세청 통계 기준 연봉 순위",
+      },
+      {
+        href: "/calc/salary-compare",
+        title: "대기업 평균연봉 비교",
+        desc: "금감원 DART 공시 기준 실제 데이터",
+      },
+      {
+        href: "/calc/savings-goal",
+        title: "저축 목표 시뮬레이터",
+        desc: "월급·지출 입력 → 1억까지 걸리는 기간",
+      },
+      {
+        href: "/calc/fire",
+        title: "파이어족 계산기",
+        desc: "조기 은퇴 가능 나이, 몬테카를로 성공확률",
+      },
+    ],
+  },
+  {
     title: "실수령액 계산",
     desc: "직업·연봉별 세후 월급",
     items: [
@@ -57,32 +88,6 @@ const GROUPS = [
         href: "/calc/soldier-save",
         title: "장병내일준비적금",
         desc: "정부 매칭 100%, 전역 시 수령액",
-      },
-    ],
-  },
-  {
-    title: "재테크 도구",
-    desc: "저축·자산 계획",
-    items: [
-      {
-        href: "/calc/deposit",
-        title: "적금·예금 이자 계산기",
-        desc: "세후 만기 수령액 (15.4% 반영)",
-      },
-      {
-        href: "/calc/income-rank",
-        title: "내 연봉 상위 몇 %?",
-        desc: "국세청 통계 기준 연봉 순위",
-      },
-      {
-        href: "/calc/salary-compare",
-        title: "대기업 평균연봉 비교",
-        desc: "금감원 DART 공시 기준 실제 데이터",
-      },
-      {
-        href: "/calc/savings-goal",
-        title: "저축 목표 시뮬레이터",
-        desc: "월급·지출 입력 → 1억까지 걸리는 기간",
       },
     ],
   },
