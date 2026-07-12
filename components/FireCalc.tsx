@@ -31,7 +31,7 @@ const CAGR_TABLE = [
   { name: "S&P500", cagr: 10, note: "미국 대형주 지수" },
   { name: "나스닥100", cagr: 13, note: "기술주 중심" },
   { name: "워런 버핏", cagr: 20, note: "재현 매우 어려움" },
-  { name: "피터 린치", cagr: 29, note: "역대 최고 수준" },
+  { name: "코스피", cagr: 10, note: "1980년 이후 장기평균 · 최근 10년은 2%대(코리아 디스카운트)" },
 ];
 
 export default function FireCalc() {
