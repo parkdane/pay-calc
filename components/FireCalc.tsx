@@ -45,6 +45,7 @@ export default function FireCalc() {
   const [withdrawRate, setWithdrawRate] = useState(4);
   const [sideIncome, setSideIncome] = useState(0);
   const [pension, setPension] = useState(0);
+  const [growSavings, setGrowSavings] = useState(false);
 
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -67,6 +68,8 @@ export default function FireCalc() {
     num("withdrawRate", setWithdrawRate);
     num("sideIncome", setSideIncome);
     num("pension", setPension);
+    const g = p.get("growSavings");
+    if (g !== null) setGrowSavings(g === "1");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -82,6 +85,7 @@ export default function FireCalc() {
       withdrawRate: String(withdrawRate),
       sideIncome: String(sideIncome),
       pension: String(pension),
+      growSavings: growSavings ? "1" : "0",
     });
     return `${window.location.origin}${window.location.pathname}?${p.toString()}`;
   };
@@ -152,13 +156,16 @@ export default function FireCalc() {
 
     // 1) 달성 시점 계산 (통계용) — 자산은 입력한 수익률 그대로 복리 성장, 목표 자산은
     //    물가상승률만큼 매년 커진다 (미래 시점의 실제 원화 금액 기준 시뮬레이션)
+    //    growSavings가 켜져 있으면 월 투자금도 물가상승률만큼 매년 같이 인상된다고 가정
     let cur = startAsset;
     let target = fireNumber;
+    let curSave = save;
     let months = 0;
     if (!already) {
       while (cur < target && months < maxMonths) {
-        cur = cur * (1 + mRet) + save;
+        cur = cur * (1 + mRet) + curSave;
         target = target * targetGrowth;
+        if (growSavings) curSave = curSave * targetGrowth;
         months++;
       }
     }
@@ -173,11 +180,13 @@ export default function FireCalc() {
     {
       let c = startAsset,
         t = fireNumber,
+        cs = save,
         m = 0;
       const cap = reached ? Math.min(months + 12 * 10, maxMonths) : maxMonths;
       while (m < cap) {
-        c = c * (1 + mRet) + save;
+        c = c * (1 + mRet) + cs;
         t = t * targetGrowth;
+        if (growSavings) cs = cs * targetGrowth;
         m++;
         if (m % 12 === 0) path.push({ age: age + m / 12, asset: c, target: t });
       }
@@ -191,7 +200,11 @@ export default function FireCalc() {
       let tgt = fireNumber;
       for (let m = 0; m < tM; m++) tgt = tgt * targetGrowth;
       let projected = startAsset;
-      for (let m = 0; m < tM; m++) projected = projected * (1 + mRet) + save;
+      let projSave = save;
+      for (let m = 0; m < tM; m++) {
+        projected = projected * (1 + mRet) + projSave;
+        if (growSavings) projSave = projSave * targetGrowth;
+      }
       shortfall = Math.max(0, tgt - projected);
 
       let lo = 0,
@@ -259,7 +272,7 @@ export default function FireCalc() {
       netMonthly,
       path,
     };
-  }, [age, retireAge, asset, monthlySave, monthlyExpense, returnRate, inflation, withdrawRate, sideIncome, pension]);
+  }, [age, retireAge, asset, monthlySave, monthlyExpense, returnRate, inflation, withdrawRate, sideIncome, pension, growSavings]);
 
   const scenarios = useMemo(() => {
     return [5, 7, 9].map((rate) => {
@@ -269,11 +282,13 @@ export default function FireCalc() {
       const tg = Math.pow(1 + inflation / 100, 1 / 12);
       let cur = asset * 10000,
         target = fireNum,
+        curSave = monthlySave * 10000,
         months = 0;
       const max = Math.max(0, Math.round((100 - age) * 12));
       while (cur < target && months < max) {
-        cur = cur * (1 + mRet) + monthlySave * 10000;
+        cur = cur * (1 + mRet) + curSave;
         target = target * tg;
+        if (growSavings) curSave = curSave * tg;
         months++;
       }
       return {
@@ -282,7 +297,7 @@ export default function FireCalc() {
         reachAge: months < max ? age + Math.floor(months / 12) : null,
       };
     });
-  }, [age, asset, monthlySave, monthlyExpense, inflation, withdrawRate, sideIncome, pension]);
+  }, [age, asset, monthlySave, monthlyExpense, inflation, withdrawRate, sideIncome, pension, growSavings]);
 
   const fmtDur = (m: number) => {
     const y = Math.floor(m / 12),
@@ -422,6 +437,20 @@ export default function FireCalc() {
             )}
           </div>
           <Slider label="물가상승률" value={inflation} onChange={setInflation} min={0} max={6} step={0.1} />
+          <label className="flex items-start gap-2 text-sm text-slate-700">
+            <input
+              type="checkbox"
+              checked={growSavings}
+              onChange={(e) => setGrowSavings(e.target.checked)}
+              className="mt-0.5 h-4 w-4 rounded border-slate-300"
+            />
+            <span>
+              월 투자금도 물가상승률만큼 매년 인상
+              <span className="block text-xs font-normal text-slate-400">
+                승진·연봉 인상으로 저축 여력이 같이 늘어난다고 가정 (기본: 지금 금액 그대로 유지)
+              </span>
+            </span>
+          </label>
           <Slider label="안전인출률" value={withdrawRate} onChange={setWithdrawRate} min={2.5} max={5} step={0.5} />
           <div className="grid grid-cols-2 gap-4 border-t border-slate-200 pt-4">
             <Field label="월 부수입" value={sideIncome} onChange={setSideIncome} suffix="만원" />
@@ -491,6 +520,20 @@ export default function FireCalc() {
 
         {/* 재정 수명 차트 */}
         <DepletionChart path={r.depletionPath} depletionAge={r.depletionAge} />
+
+        {/* 계산 방식 설명 */}
+        <div className="space-y-1.5 rounded-xl border border-slate-200 bg-slate-50 p-4 text-xs leading-relaxed text-slate-500">
+          <p className="font-semibold text-slate-700">이 차트는 이렇게 계산됩니다</p>
+          <p>
+            자산(파랑 선)은 입력한 기대수익률 그대로 매달 복리로 불어나고, 목표 자산(주황 선)은 물가상승률만큼
+            매년 커집니다. 즉 오늘 화폐가치가 아니라, 실제 미래 시점에 필요한 원화 금액 기준의 시뮬레이션입니다.
+          </p>
+          <p>
+            월 투자금은 기본적으로 지금 입력한 금액 그대로 계속 유지된다고 가정합니다. "월 투자금도 물가상승률만큼
+            매년 인상" 옵션을 켜면 승진·연봉 인상으로 저축 여력이 함께 늘어나는 경우까지 반영해 다시 계산합니다 —
+            같은 조건이라도 이 옵션 하나로 달성 시점이 꽤 앞당겨질 수 있습니다.
+          </p>
+        </div>
 
         {/* 시나리오 비교 */}
         <div className="overflow-hidden rounded-xl border border-slate-200">
