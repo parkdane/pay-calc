@@ -27,12 +27,14 @@ const RETURN_PRESETS = [
 
 // CAGR 참고 (과거 장기 연평균, 참고용)
 const CAGR_TABLE = [
+  { name: "코스닥", cagr: -1, note: "1996년 1000→2026년 851, 30년째 마이너스" },
   { name: "예금·채권", cagr: 4, note: "안전자산" },
+  { name: "서울 아파트", cagr: 8, note: "2002~2021년 매매가 상승률 환산(부동산R114)" },
+  { name: "코스피", cagr: 10, note: "1980년 이후 장기평균 · 최근 10년은 2%대(코리아 디스카운트)" },
   { name: "S&P500", cagr: 10, note: "미국 대형주 지수" },
   { name: "나스닥100", cagr: 13, note: "기술주 중심" },
   { name: "워런 버핏", cagr: 20, note: "재현 매우 어려움" },
-  { name: "코스피", cagr: 10, note: "1980년 이후 장기평균 · 최근 10년은 2%대(코리아 디스카운트)" },
-];
+].sort((a, b) => a.cagr - b.cagr);
 
 export default function FireCalc() {
   const [age, setAge] = useState(35);
