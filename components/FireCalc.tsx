@@ -327,9 +327,6 @@ export default function FireCalc() {
             <Field label="월 연금 예상액" value={pension} onChange={setPension} suffix="만원" />
           </div>
         </div>
-
-        {/* 광고 (입력 아래) */}
-        <AdSlot id="calc-fire-mid" />
       </div>
 
       {/* ═══ 오른쪽: 결과 (sticky) ═══ */}
@@ -421,6 +418,9 @@ export default function FireCalc() {
         </div>
       </div>
     </div>
+
+    {/* 광고 (그리드 전체 밑, 전체 폭 — 728px 배너가 넘치지 않도록) */}
+    <AdSlot id="calc-fire-mid" />
 
     {/* ═══ 하단 전체 폭 (grid 밖으로 분리 — sticky 오른쪽 컬럼과 겹치는 문제 방지) ═══ */}
     <div className="mt-6 space-y-6">
