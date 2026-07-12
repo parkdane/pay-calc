@@ -56,11 +56,11 @@ export default function Page() {
         </p>
         <p>
           소득 요건에 해당하지 않는 청년이라면{" "}
-          <Link href="/calc/youth-save" className="text-blue-700 underline">
+          <Link href="/calc/youth-save" className="text-[#5B67A2] underline">
             청년미래적금
           </Link>
           이 대안입니다. 일반 적금과의 수익 차이는{" "}
-          <Link href="/calc/deposit" className="text-blue-700 underline">
+          <Link href="/calc/deposit" className="text-[#5B67A2] underline">
             적금 이자 계산기
           </Link>
           에서 비교해볼 수 있습니다.

@@ -48,11 +48,11 @@ export default function RootLayout({
         <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
           <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
             <Link href="/" className="text-lg font-bold tracking-tight text-slate-900">
-              봉급<span className="text-blue-700">계산소</span>
+              봉급<span className="text-[#5B67A2]">계산소</span>
             </Link>
             <nav className="flex gap-5 text-sm font-medium text-slate-600">
               {NAV.map((item) => (
-                <Link key={item.href} href={item.href} className="hover:text-blue-700">
+                <Link key={item.href} href={item.href} className="hover:text-[#5B67A2]">
                   {item.label}
                 </Link>
               ))}

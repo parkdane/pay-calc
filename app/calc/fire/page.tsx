@@ -58,11 +58,11 @@ export default function Page() {
         </p>
         <p>
           은퇴 전 저축 계획은{" "}
-          <Link href="/calc/savings-goal" className="text-blue-700 underline">
+          <Link href="/calc/savings-goal" className="text-[#5B67A2] underline">
             저축 목표 시뮬레이터
           </Link>
           에서, 목돈 운용은{" "}
-          <Link href="/calc/deposit" className="text-blue-700 underline">
+          <Link href="/calc/deposit" className="text-[#5B67A2] underline">
             예금 계산기
           </Link>
           에서 이어서 확인하세요.

@@ -60,7 +60,7 @@ export default function YouthSavingsCalc() {
         <div>
           <div className="flex items-center justify-between text-sm font-medium text-slate-700">
             <span>월 납입액</span>
-            <span className="tabular-nums text-blue-700">{won(monthly)}</span>
+            <span className="tabular-nums text-[#5B67A2]">{won(monthly)}</span>
           </div>
           <input
             type="range"
@@ -69,7 +69,7 @@ export default function YouthSavingsCalc() {
             step={cfg.monthlyStep}
             value={monthly}
             onChange={(e) => setMonthly(Number(e.target.value))}
-            className="mt-2 w-full accent-blue-700"
+            className="mt-2 w-full accent-[#5B67A2]"
           />
           <p className="mt-1 text-xs text-slate-400">
             월 최대 50만 원, 3년(36개월) 만기 자유적립식
@@ -88,9 +88,9 @@ export default function YouthSavingsCalc() {
                 step={0.01}
                 value={rate}
                 onChange={(e) => setRate(Number(e.target.value) || 0)}
-                className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-blue-700"
+                className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-[#5B67A2]"
               />
-              <span className="text-blue-700">%</span>
+              <span className="text-[#5B67A2]">%</span>
             </div>
           </div>
           <input
@@ -100,7 +100,7 @@ export default function YouthSavingsCalc() {
             step={0.01}
             value={rate}
             onChange={(e) => setRate(Number(e.target.value))}
-            className="mt-2 w-full accent-blue-700"
+            className="mt-2 w-full accent-[#5B67A2]"
           />
           <p className="mt-1 text-xs text-slate-400">
             기본 5.0% (전 기관 동일). 은행 우대금리 포함 최대 8%
@@ -113,7 +113,7 @@ export default function YouthSavingsCalc() {
 
       {/* 결과 */}
       <div className="overflow-hidden rounded-xl border border-slate-200">
-        <div className="bg-blue-700 px-5 py-4 text-white">
+        <div className="bg-[#5B67A2] px-5 py-4 text-white">
           <p className="text-sm opacity-80">3년 만기 예상 수령액</p>
           <p className="text-3xl font-bold tabular-nums">{won(result.total)}</p>
         </div>
@@ -163,7 +163,7 @@ function Row({
           bold
             ? "font-bold text-slate-900"
             : accent
-              ? "font-semibold text-blue-700"
+              ? "font-semibold text-[#5B67A2]"
               : muted
                 ? "text-slate-500"
                 : "text-slate-800"

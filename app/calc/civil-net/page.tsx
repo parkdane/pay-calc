@@ -58,15 +58,15 @@ export default function Page() {
         <p>
           소득세는 국세청 근로소득 간이세액표의 연환산 산출 방식을 적용해
           부양가족 수에 따른 인적공제까지 반영합니다. 기본급은{" "}
-          <Link href="/salary/civil" className="text-blue-700 underline">
+          <Link href="/salary/civil" className="text-[#5B67A2] underline">
             일반직
           </Link>
           ·
-          <Link href="/salary/police" className="text-blue-700 underline">
+          <Link href="/salary/police" className="text-[#5B67A2] underline">
             경찰
           </Link>
           ·
-          <Link href="/salary/fire" className="text-blue-700 underline">
+          <Link href="/salary/fire" className="text-[#5B67A2] underline">
             소방
           </Link>{" "}
           봉급표를 기준으로 합니다.

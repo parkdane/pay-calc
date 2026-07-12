@@ -54,7 +54,7 @@ export default function DepositCalc() {
   return (
     <div className="space-y-6">
       {fromRates && (
-        <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+        <div className="rounded-xl border border-[#BFC8EA] bg-[#EEF0FA] px-4 py-3 text-sm text-[#464F82]">
           금리 비교에서 선택한 <strong>{rate.toFixed(2)}%</strong>가 적용됐습니다.
           납입액·기간을 넣어 실수령액을 확인하세요.
         </div>
@@ -72,7 +72,7 @@ export default function DepositCalc() {
             onClick={() => setMode(m.id)}
             className={`rounded-lg py-2.5 text-sm font-semibold transition ${
               mode === m.id
-                ? "bg-white text-blue-700 shadow-sm"
+                ? "bg-white text-[#5B67A2] shadow-sm"
                 : "text-slate-500"
             }`}
           >
@@ -121,9 +121,9 @@ export default function DepositCalc() {
                   step={0.01}
                   value={rate}
                   onChange={(e) => setRate(Number(e.target.value) || 0)}
-                  className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-blue-700"
+                  className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-[#5B67A2]"
                 />
-                <span className="text-blue-700">%</span>
+                <span className="text-[#5B67A2]">%</span>
               </div>
             </div>
             <input
@@ -133,7 +133,7 @@ export default function DepositCalc() {
               step={0.01}
               value={rate}
               onChange={(e) => setRate(Number(e.target.value))}
-              className="mt-3 w-full accent-blue-700"
+              className="mt-3 w-full accent-[#5B67A2]"
             />
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function DepositCalc() {
 
       {/* 결과 */}
       <div className="overflow-hidden rounded-xl border border-slate-200">
-        <div className="bg-blue-700 px-5 py-4 text-white">
+        <div className="bg-[#5B67A2] px-5 py-4 text-white">
           <p className="text-sm opacity-80">만기 수령액 (세후)</p>
           <p className="text-3xl font-bold tabular-nums">{won(result.total)}</p>
         </div>

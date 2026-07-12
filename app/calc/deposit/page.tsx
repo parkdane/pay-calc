@@ -52,11 +52,11 @@ export default function Page() {
         </p>
         <p>
           정부 지원이 붙는 정책 적금은 일반 적금보다 훨씬 유리합니다.{" "}
-          <Link href="/calc/youth-save" className="text-blue-700 underline">
+          <Link href="/calc/youth-save" className="text-[#5B67A2] underline">
             청년미래적금
           </Link>
           은 정부기여금과 비과세,{" "}
-          <Link href="/calc/soldier-save" className="text-blue-700 underline">
+          <Link href="/calc/soldier-save" className="text-[#5B67A2] underline">
             장병내일준비적금
           </Link>
           은 납입원금 100% 매칭을 받을 수 있으니 가입 대상이라면 먼저

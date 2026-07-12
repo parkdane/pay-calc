@@ -37,7 +37,7 @@ export default function RateTable() {
             key={t.id}
             onClick={() => setTab(t.id)}
             className={`rounded-lg py-2.5 text-sm font-semibold transition ${
-              tab === t.id ? "bg-white text-blue-700 shadow-sm" : "text-slate-500"
+              tab === t.id ? "bg-white text-[#5B67A2] shadow-sm" : "text-slate-500"
             }`}
           >
             {t.label}
@@ -76,7 +76,7 @@ export default function RateTable() {
               {list.map((p, i) => (
                 <tr
                   key={`${p.bank}-${p.product}-${i}`}
-                  className="border-t border-slate-100 hover:bg-blue-50/40"
+                  className="border-t border-slate-100 hover:bg-[#EEF0FA]/60"
                 >
                   <td className="px-2 py-2 text-slate-400 sm:px-3">{i + 1}</td>
                   <td className="whitespace-nowrap px-2 py-2 font-medium text-slate-900 sm:px-3">
@@ -86,7 +86,7 @@ export default function RateTable() {
                   <td className="whitespace-nowrap px-2 py-2 text-right tabular-nums text-slate-500 sm:px-3">
                     {p.baseRate.toFixed(2)}%
                   </td>
-                  <td className="whitespace-nowrap px-2 py-2 text-right font-bold tabular-nums text-blue-700 sm:px-3">
+                  <td className="whitespace-nowrap px-2 py-2 text-right font-bold tabular-nums text-[#5B67A2] sm:px-3">
                     {p.maxRate.toFixed(2)}%
                   </td>
                   <td className="whitespace-nowrap px-2 py-2 text-center sm:px-3">
@@ -94,7 +94,7 @@ export default function RateTable() {
                       href={`/calc/deposit?rate=${p.maxRate}&mode=${
                         tab === "deposits" ? "deposit" : "savings"
                       }`}
-                      className="inline-block rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 transition hover:bg-blue-100"
+                      className="inline-block rounded-lg bg-[#EEF0FA] px-2.5 py-1 text-xs font-medium text-[#5B67A2] transition hover:bg-[#EEF0FA]"
                     >
                       계산
                     </Link>

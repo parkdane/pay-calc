@@ -58,7 +58,7 @@ export default function Page() {
           이자의 15.4%가 공제되며, 새마을금고·신협의 세금우대(3,000만 원 한도)나
           비과세 상품을 활용하면 세후 수령이 늘어납니다. 마음에 드는 상품을
           찾았다면{" "}
-          <Link href="/calc/deposit" className="text-blue-700 underline">
+          <Link href="/calc/deposit" className="text-[#5B67A2] underline">
             적금·예금 이자 계산기
           </Link>
           에서 세후 수령액을 계산해보세요.

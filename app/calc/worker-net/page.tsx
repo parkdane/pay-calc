@@ -55,11 +55,11 @@ export default function Page() {
         </p>
         <p>
           내 연봉이 전국에서 어느 위치인지 궁금하다면{" "}
-          <Link href="/calc/income-rank" className="text-blue-700 underline">
+          <Link href="/calc/income-rank" className="text-[#5B67A2] underline">
             연봉 순위 계산기
           </Link>
           에서, 실수령액으로 목돈을 모으는 계획은{" "}
-          <Link href="/calc/savings-goal" className="text-blue-700 underline">
+          <Link href="/calc/savings-goal" className="text-[#5B67A2] underline">
             저축 목표 시뮬레이터
           </Link>
           에서 확인하세요.

@@ -326,7 +326,7 @@ export default function FireCalc() {
         {/* 기본 입력 */}
         <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">기본 입력</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">기본 입력</p>
             <p className="mt-0.5 text-base font-bold text-slate-900">은퇴 목표와 자산 속도</p>
             <p className="mt-0.5 text-xs text-slate-400">
               현재 나이부터 월 투자 가능액까지, 계산의 출발점이 되는 값입니다.
@@ -374,7 +374,7 @@ export default function FireCalc() {
         {/* 생활비 기준 */}
         <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-5">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">생활비 기준</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">생활비 기준</p>
             <p className="mt-0.5 text-base font-bold text-slate-900">은퇴 후 월 생활비</p>
             <p className="mt-0.5 text-xs text-slate-400">
               평균 생활비 프리셋으로 빠르게 시작하고, 본인 소비 구조에 맞게 조정하세요.
@@ -395,8 +395,8 @@ export default function FireCalc() {
                 onClick={() => setMonthlyExpense(p.value)}
                 className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
                   monthlyExpense === p.value
-                    ? "border-blue-500 bg-blue-50 text-blue-700"
-                    : "border-slate-300 bg-white text-slate-600 hover:border-blue-300"
+                    ? "border-[#5B67A2] bg-[#EEF0FA] text-[#5B67A2]"
+                    : "border-slate-300 bg-white text-slate-600 hover:border-[#7B86AA]"
                 }`}
               >
                 {p.label} <span className="text-slate-400">{p.value}만</span>
@@ -411,7 +411,7 @@ export default function FireCalc() {
         {/* 가정 옵션 */}
         <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">가정 옵션</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">가정 옵션</p>
             <p className="mt-0.5 text-base font-bold text-slate-900">수익률과 인출률 조정</p>
             <p className="mt-0.5 text-xs text-slate-400">
               현실적인 범위(연 5~12%)에서 보수적·공격적 시나리오를 함께 비교하세요.
@@ -424,7 +424,7 @@ export default function FireCalc() {
                 <button
                   key={p.label}
                   onClick={() => setReturnRate(p.value)}
-                  className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-500 hover:border-blue-300"
+                  className="rounded-md border border-slate-200 bg-white px-2 py-1 text-xs text-slate-500 hover:border-[#7B86AA]"
                 >
                   {p.label} {p.value}%
                 </button>
@@ -464,7 +464,7 @@ export default function FireCalc() {
           <button
             type="button"
             onClick={copyShareLink}
-            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-blue-300"
+            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-[#7B86AA]"
           >
             {copied ? "링크 복사됨" : "링크 복사 (값 공유·저장)"}
           </button>
@@ -472,14 +472,14 @@ export default function FireCalc() {
             type="button"
             onClick={downloadPdf}
             disabled={exporting}
-            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-blue-300 disabled:opacity-50"
+            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-[#7B86AA] disabled:opacity-50"
           >
             {exporting ? "PDF 생성 중..." : "PDF로 저장"}
           </button>
         </div>
 
         {/* 한줄 요약 */}
-        <div className="rounded-xl bg-blue-700 px-5 py-4 text-sm leading-relaxed text-white">{summary}</div>
+        <div className="rounded-xl bg-[#5B67A2] px-5 py-4 text-sm leading-relaxed text-white">{summary}</div>
 
         {/* 결과 카드 */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -551,7 +551,7 @@ export default function FireCalc() {
                 <tr key={s.rate} className="border-t border-slate-100">
                   <td className="px-4 py-2 font-medium text-slate-800">{s.label}</td>
                   <td className="px-4 py-2 text-right tabular-nums text-slate-600">연 {s.rate}%</td>
-                  <td className="px-4 py-2 text-right font-semibold tabular-nums text-blue-700">
+                  <td className="px-4 py-2 text-right font-semibold tabular-nums text-[#5B67A2]">
                     {s.reachAge ? `${s.reachAge}세` : "100세+"}
                   </td>
                 </tr>
@@ -570,7 +570,7 @@ export default function FireCalc() {
               {CAGR_TABLE.map((c) => (
                 <tr key={c.name} className="border-t border-slate-100">
                   <td className="px-4 py-2 font-medium text-slate-800">{c.name}</td>
-                  <td className="px-4 py-2 text-right font-semibold tabular-nums text-blue-700">{c.cagr}%</td>
+                  <td className="px-4 py-2 text-right font-semibold tabular-nums text-[#5B67A2]">{c.cagr}%</td>
                   <td className="px-4 py-2 text-right text-xs text-slate-400">{c.note}</td>
                 </tr>
               ))}
@@ -650,7 +650,7 @@ function GrowthChart({
     <div className="rounded-xl border border-slate-200 bg-white p-4">
       <p className="mb-1 text-sm font-semibold text-slate-800">자산 성장 시뮬레이션</p>
       <p className="mb-3 text-xs text-slate-400">
-        <span className="text-blue-600">■</span> 내 예상 자산 &nbsp;
+        <span className="text-[#5B67A2]">■</span> 내 예상 자산 &nbsp;
         <span className="text-amber-500">■</span> 필요 목표 자산(물가상승률만큼 매년 증가) · 점에 마우스를 올려보세요
       </p>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="xMidYMid meet">
@@ -869,9 +869,9 @@ function DepletionChart({
 
 function Card({ label, value, sub, highlight }: { label: string; value: string; sub?: string; highlight?: boolean }) {
   return (
-    <div className={`rounded-xl border p-4 ${highlight ? "border-blue-200 bg-blue-50" : "border-slate-200 bg-white"}`}>
+    <div className={`rounded-xl border p-4 ${highlight ? "border-[#BFC8EA] bg-[#EEF0FA]" : "border-slate-200 bg-white"}`}>
       <p className="text-xs text-slate-500">{label}</p>
-      <p className={`mt-1 font-bold tabular-nums ${highlight ? "text-lg text-blue-700" : "text-base text-slate-900"}`}>
+      <p className={`mt-1 font-bold tabular-nums ${highlight ? "text-lg text-[#5B67A2]" : "text-base text-slate-900"}`}>
         {value}
       </p>
       {sub && <p className="mt-1 text-xs leading-snug text-slate-400">{sub}</p>}
@@ -917,7 +917,7 @@ function Field({
         />
         {suffix && <span className="shrink-0 text-sm text-slate-400">{suffix}</span>}
       </div>
-      {display && value > 0 && <p className="mt-1 text-xs font-medium text-blue-600">약 {display(value)}</p>}
+      {display && value > 0 && <p className="mt-1 text-xs font-medium text-[#5B67A2]">약 {display(value)}</p>}
     </label>
   );
 }
@@ -940,7 +940,7 @@ function PresetRow({
         v === current ? (
           <span
             key={`cur-${v}`}
-            className="flex-1 rounded-lg border border-blue-500 bg-blue-50 px-2 py-1.5 text-center text-xs font-semibold text-blue-700"
+            className="flex-1 rounded-lg border border-[#5B67A2] bg-[#EEF0FA] px-2 py-1.5 text-center text-xs font-semibold text-[#5B67A2]"
           >
             기본 {format(v)}
           </span>
@@ -949,7 +949,7 @@ function PresetRow({
             key={v}
             type="button"
             onClick={() => onPick(v)}
-            className="flex-1 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-center text-xs text-slate-500 hover:border-blue-300"
+            className="flex-1 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-center text-xs text-slate-500 hover:border-[#7B86AA]"
           >
             {format(v)}
           </button>
@@ -986,9 +986,9 @@ function Slider({
             step={step}
             value={value}
             onChange={(e) => onChange(Number(e.target.value) || 0)}
-            className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-blue-700"
+            className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-[#5B67A2]"
           />
-          <span className="text-blue-700">%</span>
+          <span className="text-[#5B67A2]">%</span>
         </div>
       </div>
       <input
@@ -998,7 +998,7 @@ function Slider({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="mt-2 w-full accent-blue-700"
+        className="mt-2 w-full accent-[#5B67A2]"
       />
     </div>
   );

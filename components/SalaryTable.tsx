@@ -27,7 +27,7 @@ export default function SalaryTable({
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.hobong} className="border-t border-slate-100 hover:bg-blue-50/40">
+            <tr key={r.hobong} className="border-t border-slate-100 hover:bg-[#EEF0FA]/60">
               <td className="sticky left-0 whitespace-nowrap bg-white px-2 py-2 font-medium text-slate-900 sm:px-3">
                 {r.hobong}
               </td>

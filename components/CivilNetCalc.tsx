@@ -154,7 +154,7 @@ export default function CivilNetCalc() {
         <div className="space-y-4">
           <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">기본 입력</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">기본 입력</p>
               <p className="mt-0.5 text-base font-bold text-slate-900">직종·직급·호봉</p>
             </div>
 
@@ -296,7 +296,7 @@ export default function CivilNetCalc() {
           {result ? (
             <>
               <div className="overflow-hidden rounded-xl border border-slate-200">
-                <div className="bg-blue-700 px-5 py-4 text-white">
+                <div className="bg-[#5B67A2] px-5 py-4 text-white">
                   <p className="text-sm opacity-80">예상 월 실수령액</p>
                   <p className="text-3xl font-bold tabular-nums">{won(result.net)}</p>
                 </div>
@@ -326,7 +326,7 @@ export default function CivilNetCalc() {
                   </p>
                   <p>
                     연 실수령 추정:{" "}
-                    <span className="font-semibold tabular-nums text-blue-700">{won(result.annualNetApprox)}</span>
+                    <span className="font-semibold tabular-nums text-[#5B67A2]">{won(result.annualNetApprox)}</span>
                   </p>
                 </div>
               </div>

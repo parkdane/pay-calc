@@ -106,7 +106,7 @@ export default function Page() {
               <Link
                 key={c.href}
                 href={c.href}
-                className="rounded-xl border border-blue-200 bg-blue-50/50 p-5 transition hover:shadow-md"
+                className="rounded-xl border border-[#BFC8EA] bg-[#EEF0FA]/50 p-5 transition hover:shadow-md"
               >
                 <h3 className="font-semibold text-slate-900">{c.title}</h3>
                 <p className="mt-1 text-sm text-slate-500">{c.desc}</p>

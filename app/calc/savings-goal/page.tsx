@@ -53,15 +53,15 @@ export default function Page() {
         </p>
         <p>
           내 월 실수령액을 모른다면{" "}
-          <Link href="/calc/worker-net" className="text-blue-700 underline">
+          <Link href="/calc/worker-net" className="text-[#5B67A2] underline">
             연봉 실수령액 계산기
           </Link>
           에서 먼저 확인하고, 저축 상품은{" "}
-          <Link href="/calc/youth-save" className="text-blue-700 underline">
+          <Link href="/calc/youth-save" className="text-[#5B67A2] underline">
             청년미래적금
           </Link>
           과{" "}
-          <Link href="/calc/deposit" className="text-blue-700 underline">
+          <Link href="/calc/deposit" className="text-[#5B67A2] underline">
             일반 적금
           </Link>
           을 비교해보세요.

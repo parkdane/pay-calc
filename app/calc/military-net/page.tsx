@@ -52,7 +52,7 @@ export default function Page() {
         </p>
         <p>
           기본급은{" "}
-          <Link href="/salary/military" className="text-blue-700 underline">
+          <Link href="/salary/military" className="text-[#5B67A2] underline">
             2026년 군인 봉급표
           </Link>
           를 기준으로 합니다.

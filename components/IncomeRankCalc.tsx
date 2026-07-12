@@ -57,7 +57,7 @@ export default function IncomeRankCalc() {
             />
             <button
               onClick={() => setSubmitted(true)}
-              className="shrink-0 rounded-lg bg-blue-700 px-5 font-semibold text-white transition hover:bg-blue-800"
+              className="shrink-0 rounded-lg bg-[#5B67A2] px-5 font-semibold text-white transition hover:bg-[#4A5488]"
             >
               확인
             </button>
@@ -74,7 +74,7 @@ export default function IncomeRankCalc() {
       {/* 결과 */}
       {submitted && manwon > 0 && (
         <div className="overflow-hidden rounded-xl border border-slate-200">
-          <div className="bg-blue-700 px-5 py-6 text-center text-white">
+          <div className="bg-[#5B67A2] px-5 py-6 text-center text-white">
             <p className="text-sm opacity-80">연봉 {won(result.income)}은</p>
             <p className="mt-1 text-4xl font-bold tabular-nums">
               {result.isTop1 ? "상위 1% 이내" : `상위 ${result.top.toFixed(1)}%`}

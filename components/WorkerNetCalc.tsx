@@ -92,7 +92,7 @@ export default function WorkerNetCalc() {
         <div className="space-y-4">
           <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">기본 입력</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">기본 입력</p>
               <p className="mt-0.5 text-base font-bold text-slate-900">연봉과 부양가족</p>
             </div>
 
@@ -135,7 +135,7 @@ export default function WorkerNetCalc() {
         <div className="space-y-5 lg:sticky lg:top-20">
           {/* 결과 요약 */}
           <div className="overflow-hidden rounded-xl border border-slate-200">
-            <div className="bg-blue-700 px-5 py-4 text-white">
+            <div className="bg-[#5B67A2] px-5 py-4 text-white">
               <p className="text-sm opacity-80">월 실수령액</p>
               <p className="text-3xl font-bold tabular-nums">{won(my.net)}</p>
               <p className="mt-1 text-sm opacity-90">
@@ -152,8 +152,8 @@ export default function WorkerNetCalc() {
           </div>
 
           {/* 핵심 지표 */}
-          <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
-            <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">핵심 지표</p>
+          <div className="rounded-xl border border-[#BFC8EA] bg-[#EEF0FA] p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">핵심 지표</p>
             <p className="mt-1 text-lg font-bold text-slate-900">
               내 연봉은 근로소득자 상위 {topPct <= 1 ? "1% 이내" : `${topPct.toFixed(1)}%`}
             </p>
@@ -164,7 +164,7 @@ export default function WorkerNetCalc() {
             </p>
             <Link
               href="/calc/income-rank"
-              className="mt-2 inline-block text-xs font-medium text-blue-700 underline underline-offset-2"
+              className="mt-2 inline-block text-xs font-medium text-[#5B67A2] underline underline-offset-2"
             >
               연봉순위 계산기에서 자세히 보기 →
             </Link>
@@ -181,7 +181,7 @@ export default function WorkerNetCalc() {
               {bars.map((b) => (
                 <div key={b.annual}>
                   <div className="mb-0.5 flex justify-between text-xs">
-                    <span className={b.mine ? "font-bold text-blue-700" : "text-slate-500"}>
+                    <span className={b.mine ? "font-bold text-[#5B67A2]" : "text-slate-500"}>
                       {b.annual.toLocaleString()}만 {b.mine && "← 내 연봉"}
                     </span>
                     <span className="tabular-nums text-slate-500">
@@ -189,7 +189,7 @@ export default function WorkerNetCalc() {
                     </span>
                   </div>
                   <div className="flex h-4 w-full overflow-hidden rounded bg-slate-100">
-                    <div className={b.mine ? "bg-blue-700" : "bg-blue-400"} style={{ width: `${b.netW}%` }} />
+                    <div className={b.mine ? "bg-[#5B67A2]" : "bg-[#738BE7]"} style={{ width: `${b.netW}%` }} />
                     <div className="bg-slate-300" style={{ width: `${b.taxW}%` }} />
                   </div>
                 </div>

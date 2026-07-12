@@ -56,11 +56,11 @@ export default function Page() {
         </p>
         <p>
           신규 가입이 종료된 상품이므로, 새로 시작한다면 후속 상품인{" "}
-          <Link href="/calc/youth-save" className="text-blue-700 underline">
+          <Link href="/calc/youth-save" className="text-[#5B67A2] underline">
             청년미래적금
           </Link>
           을, 저소득 청년이라면{" "}
-          <Link href="/calc/naeil-save" className="text-blue-700 underline">
+          <Link href="/calc/naeil-save" className="text-[#5B67A2] underline">
             청년내일저축계좌
           </Link>
           를 확인하세요.

@@ -91,9 +91,9 @@ export default function SavingsGoalSim() {
                 step={0.01}
                 value={rate}
                 onChange={(e) => setRate(Number(e.target.value) || 0)}
-                className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-blue-700"
+                className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-right tabular-nums text-[#5B67A2]"
               />
-              <span className="text-blue-700">%</span>
+              <span className="text-[#5B67A2]">%</span>
             </div>
             </div>
             <input
@@ -103,7 +103,7 @@ export default function SavingsGoalSim() {
               step={0.01}
               value={rate}
               onChange={(e) => setRate(Number(e.target.value))}
-              className="mt-3 w-full accent-blue-700"
+              className="mt-3 w-full accent-[#5B67A2]"
             />
           </div>
         </div>
@@ -115,12 +115,12 @@ export default function SavingsGoalSim() {
         <div className="flex h-6 w-full overflow-hidden rounded-lg">
           <div className="bg-slate-400" style={{ width: `${pctFix}%` }} />
           <div className="bg-slate-300" style={{ width: `${pctVar}%` }} />
-          <div className="bg-blue-600" style={{ width: `${pctSave}%` }} />
+          <div className="bg-[#5B67A2]" style={{ width: `${pctSave}%` }} />
         </div>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
           <span>■ 고정비 {won(result.fix)}</span>
           <span className="text-slate-400">■ 변동비 {won(result.varc)}</span>
-          <span className="font-semibold text-blue-700">
+          <span className="font-semibold text-[#5B67A2]">
             ■ 저축 가능 {won(Math.max(0, result.save))}
           </span>
         </div>
@@ -138,7 +138,7 @@ export default function SavingsGoalSim() {
       ) : (
         result.months !== null && (
           <div className="overflow-hidden rounded-xl border border-slate-200">
-            <div className="bg-blue-700 px-5 py-5 text-center text-white">
+            <div className="bg-[#5B67A2] px-5 py-5 text-center text-white">
               <p className="text-sm opacity-80">
                 목표 {won(result.goal)} 달성까지
               </p>
@@ -153,7 +153,7 @@ export default function SavingsGoalSim() {
                 · 이자 없이 모으면{" "}
                 <strong>{fmt(result.plainMonths!)}</strong> 걸립니다. 연{" "}
                 {rate.toFixed(2)}% 저축으로{" "}
-                <strong className="text-blue-700">
+                <strong className="text-[#5B67A2]">
                   {result.interestSaved}개월 단축
                 </strong>
                 됩니다.

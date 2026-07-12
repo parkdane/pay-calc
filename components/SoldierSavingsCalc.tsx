@@ -37,7 +37,7 @@ export default function SoldierSavingsCalc() {
         <div>
           <div className="flex items-center justify-between text-sm font-medium text-slate-700">
             <span>월 납입액</span>
-            <span className="tabular-nums text-blue-700">{won(monthly)}</span>
+            <span className="tabular-nums text-[#5B67A2]">{won(monthly)}</span>
           </div>
           <input
             type="range"
@@ -46,7 +46,7 @@ export default function SoldierSavingsCalc() {
             step={cfg.monthlyStep}
             value={monthly}
             onChange={(e) => setMonthly(Number(e.target.value))}
-            className="mt-2 w-full accent-blue-700"
+            className="mt-2 w-full accent-[#5B67A2]"
           />
           <p className="mt-1 text-xs text-slate-400">
             개인 최대 월 55만 원 (은행당 30만 원, 5만 원 단위)
@@ -73,7 +73,7 @@ export default function SoldierSavingsCalc() {
         <div>
           <div className="flex items-center justify-between text-sm font-medium text-slate-700">
             <span>적용 금리 (연)</span>
-            <span className="tabular-nums text-blue-700">{rate.toFixed(1)}%</span>
+            <span className="tabular-nums text-[#5B67A2]">{rate.toFixed(1)}%</span>
           </div>
           <input
             type="range"
@@ -82,7 +82,7 @@ export default function SoldierSavingsCalc() {
             step={0.1}
             value={rate}
             onChange={(e) => setRate(Number(e.target.value))}
-            className="mt-2 w-full accent-blue-700"
+            className="mt-2 w-full accent-[#5B67A2]"
           />
           <p className="mt-1 text-xs text-slate-400">
             기본 5.0% (계약 15개월 이상). 은행 우대금리로 달라질 수 있음
@@ -95,7 +95,7 @@ export default function SoldierSavingsCalc() {
 
       {/* 결과 */}
       <div className="overflow-hidden rounded-xl border border-slate-200">
-        <div className="bg-blue-700 px-5 py-4 text-white">
+        <div className="bg-[#5B67A2] px-5 py-4 text-white">
           <p className="text-sm opacity-80">전역 시 예상 수령액</p>
           <p className="text-3xl font-bold tabular-nums">{won(result.total)}</p>
         </div>
@@ -139,7 +139,7 @@ function Row({
           bold
             ? "font-bold text-slate-900"
             : accent
-              ? "font-semibold text-blue-700"
+              ? "font-semibold text-[#5B67A2]"
               : muted
                 ? "text-slate-500"
                 : "text-slate-800"

@@ -46,7 +46,7 @@ export default function Home() {
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">
           2026년 봉급표, 표만 보지 말고
           <br />
-          <span className="text-blue-700">실수령액까지 계산</span>하세요
+          <span className="text-[#5B67A2]">실수령액까지 계산</span>하세요
         </h1>
         <p className="text-slate-600">
           공무원·군인·경찰·소방·교사 봉급표와 4대보험·세금을 반영한 실수령액
@@ -56,9 +56,9 @@ export default function Home() {
 
       <Link
         href="/rates"
-        className="block rounded-xl border border-blue-200 bg-blue-50 p-5 transition hover:shadow-md"
+        className="block rounded-xl border border-[#BFC8EA] bg-[#EEF0FA] p-5 transition hover:shadow-md"
       >
-        <p className="text-sm font-semibold text-blue-700">📊 매일 갱신</p>
+        <p className="text-sm font-semibold text-[#5B67A2]">📊 매일 갱신</p>
         <p className="mt-1 font-bold text-slate-900">
           예금·적금 금리 비교 — 오늘 최고금리 보러 가기
         </p>
@@ -106,7 +106,7 @@ function Card({
     <Link
       href={href}
       className={`rounded-xl border p-5 transition hover:shadow-md ${
-        accent ? "border-blue-200 bg-blue-50/50" : "border-slate-200 bg-white"
+        accent ? "border-[#BFC8EA] bg-[#EEF0FA]/50" : "border-slate-200 bg-white"
       }`}
     >
       <h3 className="font-semibold text-slate-900">{title}</h3>

@@ -55,7 +55,7 @@ function tierOf(rank: number, total: number): "S" | "A" | "B" | "C" {
 }
 const TIER_COLOR: Record<string, string> = {
   S: "bg-amber-100 text-amber-700 border-amber-300",
-  A: "bg-blue-100 text-blue-700 border-blue-300",
+  A: "bg-[#BFC8EA]/50 text-[#5B67A2] border-[#7B86AA]",
   B: "bg-slate-100 text-slate-600 border-slate-300",
   C: "bg-slate-50 text-slate-500 border-slate-200",
 };
@@ -143,7 +143,7 @@ export default function SalaryCompareCalc() {
         <button
           type="button"
           onClick={copyLink}
-          className="mt-3 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:border-blue-300"
+          className="mt-3 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:border-[#7B86AA]"
         >
           {copied ? "링크 복사됨" : "링크 복사"}
         </button>
@@ -152,8 +152,8 @@ export default function SalaryCompareCalc() {
       <AdSlot id="calc-salary-compare-mid" />
 
       {/* 핵심 지표 */}
-      <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">핵심 지표</p>
+      <div className="rounded-xl border border-[#BFC8EA] bg-[#EEF0FA] p-5">
+        <p className="text-xs font-semibold uppercase tracking-wide text-[#5B67A2]">핵심 지표</p>
         <div className="mt-1 flex items-center gap-2">
           <p className="text-lg font-bold text-slate-900">
             상위 {stats.topPercent.toFixed(0)}% · {stats.count}개 중 {stats.rank}위 근처
@@ -198,8 +198,8 @@ export default function SalaryCompareCalc() {
               onClick={() => setIndustry(ind)}
               className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition ${
                 industry === ind
-                  ? "border-blue-500 bg-blue-50 text-blue-700"
-                  : "border-slate-300 bg-white text-slate-600 hover:border-blue-300"
+                  ? "border-[#5B67A2] bg-[#EEF0FA] text-[#5B67A2]"
+                  : "border-slate-300 bg-white text-slate-600 hover:border-[#7B86AA]"
               }`}
             >
               {ind}
@@ -225,12 +225,12 @@ export default function SalaryCompareCalc() {
         <div className="mt-4 space-y-2">
           <div>
             <div className="mb-0.5 flex justify-between text-xs">
-              <span className="font-bold text-blue-700">내 연봉 ←</span>
-              <span className="tabular-nums text-blue-700">{manwon(myIncome)}</span>
+              <span className="font-bold text-[#5B67A2]">내 연봉 ←</span>
+              <span className="tabular-nums text-[#5B67A2]">{manwon(myIncome)}</span>
             </div>
             <div className="h-4 w-full overflow-hidden rounded bg-slate-100">
               <div
-                className="h-full bg-blue-700"
+                className="h-full bg-[#5B67A2]"
                 style={{ width: `${Math.min((myIncome / chartMax) * 100, 100)}%` }}
               />
             </div>
@@ -275,7 +275,7 @@ export default function SalaryCompareCalc() {
                 <td className="px-4 py-2 text-center">
                   <span className={`rounded px-1.5 py-0.5 text-xs font-bold ${TIER_COLOR[c.tier]}`}>{c.tier}</span>
                 </td>
-                <td className="px-4 py-2 text-right tabular-nums text-blue-700">{won(c.avgSalary)}</td>
+                <td className="px-4 py-2 text-right tabular-nums text-[#5B67A2]">{won(c.avgSalary)}</td>
                 <td className="px-4 py-2 text-right tabular-nums text-slate-500">
                   {c.avgTenure !== null ? `${c.avgTenure}년` : "-"}
                 </td>
@@ -303,7 +303,7 @@ export default function SalaryCompareCalc() {
 
       <p className="text-sm text-slate-600">
         전체 근로소득자 대비 내 연봉 위치가 궁금하다면{" "}
-        <Link href="/calc/income-rank" className="text-blue-700 underline underline-offset-2">
+        <Link href="/calc/income-rank" className="text-[#5B67A2] underline underline-offset-2">
           연봉순위 계산기
         </Link>
         도 함께 확인해보세요.
