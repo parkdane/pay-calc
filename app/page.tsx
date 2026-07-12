@@ -11,6 +11,15 @@ const SALARY = [
 
 const CALC_GROUPS = [
   {
+    title: "재테크 도구",
+    items: [
+      { href: "/calc/deposit", title: "적금·예금 이자 계산기", desc: "세후 만기 수령액" },
+      { href: "/calc/income-rank", title: "내 연봉 상위 몇 %?", desc: "국세청 통계 기준 순위" },
+      { href: "/calc/savings-goal", title: "저축 목표 시뮬레이터", desc: "1억까지 걸리는 기간" },
+      { href: "/calc/fire", title: "파이어족 계산기", desc: "조기 은퇴 가능 나이 계산" },
+    ],
+  },
+  {
     title: "실수령액 계산",
     items: [
       { href: "/calc/civil-net", title: "공무원·경찰·소방 실수령액", desc: "직급·호봉으로 세후 월급" },
@@ -25,15 +34,6 @@ const CALC_GROUPS = [
       { href: "/calc/naeil-save", title: "청년내일저축계좌", desc: "정부지원 월 30만 포함" },
       { href: "/calc/leap-save", title: "청년도약계좌", desc: "기존 가입자 만기 계산" },
       { href: "/calc/soldier-save", title: "장병내일준비적금", desc: "정부 매칭 포함 전역 수령액" },
-    ],
-  },
-  {
-    title: "재테크 도구",
-    items: [
-      { href: "/calc/deposit", title: "적금·예금 이자 계산기", desc: "세후 만기 수령액" },
-      { href: "/calc/income-rank", title: "내 연봉 상위 몇 %?", desc: "국세청 통계 기준 순위" },
-      { href: "/calc/savings-goal", title: "저축 목표 시뮬레이터", desc: "1억까지 걸리는 기간" },
-      { href: "/calc/fire", title: "파이어족 계산기", desc: "조기 은퇴 가능 나이 계산" },
     ],
   },
 ] as const;
@@ -66,6 +66,18 @@ export default function Home() {
         </p>
       </Link>
 
+      {CALC_GROUPS.map((g, i) => (
+        <section key={g.title} className="space-y-4">
+          <h2 className="text-lg font-bold text-slate-900">{g.title}</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {g.items.map((c) => (
+              <Card key={c.href} {...c} accent />
+            ))}
+          </div>
+          {i === 0 && <AdSlot id="home-mid" />}
+        </section>
+      ))}
+
       <section className="space-y-4">
         <h2 className="text-lg font-bold text-slate-900">봉급표</h2>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -74,19 +86,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      <AdSlot id="home-mid" />
-
-      {CALC_GROUPS.map((g) => (
-        <section key={g.title} className="space-y-4">
-          <h2 className="text-lg font-bold text-slate-900">{g.title}</h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {g.items.map((c) => (
-              <Card key={c.href} {...c} accent />
-            ))}
-          </div>
-        </section>
-      ))}
     </div>
   );
 }
