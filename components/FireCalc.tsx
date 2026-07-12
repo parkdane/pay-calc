@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
@@ -45,6 +45,93 @@ export default function FireCalc() {
   const [withdrawRate, setWithdrawRate] = useState(4);
   const [sideIncome, setSideIncome] = useState(0);
   const [pension, setPension] = useState(0);
+
+  const [copied, setCopied] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const captureRef = useRef<HTMLDivElement>(null);
+
+  // URL에 담긴 값이 있으면 복원 (링크 공유·북마크용)
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    const num = (key: string, setter: (n: number) => void) => {
+      const v = p.get(key);
+      if (v !== null && !Number.isNaN(Number(v))) setter(Number(v));
+    };
+    num("age", setAge);
+    num("retireAge", setRetireAge);
+    num("asset", setAsset);
+    num("monthlySave", setMonthlySave);
+    num("monthlyExpense", setMonthlyExpense);
+    num("returnRate", setReturnRate);
+    num("inflation", setInflation);
+    num("withdrawRate", setWithdrawRate);
+    num("sideIncome", setSideIncome);
+    num("pension", setPension);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const buildShareUrl = () => {
+    const p = new URLSearchParams({
+      age: String(age),
+      retireAge: String(retireAge),
+      asset: String(asset),
+      monthlySave: String(monthlySave),
+      monthlyExpense: String(monthlyExpense),
+      returnRate: String(returnRate),
+      inflation: String(inflation),
+      withdrawRate: String(withdrawRate),
+      sideIncome: String(sideIncome),
+      pension: String(pension),
+    });
+    return `${window.location.origin}${window.location.pathname}?${p.toString()}`;
+  };
+
+  const copyShareLink = async () => {
+    const url = buildShareUrl();
+    window.history.replaceState(null, "", url);
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      window.prompt("아래 링크를 복사하세요", url);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
+
+  const downloadPdf = async () => {
+    if (!captureRef.current) return;
+    setExporting(true);
+    try {
+      const [{ default: html2canvas }, { default: JsPDF }] = await Promise.all([
+        import("html2canvas"),
+        import("jspdf"),
+      ]);
+      const canvas = await html2canvas(captureRef.current, {
+        scale: 2,
+        backgroundColor: "#ffffff",
+        useCORS: true,
+      });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new JsPDF("p", "mm", "a4");
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+      pdf.save(`파이어계산기_${Math.round(age)}세_결과.pdf`);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const r = useMemo(() => {
     const netMonthly = Math.max(0, monthlyExpense - sideIncome - pension);
@@ -216,7 +303,7 @@ export default function FireCalc() {
     {/* 광고 (입력칸 위, 전체 폭) */}
     <AdSlot id="calc-fire-mid" />
 
-    <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
+    <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start" ref={captureRef}>
       {/* ═══ 왼쪽: 입력 ═══ */}
       <div className="space-y-4">
         {/* 기본 입력 */}
@@ -341,6 +428,25 @@ export default function FireCalc() {
 
       {/* ═══ 오른쪽: 결과 (sticky) ═══ */}
       <div className="space-y-5 lg:sticky lg:top-20">
+        {/* 링크 복사 · PDF 저장 */}
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={copyShareLink}
+            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-blue-300"
+          >
+            {copied ? "링크 복사됨" : "링크 복사 (값 공유·저장)"}
+          </button>
+          <button
+            type="button"
+            onClick={downloadPdf}
+            disabled={exporting}
+            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:border-blue-300 disabled:opacity-50"
+          >
+            {exporting ? "PDF 생성 중..." : "PDF로 저장"}
+          </button>
+        </div>
+
         {/* 한줄 요약 */}
         <div className="rounded-xl bg-blue-700 px-5 py-4 text-sm leading-relaxed text-white">{summary}</div>
 
