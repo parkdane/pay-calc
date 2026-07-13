@@ -82,6 +82,7 @@ const DEFAULTS = {
   otherFixed: 500000,
   includeSeverance: true,
   includeTax: true,
+  paybackBasis: "pretax" as const,
   deposit: 30000000,
   startupCost: 50000000,
   livingCost: 2500000,
@@ -104,6 +105,7 @@ export default function BusinessBreakEvenCalc() {
   const [otherFixed, setOtherFixed] = useState(DEFAULTS.otherFixed);
   const [includeSeverance, setIncludeSeverance] = useState(DEFAULTS.includeSeverance);
   const [includeTax, setIncludeTax] = useState(DEFAULTS.includeTax);
+  const [paybackBasis, setPaybackBasis] = useState<"pretax" | "aftertax">(DEFAULTS.paybackBasis);
 
   // 초기 투자금 (창업 비용)
   const [deposit, setDeposit] = useState(DEFAULTS.deposit);
@@ -126,6 +128,7 @@ export default function BusinessBreakEvenCalc() {
     setOtherFixed(DEFAULTS.otherFixed);
     setIncludeSeverance(DEFAULTS.includeSeverance);
     setIncludeTax(DEFAULTS.includeTax);
+    setPaybackBasis(DEFAULTS.paybackBasis);
     setDeposit(DEFAULTS.deposit);
     setStartupCost(DEFAULTS.startupCost);
     setLivingCost(DEFAULTS.livingCost);
@@ -157,13 +160,16 @@ export default function BusinessBreakEvenCalc() {
     const breakEvenRevenue = marginRate > 0 ? fixedCosts / marginRate : null;
 
     const initialInvestment = deposit + startupCost;
-    const paybackMonths = operatingProfit > 0 ? initialInvestment / operatingProfit : null;
 
     // 5. 종합소득세 (연환산 누진세율, 인적공제·경비 추가공제 미반영 — 보수적 추정)
     const annualOperatingProfit = Math.max(0, operatingProfit) * 12;
     const estimatedAnnualTax = includeTax ? estimateAnnualIncomeTax(annualOperatingProfit) : 0;
     const monthlyTax = estimatedAnnualTax / 12;
     const afterTaxProfit = operatingProfit - monthlyTax;
+
+    // 회수기간 기준 선택: 세전 영업이익 vs 세후 영업이익
+    const paybackProfit = includeTax && paybackBasis === "aftertax" ? afterTaxProfit : operatingProfit;
+    const paybackMonths = paybackProfit > 0 ? initialInvestment / paybackProfit : null;
 
     const personalCosts = livingCost + loanPayment;
     const disposableIncome = afterTaxProfit - personalCosts;
@@ -191,7 +197,7 @@ export default function BusinessBreakEvenCalc() {
     revMode, dailyRevenue, monthlyRevenueInput, costRate, vatType, cardFeeRate,
     rent, labor, otherFixed, includeSeverance,
     deposit, startupCost,
-    livingCost, loanPayment, includeTax,
+    livingCost, loanPayment, includeTax, paybackBasis,
   ]);
 
   const fmtMonths = (m: number) => {
@@ -375,6 +381,30 @@ export default function BusinessBreakEvenCalc() {
               />
               종합소득세 추정치도 결과에 반영 (연환산 누진세율, 공제 미반영 보수적 추정)
             </label>
+
+            {includeTax && (
+              <div className="pl-6">
+                <p className="text-xs font-medium text-[#5B6478]">투자금 회수기간 계산 기준</p>
+                <div className="mt-1.5 grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1">
+                  {(
+                    [
+                      { id: "pretax", label: "세전 (순수 사업지표)" },
+                      { id: "aftertax", label: "세후 (실제 손에 쥐는 돈)" },
+                    ] as const
+                  ).map((b) => (
+                    <button
+                      key={b.id}
+                      onClick={() => setPaybackBasis(b.id)}
+                      className={`rounded-lg py-2 text-xs font-semibold transition ${
+                        paybackBasis === b.id ? "bg-white text-[#2E4494] shadow-sm" : "text-[#7A8296]"
+                      }`}
+                    >
+                      {b.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* 월 고정비 */}
@@ -423,7 +453,9 @@ export default function BusinessBreakEvenCalc() {
               <p className="text-3xl font-bold tabular-nums">{won(result.operatingProfit)}</p>
               <p className="mt-1 text-sm opacity-90">
                 {result.paybackMonths !== null
-                  ? `초기 투자금 회수까지 약 ${fmtMonths(result.paybackMonths)}`
+                  ? `초기 투자금 회수까지 약 ${fmtMonths(result.paybackMonths)} (${
+                      includeTax && paybackBasis === "aftertax" ? "세후" : "세전"
+                    } 기준)`
                   : "현재 조건으로는 투자금을 회수할 수 없습니다 (영업이익 적자)"}
               </p>
             </div>
