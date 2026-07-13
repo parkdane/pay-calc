@@ -43,14 +43,44 @@ const INDUSTRY_PRESETS = [
   },
 ] as const;
 
+// 사업자 유형별 부가세 실효 부담률 (매출이 부가세 포함가라는 전제, 매입세액공제는 반영하지 않은 보수적 추정)
+const VAT_TYPES = [
+  { id: "general", label: "일반과세자", rate: 10 / 110 },
+  { id: "simplified", label: "간이과세자", rate: 0.015 },
+  { id: "exempt", label: "면세사업자", rate: 0 },
+] as const;
+
+// 종합소득세 2026년 귀속 누진세율표 (지방소득세 10% 별도)
+const INCOME_TAX_BRACKETS = [
+  { upTo: 14000000, rate: 0.06, deduction: 0 },
+  { upTo: 50000000, rate: 0.15, deduction: 1260000 },
+  { upTo: 88000000, rate: 0.24, deduction: 5760000 },
+  { upTo: 150000000, rate: 0.35, deduction: 15440000 },
+  { upTo: 300000000, rate: 0.38, deduction: 19940000 },
+  { upTo: 500000000, rate: 0.4, deduction: 25940000 },
+  { upTo: 1000000000, rate: 0.42, deduction: 35940000 },
+  { upTo: Infinity, rate: 0.45, deduction: 65940000 },
+];
+
+// 인적공제·경비 추가공제 등 전혀 반영하지 않은 보수적(최악 시나리오) 추정
+function estimateAnnualIncomeTax(annualIncome: number): number {
+  if (annualIncome <= 0) return 0;
+  const b = INCOME_TAX_BRACKETS.find((b) => annualIncome <= b.upTo)!;
+  const tax = Math.max(0, annualIncome * b.rate - b.deduction);
+  return tax * 1.1; // 지방소득세 10% 포함
+}
+
 const DEFAULTS = {
   revMode: "daily" as const,
   dailyRevenue: 1000000,
   monthlyRevenueInput: 30000000,
   costRate: 35,
+  vatType: "general" as const,
+  cardFeeRate: 1.5,
   rent: 2000000,
   labor: 3000000,
   otherFixed: 500000,
+  includeSeverance: true,
   deposit: 30000000,
   startupCost: 50000000,
   livingCost: 2500000,
@@ -64,11 +94,14 @@ export default function BusinessBreakEvenCalc() {
   const [monthlyRevenueInput, setMonthlyRevenueInput] = useState(DEFAULTS.monthlyRevenueInput);
   const [costRate, setCostRate] = useState(DEFAULTS.costRate); // 원가율(%)
   const [industryId, setIndustryId] = useState<string | null>(null);
+  const [vatType, setVatType] = useState<string>(DEFAULTS.vatType);
+  const [cardFeeRate, setCardFeeRate] = useState(DEFAULTS.cardFeeRate);
 
   // 월 고정비
   const [rent, setRent] = useState(DEFAULTS.rent);
   const [labor, setLabor] = useState(DEFAULTS.labor);
   const [otherFixed, setOtherFixed] = useState(DEFAULTS.otherFixed);
+  const [includeSeverance, setIncludeSeverance] = useState(DEFAULTS.includeSeverance);
 
   // 초기 투자금 (창업 비용)
   const [deposit, setDeposit] = useState(DEFAULTS.deposit);
@@ -84,9 +117,12 @@ export default function BusinessBreakEvenCalc() {
     setMonthlyRevenueInput(DEFAULTS.monthlyRevenueInput);
     setCostRate(DEFAULTS.costRate);
     setIndustryId(null);
+    setVatType(DEFAULTS.vatType);
+    setCardFeeRate(DEFAULTS.cardFeeRate);
     setRent(DEFAULTS.rent);
     setLabor(DEFAULTS.labor);
     setOtherFixed(DEFAULTS.otherFixed);
+    setIncludeSeverance(DEFAULTS.includeSeverance);
     setDeposit(DEFAULTS.deposit);
     setStartupCost(DEFAULTS.startupCost);
     setLivingCost(DEFAULTS.livingCost);
@@ -95,11 +131,24 @@ export default function BusinessBreakEvenCalc() {
 
   const result = useMemo(() => {
     const monthlyRevenue = revMode === "daily" ? dailyRevenue * 30 : monthlyRevenueInput;
-    const monthlyCost = monthlyRevenue * (costRate / 100);
-    const grossProfit = monthlyRevenue - monthlyCost;
+
+    // 1. 부가세 (매출은 부가세 포함가로 간주, 매입세액공제 미반영 — 보수적 추정)
+    const vatRate = VAT_TYPES.find((v) => v.id === vatType)?.rate ?? 0;
+    const vat = monthlyRevenue * vatRate;
+
+    // 2. 카드수수료 (매출 전체에 실효 수수료율 적용)
+    const cardFee = monthlyRevenue * (cardFeeRate / 100);
+
+    const netRevenue = monthlyRevenue - vat - cardFee;
+
+    // 3. 원가 (부가세·카드수수료를 뺀 순매출 기준)
+    const monthlyCost = netRevenue * (costRate / 100);
+    const grossProfit = netRevenue - monthlyCost;
     const marginRate = monthlyRevenue > 0 ? grossProfit / monthlyRevenue : 0;
 
-    const fixedCosts = rent + labor + otherFixed;
+    // 4. 고정비 (퇴직금 충당금 = 인건비의 1/12)
+    const severance = includeSeverance ? labor / 12 : 0;
+    const fixedCosts = rent + labor + otherFixed + severance;
     const operatingProfit = grossProfit - fixedCosts;
 
     const breakEvenRevenue = marginRate > 0 ? fixedCosts / marginRate : null;
@@ -107,25 +156,37 @@ export default function BusinessBreakEvenCalc() {
     const initialInvestment = deposit + startupCost;
     const paybackMonths = operatingProfit > 0 ? initialInvestment / operatingProfit : null;
 
+    // 5. 종합소득세 (연환산 누진세율, 인적공제·경비 추가공제 미반영 — 보수적 추정)
+    const annualOperatingProfit = Math.max(0, operatingProfit) * 12;
+    const estimatedAnnualTax = estimateAnnualIncomeTax(annualOperatingProfit);
+    const monthlyTax = estimatedAnnualTax / 12;
+    const afterTaxProfit = operatingProfit - monthlyTax;
+
     const personalCosts = livingCost + loanPayment;
-    const disposableIncome = operatingProfit - personalCosts;
+    const disposableIncome = afterTaxProfit - personalCosts;
 
     return {
       monthlyRevenue,
+      vat,
+      cardFee,
+      netRevenue,
       monthlyCost,
       grossProfit,
       marginRate,
+      severance,
       fixedCosts,
       operatingProfit,
       breakEvenRevenue,
       initialInvestment,
       paybackMonths,
+      monthlyTax,
+      afterTaxProfit,
       personalCosts,
       disposableIncome,
     };
   }, [
-    revMode, dailyRevenue, monthlyRevenueInput, costRate,
-    rent, labor, otherFixed,
+    revMode, dailyRevenue, monthlyRevenueInput, costRate, vatType, cardFeeRate,
+    rent, labor, otherFixed, includeSeverance,
     deposit, startupCost,
     livingCost, loanPayment,
   ]);
@@ -264,6 +325,43 @@ export default function BusinessBreakEvenCalc() {
                 재료비·매입원가가 매출에서 차지하는 비율. 음식점은 보통 30~40%대
               </p>
             </div>
+
+            <label className="block">
+              <span className="text-sm font-medium text-[#5B6478]">사업자 유형 (부가세)</span>
+              <select
+                value={vatType}
+                onChange={(e) => setVatType(e.target.value)}
+                className="mt-1.5 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-3"
+              >
+                {VAT_TYPES.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.label}
+                  </option>
+                ))}
+              </select>
+              <span className="mt-1 block text-xs font-normal text-[#8B93A6]">
+                매출은 부가세 포함 금액으로 가정. 매입세액공제는 반영하지 않은 보수적 추정
+              </span>
+            </label>
+
+            <div className="text-sm font-medium text-[#5B6478]">
+              <div className="flex items-center justify-between">
+                <span>카드수수료</span>
+                <div className="flex items-center gap-1">
+                  <input
+                    type="number"
+                    min={0}
+                    max={5}
+                    step={0.1}
+                    value={cardFeeRate}
+                    onChange={(e) => setCardFeeRate(Number(e.target.value) || 0)}
+                    className="w-14 rounded-lg border border-[rgba(46,68,148,0.22)] px-2 py-1 text-right tabular-nums text-[#2E4494]"
+                  />
+                  <span className="text-[#2E4494]">%</span>
+                </div>
+              </div>
+              <p className="mt-1 text-xs text-[#8B93A6]">매출 대비 실효 카드수수료율. 영세가맹점 기준 통상 1~2%대</p>
+            </div>
           </div>
 
           {/* 월 고정비 */}
@@ -272,6 +370,15 @@ export default function BusinessBreakEvenCalc() {
             <MoneyField label="월세" value={rent} onChange={setRent} />
             <MoneyField label="인건비 (본인 제외 직원)" value={labor} onChange={setLabor} />
             <MoneyField label="기타 고정비" value={otherFixed} onChange={setOtherFixed} hint="관리비·공과금·보험료 등" />
+            <label className="flex items-center gap-2 text-sm text-[#5B6478]">
+              <input
+                type="checkbox"
+                checked={includeSeverance}
+                onChange={(e) => setIncludeSeverance(e.target.checked)}
+                className="h-4 w-4"
+              />
+              직원 퇴직금 충당 (인건비의 1/12씩 매달 적립)
+            </label>
           </div>
 
           {/* 초기 투자금 */}
@@ -299,7 +406,7 @@ export default function BusinessBreakEvenCalc() {
           {/* 핵심 요약 */}
           <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
             <div className="bg-[#2E4494] px-5 py-4 text-white">
-              <p className="text-sm opacity-80">월 영업이익</p>
+              <p className="text-sm opacity-80">월 영업이익 (세전)</p>
               <p className="text-3xl font-bold tabular-nums">{won(result.operatingProfit)}</p>
               <p className="mt-1 text-sm opacity-90">
                 {result.paybackMonths !== null
@@ -308,12 +415,21 @@ export default function BusinessBreakEvenCalc() {
               </p>
             </div>
             <dl className="divide-y divide-[rgba(46,68,148,0.10)] bg-white text-sm">
-              <Row label="월매출" value={won(result.monthlyRevenue)} />
+              <Row label="월매출 (부가세 포함)" value={won(result.monthlyRevenue)} />
+              <Row label="부가세" value={"- " + won(result.vat)} muted />
+              <Row label="카드수수료" value={"- " + won(result.cardFee)} muted />
+              <Row label="순매출" value={won(result.netRevenue)} />
               <Row label="원가" value={"- " + won(result.monthlyCost)} muted />
               <Row label="매출총이익 (마진)" value={won(result.grossProfit)} />
-              <Row label="마진율" value={`${(result.marginRate * 100).toFixed(1)}%`} muted />
-              <Row label="월 고정비 (월세+인건비+기타)" value={"- " + won(result.fixedCosts)} muted />
-              <Row label="월 영업이익" value={won(result.operatingProfit)} bold />
+              <Row label="마진율 (매출 대비)" value={`${(result.marginRate * 100).toFixed(1)}%`} muted />
+              <Row
+                label="월 고정비 (월세+인건비+기타+퇴직충당)"
+                value={"- " + won(result.fixedCosts)}
+                muted
+              />
+              <Row label="월 영업이익 (세전)" value={won(result.operatingProfit)} bold />
+              <Row label="종합소득세 추정 (연환산, 월할)" value={"- " + won(Math.max(0, result.monthlyTax))} muted />
+              <Row label="세후 영업이익" value={won(result.afterTaxProfit)} bold />
             </dl>
           </div>
 
@@ -340,7 +456,7 @@ export default function BusinessBreakEvenCalc() {
                 result.disposableIncome >= 0 ? "text-emerald-700" : "text-rose-700"
               }`}
             >
-              생활비·대출금까지 낸 뒤 실제로 남는 돈
+              세금·생활비·대출금까지 낸 뒤 실제로 남는 돈
             </p>
             <p
               className={`mt-1 text-2xl font-bold tabular-nums ${
@@ -350,10 +466,11 @@ export default function BusinessBreakEvenCalc() {
               {won(result.disposableIncome)}
             </p>
             <p className="mt-1 text-xs leading-relaxed text-[#5B6478]">
-              월 영업이익 {won(result.operatingProfit)}에서 생활비·대출금 합계{" "}
-              {won(result.personalCosts)}를 뺀 금액입니다.{" "}
+              세후 영업이익 {won(result.afterTaxProfit)}에서 생활비·대출금 합계{" "}
+              {won(result.personalCosts)}를 뺀 금액입니다. 종합소득세는 인적공제 등을 반영하지 않은 보수적
+              추정이라 실제로는 이보다 세금이 적고 남는 돈이 많을 가능성이 큽니다.{" "}
               {result.disposableIncome < 0 &&
-                "이 값이 마이너스라면, 사업 자체는 흑자여도 생활은 적자라는 뜻입니다 — 저축은커녕 계속 돈이 새는 구조입니다."}
+                "그럼에도 마이너스라면, 사업 자체는 흑자여도 생활은 적자라는 뜻입니다 — 저축은커녕 계속 돈이 새는 구조입니다."}
             </p>
           </div>
 
@@ -383,11 +500,13 @@ export default function BusinessBreakEvenCalc() {
       </div>
 
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
-        ※ 참고용 추정치입니다. 부가가치세·종합소득세, 카드수수료, 계절 매출 변동, 초기 매출 부진 기간(오픈
-        효과 소멸 후) 등은 반영하지 않은 단순 모델입니다. 업종 선택 시 채워지는 원가율·월세·인건비 비중은
-        국세청·DART 데이터처럼 단일 공식 통계가 아니라, 여러 요식업·창업 컨설팅 자료를 교차 검증해 정리한
-        업계 통상 범위입니다. 실제 상권·매장 규모에 따라 크게 달라질 수 있으니 참고용으로만 활용하고, 실제
-        자금 계획은 세무사·창업 컨설턴트와 함께 검토하시길 권장합니다.
+        ※ 참고용 추정치입니다. 부가세·카드수수료·퇴직금충당·종합소득세를 반영했지만, 계절 매출 변동, 초기
+        매출 부진 기간(오픈 효과 소멸 후), 매입세액공제, 인적공제·경비 추가공제 등은 반영하지 않았습니다.
+        특히 종합소득세는 공제를 전혀 적용하지 않은 보수적(최악 시나리오) 추정이라 실제 세금은 이보다 적을
+        가능성이 큽니다. 업종 선택 시 채워지는 원가율·월세·인건비 비중은 국세청·DART 데이터처럼 단일 공식
+        통계가 아니라, 여러 요식업·창업 컨설팅 자료를 교차 검증해 정리한 업계 통상 범위입니다. 실제 상권·매장
+        규모에 따라 크게 달라질 수 있으니 참고용으로만 활용하고, 실제 자금 계획은 세무사·창업 컨설턴트와 함께
+        검토하시길 권장합니다.
       </p>
     </div>
   );
