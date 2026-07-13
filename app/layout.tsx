@@ -81,7 +81,18 @@ export default function RootLayout({
 
         {/* 푸터 + 면책 */}
         <footer className="mt-16 border-t border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)]">
-          <div className="mx-auto max-w-4xl space-y-3 px-4 py-8 text-xs leading-relaxed text-[#7A8296]">
+          <div className="mx-auto max-w-4xl space-y-4 px-4 py-8 text-xs leading-relaxed text-[#7A8296]">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 font-medium text-[#5B6478]">
+              <Link href="/about" className="hover:text-[#2E4494]">
+                사이트 소개
+              </Link>
+              <Link href="/privacy" className="hover:text-[#2E4494]">
+                개인정보처리방침
+              </Link>
+              <Link href="/contact" className="hover:text-[#2E4494]">
+                문의하기
+              </Link>
+            </div>
             <p>
               본 사이트의 봉급표·계산 결과는 인사혁신처, 국세청, 금융위원회 등 공개
               자료를 바탕으로 한 <strong className="text-[#5B6478]">참고용 추정치</strong>이며 법적 효력이
