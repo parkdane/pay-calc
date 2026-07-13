@@ -70,6 +70,13 @@ function estimateAnnualIncomeTax(annualIncome: number): number {
   return tax * 1.1; // 지방소득세 10% 포함
 }
 
+// 청년창업중소기업 세액감면 (조특법 제6조, 2026.1.1 이후 창업 기준) - 지역별 감면율, 5년간 적용
+const YOUTH_STARTUP_REGIONS = [
+  { id: "nonmetro", label: "비수도권 · 수도권 인구감소지역", rate: 1.0 },
+  { id: "metro_general", label: "수도권 (과밀억제권역 제외)", rate: 0.75 },
+  { id: "metro_dense", label: "수도권 과밀억제권역 (서울 대부분 등)", rate: 0.5 },
+] as const;
+
 const DEFAULTS = {
   revMode: "daily" as const,
   dailyRevenue: 1000000,
@@ -82,6 +89,8 @@ const DEFAULTS = {
   otherFixed: 500000,
   includeSeverance: true,
   includeTax: true,
+  youthStartup: false,
+  startupRegion: "metro_dense" as const,
   deposit: 30000000,
   startupCost: 50000000,
   livingCost: 2500000,
@@ -104,6 +113,8 @@ export default function BusinessBreakEvenCalc() {
   const [otherFixed, setOtherFixed] = useState(DEFAULTS.otherFixed);
   const [includeSeverance, setIncludeSeverance] = useState(DEFAULTS.includeSeverance);
   const [includeTax, setIncludeTax] = useState(DEFAULTS.includeTax);
+  const [youthStartup, setYouthStartup] = useState(DEFAULTS.youthStartup);
+  const [startupRegion, setStartupRegion] = useState<string>(DEFAULTS.startupRegion);
 
   // 초기 투자금 (창업 비용)
   const [deposit, setDeposit] = useState(DEFAULTS.deposit);
@@ -126,6 +137,8 @@ export default function BusinessBreakEvenCalc() {
     setOtherFixed(DEFAULTS.otherFixed);
     setIncludeSeverance(DEFAULTS.includeSeverance);
     setIncludeTax(DEFAULTS.includeTax);
+    setYouthStartup(DEFAULTS.youthStartup);
+    setStartupRegion(DEFAULTS.startupRegion);
     setDeposit(DEFAULTS.deposit);
     setStartupCost(DEFAULTS.startupCost);
     setLivingCost(DEFAULTS.livingCost);
@@ -160,7 +173,12 @@ export default function BusinessBreakEvenCalc() {
 
     // 5. 종합소득세 (연환산 누진세율, 인적공제·경비 추가공제 미반영 — 보수적 추정)
     const annualOperatingProfit = Math.max(0, operatingProfit) * 12;
-    const estimatedAnnualTax = includeTax ? estimateAnnualIncomeTax(annualOperatingProfit) : 0;
+    const taxBeforeYouthReduction = includeTax ? estimateAnnualIncomeTax(annualOperatingProfit) : 0;
+    const youthReductionRate = youthStartup
+      ? YOUTH_STARTUP_REGIONS.find((r) => r.id === startupRegion)!.rate
+      : 0;
+    const youthReductionAmount = taxBeforeYouthReduction * youthReductionRate;
+    const estimatedAnnualTax = taxBeforeYouthReduction - youthReductionAmount;
     const monthlyTax = estimatedAnnualTax / 12;
     const afterTaxProfit = operatingProfit - monthlyTax;
 
@@ -186,6 +204,7 @@ export default function BusinessBreakEvenCalc() {
       initialInvestment,
       paybackMonths,
       monthlyTax,
+      youthReductionAmount,
       afterTaxProfit,
       personalCosts,
       disposableIncome,
@@ -194,7 +213,7 @@ export default function BusinessBreakEvenCalc() {
     revMode, dailyRevenue, monthlyRevenueInput, costRate, vatType, cardFeeRate,
     rent, labor, otherFixed, includeSeverance,
     deposit, startupCost,
-    livingCost, loanPayment, includeTax,
+    livingCost, loanPayment, includeTax, youthStartup, startupRegion,
   ]);
 
   const fmtMonths = (m: number) => {
@@ -382,6 +401,40 @@ export default function BusinessBreakEvenCalc() {
               켜면 결과표와 투자금 회수기간 모두 세금 낸 후 기준으로, 끄면 모두 세금 반영 전 기준으로
               계산됩니다.
             </p>
+
+            {includeTax && (
+              <>
+                <label className="flex items-center gap-2 text-sm text-[#5B6478]">
+                  <input
+                    type="checkbox"
+                    checked={youthStartup}
+                    onChange={(e) => setYouthStartup(e.target.checked)}
+                    className="h-4 w-4"
+                  />
+                  청년창업중소기업 세액감면 대상 (만 15~34세 최초 창업, 5년간)
+                </label>
+                {youthStartup && (
+                  <div className="pl-6">
+                    <select
+                      value={startupRegion}
+                      onChange={(e) => setStartupRegion(e.target.value)}
+                      className="w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-2 py-2 text-xs text-[#5B6478]"
+                    >
+                      {YOUTH_STARTUP_REGIONS.map((r) => (
+                        <option key={r.id} value={r.id}>
+                          {r.label} ({(r.rate * 100).toFixed(0)}% 감면)
+                        </option>
+                      ))}
+                    </select>
+                    <p className="mt-1 text-xs text-[#8B93A6]">
+                      조특법 제6조, 2026.1.1 이후 창업 기준. 감면대상 업종(소비성서비스업 등 일부 제외)인지,
+                      최초 창업이 맞는지는 홈택스에서 반드시 확인하세요. 신고 시 별도 신청서 제출이
+                      필요합니다.
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           {/* 월 고정비 */}
@@ -454,6 +507,15 @@ export default function BusinessBreakEvenCalc() {
               <Row label="월 영업이익 (세전)" value={won(result.operatingProfit)} bold={!includeTax} />
               {includeTax && (
                 <>
+                  {youthStartup && result.youthReductionAmount > 0 && (
+                    <Row
+                      label={`청년창업 세액감면 (연 ${(
+                        YOUTH_STARTUP_REGIONS.find((r) => r.id === startupRegion)!.rate * 100
+                      ).toFixed(0)}%)`}
+                      value={"+ " + won(result.youthReductionAmount / 12)}
+                      muted
+                    />
+                  )}
                   <Row label="종합소득세 추정 (연환산, 월할)" value={"- " + won(Math.max(0, result.monthlyTax))} muted />
                   <Row label="세후 영업이익" value={won(result.afterTaxProfit)} bold />
                 </>
@@ -537,10 +599,12 @@ export default function BusinessBreakEvenCalc() {
       </div>
 
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
-        ※ 참고용 추정치입니다. 부가세·카드수수료·퇴직금충당·종합소득세를 반영했지만, 계절 매출 변동, 초기
-        매출 부진 기간(오픈 효과 소멸 후), 매입세액공제, 인적공제·경비 추가공제 등은 반영하지 않았습니다.
-        특히 종합소득세는 공제를 전혀 적용하지 않은 보수적(최악 시나리오) 추정이라 실제 세금은 이보다 적을
-        가능성이 큽니다. 업종 선택 시 채워지는 원가율·월세·인건비 비중은 국세청·DART 데이터처럼 단일 공식
+        ※ 참고용 추정치입니다. 부가세·카드수수료·퇴직금충당·종합소득세·청년창업중소기업 세액감면을
+        반영했지만, 계절 매출 변동, 초기 매출 부진 기간(오픈 효과 소멸 후), 매입세액공제, 인적공제·경비
+        추가공제 등은 반영하지 않았습니다. 특히 종합소득세는 공제를 전혀 적용하지 않은 보수적(최악 시나리오)
+        추정이라 실제 세금은 이보다 적을 가능성이 큽니다. 청년창업 세액감면은 나이·업종·최초창업 여부 등
+        요건이 까다롭고 매년 신청해야 하므로, 적용 전 반드시 홈택스 또는 세무사를 통해 대상 여부를
+        확인하세요. 업종 선택 시 채워지는 원가율·월세·인건비 비중은 국세청·DART 데이터처럼 단일 공식
         통계가 아니라, 여러 요식업·창업 컨설팅 자료를 교차 검증해 정리한 업계 통상 범위입니다. 실제 상권·매장
         규모에 따라 크게 달라질 수 있으니 참고용으로만 활용하고, 실제 자금 계획은 세무사·창업 컨설턴트와 함께
         검토하시길 권장합니다.
