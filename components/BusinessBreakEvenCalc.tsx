@@ -6,12 +6,50 @@ import AdSlot from "@/components/AdSlot";
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const manwon = (n: number) => Math.round(n / 10000).toLocaleString("ko-KR") + "만원";
 
+// 업종별 원가율·인건비·임대료 비중 참고치
+// 국세청·DART처럼 단일 공식 통계가 아니라, 여러 요식업/창업 컨설팅 자료를 교차 검증해 정리한 "업계 통상 범위"입니다.
+const INDUSTRY_PRESETS = [
+  {
+    id: "cafe",
+    label: "카페·커피전문점",
+    costRate: 32,
+    laborRatio: 0.22,
+    rentRatio: 0.12,
+    note: "원가율 30~35%, 인건비 20~25%, 임대료 10~15%. 디저트 비중이 높을수록 원가율이 낮아지는 경향",
+  },
+  {
+    id: "delivery",
+    label: "배달전문 음식점",
+    costRate: 48,
+    laborRatio: 0.17,
+    rentRatio: 0.09,
+    note: "식재료 원가(30%)에 배달앱 수수료·포장비(15~20%)까지 합쳐 원가율로 반영. 인건비·임대료는 소형매장이라 상대적으로 낮은 편",
+  },
+  {
+    id: "meat",
+    label: "고깃집·한식",
+    costRate: 38,
+    laborRatio: 0.27,
+    rentRatio: 0.13,
+    note: "육류 원가율 35~40%, 홀 서빙 인력이 많이 필요해 인건비 25~30%, 넓은 평수라 임대료 부담도 큰 편",
+  },
+  {
+    id: "sushi",
+    label: "스시·일식",
+    costRate: 40,
+    laborRatio: 0.24,
+    rentRatio: 0.12,
+    note: "신선 수산물 원가율 38~42%로 높은 편, 숙련 조리 인력이 필요해 인건비도 상대적으로 높음",
+  },
+] as const;
+
 export default function BusinessBreakEvenCalc() {
   // 매출
   const [revMode, setRevMode] = useState<"daily" | "monthly">("daily");
   const [dailyRevenue, setDailyRevenue] = useState(1000000);
   const [monthlyRevenueInput, setMonthlyRevenueInput] = useState(30000000);
   const [costRate, setCostRate] = useState(35); // 원가율(%)
+  const [industryId, setIndustryId] = useState<string | null>(null);
 
   // 월 고정비
   const [rent, setRent] = useState(2000000);
@@ -70,6 +108,14 @@ export default function BusinessBreakEvenCalc() {
     return mo === 0 ? `${y}년` : `${y}년 ${mo}개월`;
   };
 
+  const applyIndustry = (preset: (typeof INDUSTRY_PRESETS)[number]) => {
+    setIndustryId(preset.id);
+    setCostRate(preset.costRate);
+    const monthlyRevenue = revMode === "daily" ? dailyRevenue * 30 : monthlyRevenueInput;
+    setRent(Math.round((monthlyRevenue * preset.rentRatio) / 10000) * 10000);
+    setLabor(Math.round((monthlyRevenue * preset.laborRatio) / 10000) * 10000);
+  };
+
   return (
     <div className="mx-auto max-w-[1280px] px-4">
       <AdSlot id="calc-business-breakeven-mid" />
@@ -81,6 +127,31 @@ export default function BusinessBreakEvenCalc() {
           <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">매출·원가</p>
+            </div>
+
+            {/* 업종 프리셋 */}
+            <div>
+              <p className="text-xs font-medium text-[#5B6478]">업종 선택 (원가율·월세·인건비 자동 입력)</p>
+              <div className="mt-1.5 grid grid-cols-2 gap-1.5">
+                {INDUSTRY_PRESETS.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => applyIndustry(p)}
+                    className={`rounded-lg border px-2 py-2 text-xs font-medium transition ${
+                      industryId === p.id
+                        ? "border-[#2E4494] bg-[rgba(46,68,148,0.06)] text-[#2E4494]"
+                        : "border-[rgba(46,68,148,0.22)] bg-white text-[#5B6478] hover:border-[#2E4494]"
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+              {industryId && (
+                <p className="mt-1.5 text-xs leading-relaxed text-[#8B93A6]">
+                  {INDUSTRY_PRESETS.find((p) => p.id === industryId)?.note}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1">
@@ -277,8 +348,10 @@ export default function BusinessBreakEvenCalc() {
 
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
         ※ 참고용 추정치입니다. 부가가치세·종합소득세, 카드수수료, 계절 매출 변동, 초기 매출 부진 기간(오픈
-        효과 소멸 후) 등은 반영하지 않은 단순 모델입니다. 실제 자금 계획은 세무사·창업 컨설턴트와 함께
-        검토하시길 권장합니다.
+        효과 소멸 후) 등은 반영하지 않은 단순 모델입니다. 업종 선택 시 채워지는 원가율·월세·인건비 비중은
+        국세청·DART 데이터처럼 단일 공식 통계가 아니라, 여러 요식업·창업 컨설팅 자료를 교차 검증해 정리한
+        업계 통상 범위입니다. 실제 상권·매장 규모에 따라 크게 달라질 수 있으니 참고용으로만 활용하고, 실제
+        자금 계획은 세무사·창업 컨설턴트와 함께 검토하시길 권장합니다.
       </p>
     </div>
   );
