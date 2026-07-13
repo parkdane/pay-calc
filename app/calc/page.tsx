@@ -9,6 +9,17 @@ export const metadata: Metadata = {
 
 const GROUPS = [
   {
+    title: "자영업자 도구",
+    desc: "매출·비용으로 사업성 진단",
+    items: [
+      {
+        href: "/calc/business-breakeven",
+        title: "손익분기·투자금 회수 계산기",
+        desc: "매출·원가·고정비 → 손익분기점, 투자금 회수 기간",
+      },
+    ],
+  },
+  {
     title: "재테크 도구",
     desc: "저축·자산 계획",
     items: [

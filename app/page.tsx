@@ -11,6 +11,12 @@ const SALARY = [
 
 const CALC_GROUPS = [
   {
+    title: "자영업자 도구",
+    items: [
+      { href: "/calc/business-breakeven", title: "손익분기·투자금 회수 계산기", desc: "매출·비용으로 사업성 진단" },
+    ],
+  },
+  {
     title: "재테크 도구",
     items: [
       { href: "/calc/deposit", title: "적금·예금 이자 계산기", desc: "세후 만기 수령액" },
