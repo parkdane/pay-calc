@@ -81,6 +81,7 @@ const DEFAULTS = {
   labor: 3000000,
   otherFixed: 500000,
   includeSeverance: true,
+  includeTax: true,
   deposit: 30000000,
   startupCost: 50000000,
   livingCost: 2500000,
@@ -102,6 +103,7 @@ export default function BusinessBreakEvenCalc() {
   const [labor, setLabor] = useState(DEFAULTS.labor);
   const [otherFixed, setOtherFixed] = useState(DEFAULTS.otherFixed);
   const [includeSeverance, setIncludeSeverance] = useState(DEFAULTS.includeSeverance);
+  const [includeTax, setIncludeTax] = useState(DEFAULTS.includeTax);
 
   // 초기 투자금 (창업 비용)
   const [deposit, setDeposit] = useState(DEFAULTS.deposit);
@@ -123,6 +125,7 @@ export default function BusinessBreakEvenCalc() {
     setLabor(DEFAULTS.labor);
     setOtherFixed(DEFAULTS.otherFixed);
     setIncludeSeverance(DEFAULTS.includeSeverance);
+    setIncludeTax(DEFAULTS.includeTax);
     setDeposit(DEFAULTS.deposit);
     setStartupCost(DEFAULTS.startupCost);
     setLivingCost(DEFAULTS.livingCost);
@@ -158,7 +161,7 @@ export default function BusinessBreakEvenCalc() {
 
     // 5. 종합소득세 (연환산 누진세율, 인적공제·경비 추가공제 미반영 — 보수적 추정)
     const annualOperatingProfit = Math.max(0, operatingProfit) * 12;
-    const estimatedAnnualTax = estimateAnnualIncomeTax(annualOperatingProfit);
+    const estimatedAnnualTax = includeTax ? estimateAnnualIncomeTax(annualOperatingProfit) : 0;
     const monthlyTax = estimatedAnnualTax / 12;
     const afterTaxProfit = operatingProfit - monthlyTax;
 
@@ -188,7 +191,7 @@ export default function BusinessBreakEvenCalc() {
     revMode, dailyRevenue, monthlyRevenueInput, costRate, vatType, cardFeeRate,
     rent, labor, otherFixed, includeSeverance,
     deposit, startupCost,
-    livingCost, loanPayment,
+    livingCost, loanPayment, includeTax,
   ]);
 
   const fmtMonths = (m: number) => {
@@ -362,6 +365,16 @@ export default function BusinessBreakEvenCalc() {
               </div>
               <p className="mt-1 text-xs text-[#8B93A6]">매출 대비 실효 카드수수료율. 영세가맹점 기준 통상 1~2%대</p>
             </div>
+
+            <label className="flex items-center gap-2 text-sm text-[#5B6478]">
+              <input
+                type="checkbox"
+                checked={includeTax}
+                onChange={(e) => setIncludeTax(e.target.checked)}
+                className="h-4 w-4"
+              />
+              종합소득세 추정치도 결과에 반영 (연환산 누진세율, 공제 미반영 보수적 추정)
+            </label>
           </div>
 
           {/* 월 고정비 */}
@@ -427,16 +440,22 @@ export default function BusinessBreakEvenCalc() {
                 value={"- " + won(result.fixedCosts)}
                 muted
               />
-              <Row label="월 영업이익 (세전)" value={won(result.operatingProfit)} bold />
-              <Row label="종합소득세 추정 (연환산, 월할)" value={"- " + won(Math.max(0, result.monthlyTax))} muted />
-              <Row label="세후 영업이익" value={won(result.afterTaxProfit)} bold />
+              <Row label="월 영업이익 (세전)" value={won(result.operatingProfit)} bold={!includeTax} />
+              {includeTax && (
+                <>
+                  <Row label="종합소득세 추정 (연환산, 월할)" value={"- " + won(Math.max(0, result.monthlyTax))} muted />
+                  <Row label="세후 영업이익" value={won(result.afterTaxProfit)} bold />
+                </>
+              )}
             </dl>
-            <p className="border-t border-[rgba(46,68,148,0.10)] bg-[rgba(46,68,148,0.03)] px-5 py-3 text-xs leading-relaxed text-[#7A8296]">
-              이 종합소득세는 기본공제·노란우산공제 등을 전혀 반영하지 않은 최악 시나리오입니다. 실제로
-              기본공제(150만 원)+노란우산공제(최대 500만 원)만 적용해도, 연 소득이 낮을수록 세금이 더 많이
-              줄어듭니다 — 연 3천만 원대는 약 30%, 8천만 원대는 약 12%, 1억 4천만 원대는 약 7%, 2억 원대는
-              약 4% 정도 낮아지는 경향입니다. 즉 사업 규모가 작을수록 이 추정치와 실제 세금의 차이가 큽니다.
-            </p>
+            {includeTax && (
+              <p className="border-t border-[rgba(46,68,148,0.10)] bg-[rgba(46,68,148,0.03)] px-5 py-3 text-xs leading-relaxed text-[#7A8296]">
+                이 종합소득세는 기본공제·노란우산공제 등을 전혀 반영하지 않은 최악 시나리오입니다. 실제로
+                기본공제(150만 원)+노란우산공제(최대 500만 원)만 적용해도, 연 소득이 낮을수록 세금이 더 많이
+                줄어듭니다 — 연 3천만 원대는 약 30%, 8천만 원대는 약 12%, 1억 4천만 원대는 약 7%, 2억 원대는
+                약 4% 정도 낮아지는 경향입니다. 즉 사업 규모가 작을수록 이 추정치와 실제 세금의 차이가 큽니다.
+              </p>
+            )}
           </div>
 
           {/* 손익분기 매출 */}
@@ -462,7 +481,7 @@ export default function BusinessBreakEvenCalc() {
                 result.disposableIncome >= 0 ? "text-emerald-700" : "text-rose-700"
               }`}
             >
-              세금·생활비·대출금까지 낸 뒤 실제로 남는 돈
+              {includeTax ? "세금·생활비·대출금까지 낸 뒤" : "생활비·대출금까지 낸 뒤"} 실제로 남는 돈
             </p>
             <p
               className={`mt-1 text-2xl font-bold tabular-nums ${
@@ -472,9 +491,10 @@ export default function BusinessBreakEvenCalc() {
               {won(result.disposableIncome)}
             </p>
             <p className="mt-1 text-xs leading-relaxed text-[#5B6478]">
-              세후 영업이익 {won(result.afterTaxProfit)}에서 생활비·대출금 합계{" "}
-              {won(result.personalCosts)}를 뺀 금액입니다. 종합소득세는 인적공제 등을 반영하지 않은 보수적
-              추정이라 실제로는 이보다 세금이 적고 남는 돈이 많을 가능성이 큽니다.{" "}
+              {includeTax ? "세후 영업이익" : "영업이익"} {won(result.afterTaxProfit)}에서 생활비·대출금 합계{" "}
+              {won(result.personalCosts)}를 뺀 금액입니다.{" "}
+              {includeTax &&
+                "종합소득세는 인적공제 등을 반영하지 않은 보수적 추정이라 실제로는 이보다 세금이 적고 남는 돈이 많을 가능성이 큽니다."}{" "}
               {result.disposableIncome < 0 &&
                 "그럼에도 마이너스라면, 사업 자체는 흑자여도 생활은 적자라는 뜻입니다 — 저축은커녕 계속 돈이 새는 구조입니다."}
             </p>
