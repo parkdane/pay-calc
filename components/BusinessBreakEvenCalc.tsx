@@ -43,26 +43,55 @@ const INDUSTRY_PRESETS = [
   },
 ] as const;
 
+const DEFAULTS = {
+  revMode: "daily" as const,
+  dailyRevenue: 1000000,
+  monthlyRevenueInput: 30000000,
+  costRate: 35,
+  rent: 2000000,
+  labor: 3000000,
+  otherFixed: 500000,
+  deposit: 30000000,
+  startupCost: 50000000,
+  livingCost: 2500000,
+  loanPayment: 500000,
+};
+
 export default function BusinessBreakEvenCalc() {
   // 매출
-  const [revMode, setRevMode] = useState<"daily" | "monthly">("daily");
-  const [dailyRevenue, setDailyRevenue] = useState(1000000);
-  const [monthlyRevenueInput, setMonthlyRevenueInput] = useState(30000000);
-  const [costRate, setCostRate] = useState(35); // 원가율(%)
+  const [revMode, setRevMode] = useState<"daily" | "monthly">(DEFAULTS.revMode);
+  const [dailyRevenue, setDailyRevenue] = useState(DEFAULTS.dailyRevenue);
+  const [monthlyRevenueInput, setMonthlyRevenueInput] = useState(DEFAULTS.monthlyRevenueInput);
+  const [costRate, setCostRate] = useState(DEFAULTS.costRate); // 원가율(%)
   const [industryId, setIndustryId] = useState<string | null>(null);
 
   // 월 고정비
-  const [rent, setRent] = useState(2000000);
-  const [labor, setLabor] = useState(3000000);
-  const [otherFixed, setOtherFixed] = useState(500000);
+  const [rent, setRent] = useState(DEFAULTS.rent);
+  const [labor, setLabor] = useState(DEFAULTS.labor);
+  const [otherFixed, setOtherFixed] = useState(DEFAULTS.otherFixed);
 
   // 초기 투자금 (창업 비용)
-  const [deposit, setDeposit] = useState(30000000);
-  const [startupCost, setStartupCost] = useState(50000000);
+  const [deposit, setDeposit] = useState(DEFAULTS.deposit);
+  const [startupCost, setStartupCost] = useState(DEFAULTS.startupCost);
 
   // 개인 비용
-  const [livingCost, setLivingCost] = useState(2500000);
-  const [loanPayment, setLoanPayment] = useState(500000);
+  const [livingCost, setLivingCost] = useState(DEFAULTS.livingCost);
+  const [loanPayment, setLoanPayment] = useState(DEFAULTS.loanPayment);
+
+  const resetAll = () => {
+    setRevMode(DEFAULTS.revMode);
+    setDailyRevenue(DEFAULTS.dailyRevenue);
+    setMonthlyRevenueInput(DEFAULTS.monthlyRevenueInput);
+    setCostRate(DEFAULTS.costRate);
+    setIndustryId(null);
+    setRent(DEFAULTS.rent);
+    setLabor(DEFAULTS.labor);
+    setOtherFixed(DEFAULTS.otherFixed);
+    setDeposit(DEFAULTS.deposit);
+    setStartupCost(DEFAULTS.startupCost);
+    setLivingCost(DEFAULTS.livingCost);
+    setLoanPayment(DEFAULTS.loanPayment);
+  };
 
   const result = useMemo(() => {
     const monthlyRevenue = revMode === "daily" ? dailyRevenue * 30 : monthlyRevenueInput;
@@ -123,6 +152,13 @@ export default function BusinessBreakEvenCalc() {
       <div className="grid gap-6 lg:grid-cols-[380px_1fr] lg:items-start">
         {/* ═══ 왼쪽: 입력 ═══ */}
         <div className="space-y-4">
+          <button
+            onClick={resetAll}
+            className="w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white py-2 text-xs font-semibold text-[#5B6478] hover:border-[#2E4494] hover:text-[#2E4494]"
+          >
+            ↺ 입력값 전체 초기화
+          </button>
+
           {/* 매출·원가 */}
           <div className="space-y-4 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5">
             <div>
@@ -327,7 +363,7 @@ export default function BusinessBreakEvenCalc() {
               <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">판단 보조</p>
               <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">이런 상황이면 이렇게 보세요</p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {BUSINESS_DECISION_CARDS.map((card) => (
                 <div key={card.tag} className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-4">
                   <span className="inline-block rounded-full bg-[rgba(46,68,148,0.08)] px-2 py-0.5 text-[10px] font-semibold text-[#2E4494]">
@@ -383,6 +419,15 @@ const BUSINESS_DECISION_CARDS = [
       "사업이 흑자라도 생활비까지 감당이 안 되면 지속 가능하지 않습니다",
       "생활비를 줄이거나, 영업이익 자체를 늘리는 방법을 함께 찾아야 합니다",
       "대출금 상환 구조(원리금균등 vs 거치식)를 재검토하는 것도 방법입니다",
+    ],
+  },
+  {
+    tag: "창업 전이라면",
+    title: "소상공인 3년 생존율은 계속 낮아지고 있다",
+    bullets: [
+      "창업 3년 생존율이 2020년 50.2%에서 2024년 33.6%까지 떨어졌습니다 (중기부·국세청 통계)",
+      "폐업 사유 1위는 매출부진(70.9%)이며, 정상매출 대비 40% 이상 줄었을 때 폐업을 결심하는 경우가 가장 많습니다",
+      "이 계산기의 손익분기 매출보다 40% 낮은 매출에서도 버틸 수 있는지 미리 점검해보세요",
     ],
   },
 ];
