@@ -82,7 +82,6 @@ const DEFAULTS = {
   otherFixed: 500000,
   includeSeverance: true,
   includeTax: true,
-  paybackBasis: "pretax" as const,
   deposit: 30000000,
   startupCost: 50000000,
   livingCost: 2500000,
@@ -105,7 +104,6 @@ export default function BusinessBreakEvenCalc() {
   const [otherFixed, setOtherFixed] = useState(DEFAULTS.otherFixed);
   const [includeSeverance, setIncludeSeverance] = useState(DEFAULTS.includeSeverance);
   const [includeTax, setIncludeTax] = useState(DEFAULTS.includeTax);
-  const [paybackBasis, setPaybackBasis] = useState<"pretax" | "aftertax">(DEFAULTS.paybackBasis);
 
   // 초기 투자금 (창업 비용)
   const [deposit, setDeposit] = useState(DEFAULTS.deposit);
@@ -128,7 +126,6 @@ export default function BusinessBreakEvenCalc() {
     setOtherFixed(DEFAULTS.otherFixed);
     setIncludeSeverance(DEFAULTS.includeSeverance);
     setIncludeTax(DEFAULTS.includeTax);
-    setPaybackBasis(DEFAULTS.paybackBasis);
     setDeposit(DEFAULTS.deposit);
     setStartupCost(DEFAULTS.startupCost);
     setLivingCost(DEFAULTS.livingCost);
@@ -167,8 +164,8 @@ export default function BusinessBreakEvenCalc() {
     const monthlyTax = estimatedAnnualTax / 12;
     const afterTaxProfit = operatingProfit - monthlyTax;
 
-    // 회수기간 기준 선택: 세전 영업이익 vs 세후 영업이익
-    const paybackProfit = includeTax && paybackBasis === "aftertax" ? afterTaxProfit : operatingProfit;
+    // 회수기간: 세금 반영 체크박스와 그대로 연동 (반영 켜짐=세후, 꺼짐=세전)
+    const paybackProfit = includeTax ? afterTaxProfit : operatingProfit;
     const paybackMonths = paybackProfit > 0 ? initialInvestment / paybackProfit : null;
 
     const personalCosts = livingCost + loanPayment;
@@ -197,7 +194,7 @@ export default function BusinessBreakEvenCalc() {
     revMode, dailyRevenue, monthlyRevenueInput, costRate, vatType, cardFeeRate,
     rent, labor, otherFixed, includeSeverance,
     deposit, startupCost,
-    livingCost, loanPayment, includeTax, paybackBasis,
+    livingCost, loanPayment, includeTax,
   ]);
 
   const fmtMonths = (m: number) => {
@@ -379,32 +376,12 @@ export default function BusinessBreakEvenCalc() {
                 onChange={(e) => setIncludeTax(e.target.checked)}
                 className="h-4 w-4"
               />
-              종합소득세 추정치도 결과에 반영 (연환산 누진세율, 공제 미반영 보수적 추정)
+              종합소득세 추정치 반영 (연환산 누진세율, 공제 미반영 보수적 추정)
             </label>
-
-            {includeTax && (
-              <div className="pl-6">
-                <p className="text-xs font-medium text-[#5B6478]">투자금 회수기간 계산 기준</p>
-                <div className="mt-1.5 grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1">
-                  {(
-                    [
-                      { id: "pretax", label: "세전 (순수 사업지표)" },
-                      { id: "aftertax", label: "세후 (실제 손에 쥐는 돈)" },
-                    ] as const
-                  ).map((b) => (
-                    <button
-                      key={b.id}
-                      onClick={() => setPaybackBasis(b.id)}
-                      className={`rounded-lg py-2 text-xs font-semibold transition ${
-                        paybackBasis === b.id ? "bg-white text-[#2E4494] shadow-sm" : "text-[#7A8296]"
-                      }`}
-                    >
-                      {b.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            <p className="pl-6 text-xs text-[#8B93A6]">
+              켜면 결과표와 투자금 회수기간 모두 세금 낸 후 기준으로, 끄면 모두 세금 반영 전 기준으로
+              계산됩니다.
+            </p>
           </div>
 
           {/* 월 고정비 */}
@@ -454,7 +431,8 @@ export default function BusinessBreakEvenCalc() {
             </div>
             <div className="border-b border-[rgba(46,68,148,0.10)] bg-[rgba(46,68,148,0.04)] px-5 py-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">
-                투자금 회수기간 ({includeTax && paybackBasis === "aftertax" ? "세후" : "세전"} 기준)
+                투자금 회수기간 (
+                {includeTax ? "세금 낸 후 기준" : "세금 빼고 기준"})
               </p>
               <p className="mt-0.5 text-xl font-bold tabular-nums text-[#1B2A4A]">
                 {result.paybackMonths !== null ? fmtMonths(result.paybackMonths) : "회수 불가 (적자)"}
