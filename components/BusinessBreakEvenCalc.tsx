@@ -431,6 +431,12 @@ export default function BusinessBreakEvenCalc() {
               <Row label="종합소득세 추정 (연환산, 월할)" value={"- " + won(Math.max(0, result.monthlyTax))} muted />
               <Row label="세후 영업이익" value={won(result.afterTaxProfit)} bold />
             </dl>
+            <p className="border-t border-[rgba(46,68,148,0.10)] bg-[rgba(46,68,148,0.03)] px-5 py-3 text-xs leading-relaxed text-[#7A8296]">
+              이 종합소득세는 기본공제·노란우산공제 등을 전혀 반영하지 않은 최악 시나리오입니다. 실제로
+              기본공제(150만 원)+노란우산공제(최대 500만 원)만 적용해도, 연 소득이 낮을수록 세금이 더 많이
+              줄어듭니다 — 연 3천만 원대는 약 30%, 8천만 원대는 약 12%, 1억 4천만 원대는 약 7%, 2억 원대는
+              약 4% 정도 낮아지는 경향입니다. 즉 사업 규모가 작을수록 이 추정치와 실제 세금의 차이가 큽니다.
+            </p>
           </div>
 
           {/* 손익분기 매출 */}
