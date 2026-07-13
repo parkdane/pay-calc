@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 };
 
 // TODO: 실제 사용하는 이메일 주소로 교체하세요
-const CONTACT_EMAIL = "contact@moneywatch.kr";
+const CONTACT_EMAIL = "jinsung963@naver.com";
 
 export default function ContactPage() {
   return (
