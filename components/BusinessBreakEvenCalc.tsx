@@ -451,12 +451,13 @@ export default function BusinessBreakEvenCalc() {
             <div className="bg-[#2E4494] px-5 py-4 text-white">
               <p className="text-sm opacity-80">월 영업이익 (세전)</p>
               <p className="text-3xl font-bold tabular-nums">{won(result.operatingProfit)}</p>
-              <p className="mt-1 text-sm opacity-90">
-                {result.paybackMonths !== null
-                  ? `초기 투자금 회수까지 약 ${fmtMonths(result.paybackMonths)} (${
-                      includeTax && paybackBasis === "aftertax" ? "세후" : "세전"
-                    } 기준)`
-                  : "현재 조건으로는 투자금을 회수할 수 없습니다 (영업이익 적자)"}
+            </div>
+            <div className="border-b border-[rgba(46,68,148,0.10)] bg-[rgba(46,68,148,0.04)] px-5 py-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">
+                투자금 회수기간 ({includeTax && paybackBasis === "aftertax" ? "세후" : "세전"} 기준)
+              </p>
+              <p className="mt-0.5 text-xl font-bold tabular-nums text-[#1B2A4A]">
+                {result.paybackMonths !== null ? fmtMonths(result.paybackMonths) : "회수 불가 (적자)"}
               </p>
             </div>
             <dl className="divide-y divide-[rgba(46,68,148,0.10)] bg-white text-sm">
