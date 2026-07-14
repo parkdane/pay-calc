@@ -73,11 +73,11 @@ export default function IncomeRankCalc() {
     setExporting(true);
     try {
       const { default: html2canvas } = await import("html2canvas-pro");
+      if (document.fonts?.ready) await document.fonts.ready;
       const canvas = await html2canvas(shareCardRef.current, {
         scale: 2,
         backgroundColor: null,
         useCORS: true,
-        foreignObjectRendering: true,
       });
       const blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
       if (!blob) throw new Error("이미지 생성 실패");
@@ -218,7 +218,7 @@ export default function IncomeRankCalc() {
       </div>
 
       {/* 공유용 카드 (화면에는 안 보이고 캡처용으로만 존재) */}
-      <div style={{ position: "fixed", top: 0, left: -9999, pointerEvents: "none" }}>
+      <div style={{ position: "fixed", top: 0, left: 0, zIndex: -1, pointerEvents: "none" }}>
         <div
           ref={shareCardRef}
           style={{
