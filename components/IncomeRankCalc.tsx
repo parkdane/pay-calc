@@ -96,7 +96,9 @@ export default function IncomeRankCalc() {
         setTimeout(() => URL.revokeObjectURL(url), 1000);
       };
 
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+      if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
           await navigator.share({
             files: [file],
