@@ -52,6 +52,13 @@ export default function RootLayout({
   return (
     <html lang="ko" className={notoSerifKR.variable}>
       <head>
+        {/* Google AdSense 사이트 소유권 확인 */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2066115165475669"
+          crossOrigin="anonymous"
+        ></script>
+
         {/* Pretendard 본문 폰트 (CDN) */}
         <link
           rel="stylesheet"
