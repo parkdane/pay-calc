@@ -84,19 +84,31 @@ export default function IncomeRankCalc() {
       const file = new File([blob], "연봉순위.png", { type: "image/png" });
 
       // 모바일에서 공유 시트 지원하면 바로 공유, 아니면 다운로드
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: "내 연봉 순위",
-          text: "봉급계산소에서 내 연봉 상위 몇 %인지 확인해보세요",
-        });
-      } else {
+      const downloadFile = () => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
         a.download = "연봉순위.png";
+        a.style.display = "none";
+        document.body.appendChild(a);
         a.click();
-        URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      };
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "내 연봉 순위",
+            text: "봉급계산소에서 내 연봉 상위 몇 %인지 확인해보세요",
+          });
+        } catch (shareErr) {
+          // 사용자가 공유창을 취소한 경우는 정상 동작이라 무시, 그 외 실패만 다운로드로 대체
+          if ((shareErr as Error)?.name !== "AbortError") downloadFile();
+        }
+      } else {
+        downloadFile();
       }
     } catch (err) {
       console.error("이미지 공유 실패:", err);
