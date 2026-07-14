@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import data from "@/data/income-percentile-2024.json";
 import AdSlot from "@/components/AdSlot";
 
@@ -56,6 +56,8 @@ const INCOME_RANK_DECISION_CARDS = [
 export default function IncomeRankCalc() {
   const [manwon, setManwon] = useState(4000);
   const [submitted, setSubmitted] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const shareCardRef = useRef<HTMLDivElement>(null);
 
   const result = useMemo(() => {
     const income = manwon * 10000;
@@ -65,6 +67,44 @@ export default function IncomeRankCalc() {
     const rankOf100 = Math.max(1, Math.round(top));
     return { income, top, isTop1, vsMedian, rankOf100 };
   }, [manwon]);
+
+  const shareImage = async () => {
+    if (!shareCardRef.current) return;
+    setExporting(true);
+    try {
+      const { default: html2canvas } = await import("html2canvas-pro");
+      const canvas = await html2canvas(shareCardRef.current, {
+        scale: 2,
+        backgroundColor: null,
+        useCORS: true,
+        foreignObjectRendering: true,
+      });
+      const blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+      if (!blob) throw new Error("이미지 생성 실패");
+      const file = new File([blob], "연봉순위.png", { type: "image/png" });
+
+      // 모바일에서 공유 시트 지원하면 바로 공유, 아니면 다운로드
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "내 연봉 순위",
+          text: "봉급계산소에서 내 연봉 상위 몇 %인지 확인해보세요",
+        });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "연봉순위.png";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch (err) {
+      console.error("이미지 공유 실패:", err);
+      window.alert("이미지 생성에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   return (
     <div className="mx-auto max-w-[1280px] px-4">
@@ -125,6 +165,13 @@ export default function IncomeRankCalc() {
                   국세청 {data.year}년 귀속 근로소득 백분위(천분위) 자료 기준. 근로소득자만 포함되며
                   사업·기타소득은 제외됩니다.
                 </p>
+                <button
+                  onClick={shareImage}
+                  disabled={exporting}
+                  className="mt-2 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white py-2.5 text-sm font-semibold text-[#2E4494] transition hover:border-[#2E4494] disabled:opacity-50"
+                >
+                  {exporting ? "이미지 생성 중..." : "📤 결과 이미지로 공유하기"}
+                </button>
               </div>
             </div>
           )}
@@ -167,6 +214,48 @@ export default function IncomeRankCalc() {
               </ul>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* 공유용 카드 (화면에는 안 보이고 캡처용으로만 존재) */}
+      <div style={{ position: "fixed", top: 0, left: -9999, pointerEvents: "none" }}>
+        <div
+          ref={shareCardRef}
+          style={{
+            width: 1080,
+            height: 1080,
+            background: "linear-gradient(160deg, #2E4494 0%, #1E3068 100%)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            padding: 80,
+            fontFamily: "Pretendard, sans-serif",
+            color: "#ffffff",
+          }}
+        >
+          <div style={{ fontSize: 36, fontWeight: 700, opacity: 0.85 }}>봉급계산소</div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+            <div style={{ fontSize: 32, opacity: 0.8 }}>
+              연봉 {manwon.toLocaleString("ko-KR")}만 원은
+            </div>
+            <div style={{ fontSize: 96, fontWeight: 800, lineHeight: 1.15 }}>
+              {result.isTop1 ? "상위 1%" : `상위 ${result.top.toFixed(1)}%`}
+            </div>
+            <div style={{ fontSize: 34, opacity: 0.9 }}>
+              근로소득자 100명 중 약 {result.rankOf100}등
+            </div>
+            <div style={{ fontSize: 26, opacity: 0.7, marginTop: 8 }}>
+              중위 연봉({won(data.median)}) 대비 {result.vsMedian.toFixed(1)}배
+            </div>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+            <div style={{ fontSize: 24, opacity: 0.65 }}>
+              국세청 {data.year}년 귀속 근로소득 백분위 기준
+            </div>
+            <div style={{ fontSize: 30, fontWeight: 700, opacity: 0.9 }}>moneywatch.kr</div>
+          </div>
         </div>
       </div>
     </div>
