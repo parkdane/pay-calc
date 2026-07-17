@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import ratesData from "@/data/rates.json";
 import AdSlot from "@/components/AdSlot";
 import MoneyInput from "@/components/MoneyInput";
+import Link from "next/link";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const TAX_RATE = 0.154; // 이자소득세 15.4% (소득세 14% + 지방세 1.4%)
@@ -47,6 +49,12 @@ export default function DepositCalc() {
 
     return { principal, interest, tax, netInterest, total };
   }, [mode, monthly, lump, months, rate, taxFree]);
+
+  // 지금 최고금리 TOP3 (이미 있는 금감원 금리 데이터 재사용)
+  const top3Rates = useMemo(() => {
+    const list = mode === "savings" ? ratesData.savings : ratesData.deposits;
+    return list.slice().sort((a, b) => b.maxRate - a.maxRate).slice(0, 3);
+  }, [mode]);
 
   return (
     <div className="mx-auto max-w-[1280px] px-4">
@@ -169,6 +177,32 @@ export default function DepositCalc() {
               {result.tax > 0 && <Row label="이자소득세 (15.4%)" value={"- " + won(result.tax)} muted />}
               <Row label="세후 이자" value={"+ " + won(result.netInterest)} bold />
             </dl>
+          </div>
+
+          {/* 지금 최고금리 TOP3 */}
+          <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5 text-sm">
+            <p className="font-semibold text-[#1B2A4A]">
+              지금 {mode === "savings" ? "적금" : "예금"} 최고금리 TOP3
+            </p>
+            <div className="mt-3 space-y-2">
+              {top3Rates.map((r, i) => (
+                <div key={`${r.bank}-${r.product}`} className="flex items-center justify-between">
+                  <span className="text-[#5B6478]">
+                    {i + 1}. {r.bank} <span className="text-xs text-[#8B93A6]">{r.product}</span>
+                  </span>
+                  <span className="tabular-nums font-bold text-[#2E4494]">{r.maxRate.toFixed(2)}%</span>
+                </div>
+              ))}
+            </div>
+            <Link
+              href="/rates"
+              className="mt-2 inline-block text-xs font-medium text-[#2E4494] underline underline-offset-2"
+            >
+              전체 금리 비교 보기 →
+            </Link>
+            <p className="mt-2 text-xs text-[#8B93A6]">
+              {ratesData.source}. 업데이트: {new Date(ratesData.updatedAt).toLocaleDateString("ko-KR")}
+            </p>
           </div>
         </div>
       </div>

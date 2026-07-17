@@ -4,7 +4,9 @@ import { useMemo, useState } from "react";
 import military from "@/data/salary-military-2026.json";
 import cfg from "@/data/military-allowances-2026.json";
 import { monthlyIncomeTax } from "@/lib/incomeTax";
+import salaryData from "@/data/salary-compare.json";
 import AdSlot from "@/components/AdSlot";
+import Link from "next/link";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -124,6 +126,17 @@ export default function MilitaryNetCalc() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rankKey, hobong, inputs, years, useDetail]);
+
+  // 대기업 평균연봉과 비교 (가까운 순으로 3개, 이미 있는 DART 데이터 재사용)
+  const nearbyCompanies = useMemo(() => {
+    if (!result) return [];
+    const myIncome = result.gross * 12;
+    return salaryData.companies
+      .slice()
+      .sort((a, b) => Math.abs(a.avgSalary - myIncome) - Math.abs(b.avgSalary - myIncome))
+      .slice(0, 3)
+      .sort((a, b) => b.avgSalary - a.avgSalary);
+  }, [result]);
 
   return (
     <div className="mx-auto max-w-[1280px] px-4">
@@ -254,7 +267,33 @@ export default function MilitaryNetCalc() {
                 <RowItem label="공제 합계" value={"- " + won(result.totalDeduction)} bold />
               </dl>
             </div>
-          ) : (
+          ) : null}
+
+          {result && (
+            <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5 text-sm">
+              <p className="font-semibold text-[#1B2A4A]">대기업 평균연봉과 비교</p>
+              <div className="mt-3 space-y-2">
+                {nearbyCompanies.map((c) => (
+                  <div key={c.corpCode} className="flex items-center justify-between">
+                    <span className="text-[#5B6478]">{c.name}</span>
+                    <span className="tabular-nums font-medium text-[#1B2A4A]">{won(c.avgSalary)}</span>
+                  </div>
+                ))}
+              </div>
+              <Link
+                href="/calc/salary-compare"
+                className="mt-2 inline-block text-xs font-medium text-[#2E4494] underline underline-offset-2"
+              >
+                23개 대기업 전체 비교 보기 →
+              </Link>
+              <p className="mt-2 text-xs text-[#8B93A6]">
+                {salaryData.source} 기준 전 직원 평균. 월 세전 합계 ×12로 단순 환산해 비교(수당 변동은
+                반영 안 함)
+              </p>
+            </div>
+          )}
+
+          {!result && (
             <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-6 text-center text-sm text-[#7A8296]">
               선택한 계급에 해당 호봉이 없습니다. 다른 호봉을 선택하세요.
             </div>

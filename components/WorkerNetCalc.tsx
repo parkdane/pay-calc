@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { monthlyIncomeTax } from "@/lib/incomeTax";
 import { topPercentOf, incomePercentileMeta } from "@/lib/incomePercentile";
+import salaryData from "@/data/salary-compare.json";
 import AdSlot from "@/components/AdSlot";
 import Link from "next/link";
 
@@ -64,6 +65,16 @@ export default function WorkerNetCalc() {
 
   const topPct = useMemo(() => topPercentOf(annualManwon * 10000), [annualManwon]);
   const vsMedian = (annualManwon * 10000) / incomePercentileMeta.median;
+
+  // 대기업 평균연봉과 비교 (가까운 순으로 3개, 이미 있는 DART 데이터 재사용)
+  const nearbyCompanies = useMemo(() => {
+    const myIncome = annualManwon * 10000;
+    return salaryData.companies
+      .slice()
+      .sort((a, b) => Math.abs(a.avgSalary - myIncome) - Math.abs(b.avgSalary - myIncome))
+      .slice(0, 3)
+      .sort((a, b) => b.avgSalary - a.avgSalary);
+  }, [annualManwon]);
 
   const bars = useMemo(() => {
     const list = COMPARE.includes(annualManwon) ? COMPARE : [...COMPARE, annualManwon].sort((a, b) => a - b);
@@ -169,6 +180,26 @@ export default function WorkerNetCalc() {
               연봉순위 계산기에서 자세히 보기 →
             </Link>
             <p className="mt-2 text-xs text-[#8B93A6]">{incomePercentileMeta.source}</p>
+          </div>
+
+          {/* 대기업 평균연봉과 비교 */}
+          <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+            <p className="font-semibold text-[#1B2A4A]">대기업 평균연봉과 비교</p>
+            <div className="mt-3 space-y-2">
+              {nearbyCompanies.map((c) => (
+                <div key={c.corpCode} className="flex items-center justify-between text-sm">
+                  <span className="text-[#5B6478]">{c.name}</span>
+                  <span className="tabular-nums font-medium text-[#1B2A4A]">{manwon(c.avgSalary)}만</span>
+                </div>
+              ))}
+            </div>
+            <Link
+              href="/calc/salary-compare"
+              className="mt-2 inline-block text-xs font-medium text-[#2E4494] underline underline-offset-2"
+            >
+              23개 대기업 전체 비교 보기 →
+            </Link>
+            <p className="mt-2 text-xs text-[#8B93A6]">{salaryData.source} 기준 전 직원 평균</p>
           </div>
 
           {/* 연봉별 실수령 비교 막대그래프 */}

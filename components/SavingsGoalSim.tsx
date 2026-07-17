@@ -5,6 +5,16 @@ import AdSlot from "@/components/AdSlot";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
+// 월 저축액과 목표금액, 금리로 걸리는 개월수 계산 (메인 계산과 동일한 공식)
+function monthsToGoal(save: number, goal: number, ratePercent: number): number | null {
+  if (save <= 0) return null;
+  const r = ratePercent / 100 / 12;
+  if (r === 0) return Math.ceil(goal / save);
+  return Math.ceil(Math.log((goal * r) / save + 1) / Math.log(1 + r));
+}
+
+const PRESET_SAVINGS = [300000, 500000, 1000000, 1500000, 2000000, 3000000];
+
 export default function SavingsGoalSim() {
   const [income, setIncome] = useState(280); // 만원
   const [fixedCost, setFixedCost] = useState(100);
@@ -47,6 +57,15 @@ export default function SavingsGoalSim() {
       interest,
     };
   }, [income, fixedCost, variableCost, goalManwon, rate]);
+
+  // 월 저축액별 목표 달성 기간 조견표 (같은 목표금액·금리 기준)
+  const goalTable = useMemo(() => {
+    const goal = goalManwon * 10000;
+    return PRESET_SAVINGS.map((save) => ({
+      save,
+      months: monthsToGoal(save, goal, rate),
+    }));
+  }, [goalManwon, rate]);
 
   const fmt = (m: number) => {
     const y = Math.floor(m / 12);
@@ -149,6 +168,24 @@ export default function SavingsGoalSim() {
               </div>
             )
           )}
+
+          {/* 월 저축액별 목표 달성 기간 조견표 */}
+          <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5 text-sm">
+            <p className="font-semibold text-[#1B2A4A]">
+              월 저축액별 {won(goalManwon * 10000)} 달성 기간
+            </p>
+            <p className="mt-1 text-xs text-[#8B93A6]">현재 설정한 목표금액·금리({rate.toFixed(2)}%) 기준</p>
+            <div className="mt-3 space-y-1.5">
+              {goalTable.map((row) => (
+                <div key={row.save} className="flex items-center justify-between">
+                  <span className="text-[#5B6478]">월 {won(row.save)}</span>
+                  <span className="tabular-nums font-medium text-[#1B2A4A]">
+                    {row.months !== null ? fmt(row.months) : "-"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
