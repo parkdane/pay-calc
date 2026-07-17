@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import cfg from "@/data/youth-savings-2026.json";
 import AdSlot from "@/components/AdSlot";
+import Link from "next/link";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -117,6 +118,21 @@ export default function YouthSavingsCalc() {
               <Row label="비과세 이자" value={"+ " + won(result.interest)} muted />
               <Row label="총 수령액" value={won(result.total)} bold />
             </dl>
+          </div>
+
+          {/* 다른 청년정책과 비교 */}
+          <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5 text-sm">
+            <p className="font-semibold text-[#1B2A4A]">청년도약계좌와 비교하면?</p>
+            <p className="mt-1 leading-relaxed text-[#5B6478]">
+              5년짜리 청년도약계좌는 총액이 더 크지만, 기간이 짧은 이 상품이 연 환산 실효수익률은 더 높을 수
+              있습니다.
+            </p>
+            <Link
+              href="/calc/youth-compare"
+              className="mt-2 inline-block font-medium text-[#2E4494] underline underline-offset-2"
+            >
+              청년 정책 적금 비교 계산기에서 직접 비교 →
+            </Link>
           </div>
         </div>
       </div>

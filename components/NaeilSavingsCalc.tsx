@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import AdSlot from "@/components/AdSlot";
+import Link from "next/link";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const MONTHS = 36;
@@ -112,6 +113,20 @@ export default function NaeilSavingsCalc() {
               <Row label="이자" value={"+ " + won(result.interest)} muted />
               <Row label="총 수령액" value={won(result.total)} bold />
             </dl>
+          </div>
+
+          {/* 다른 청년정책과 비교 */}
+          <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5 text-sm">
+            <p className="font-semibold text-[#1B2A4A]">다른 정책 적금과 비교하면?</p>
+            <p className="mt-1 leading-relaxed text-[#5B6478]">
+              소득 구간에 따라 청년미래적금 등 다른 상품이 더 유리할 수도 있습니다.
+            </p>
+            <Link
+              href="/calc/youth-compare"
+              className="mt-2 inline-block font-medium text-[#2E4494] underline underline-offset-2"
+            >
+              청년 정책 적금 비교 계산기에서 직접 비교 →
+            </Link>
           </div>
         </div>
       </div>
