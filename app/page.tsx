@@ -23,6 +23,7 @@ const CALC_GROUPS = [
       { href: "/calc/income-rank", title: "내 연봉 상위 몇 %?", desc: "국세청 통계 기준 순위" },
       { href: "/calc/salary-compare", title: "대기업 평균연봉 비교", desc: "금감원 DART 공시 기준 실제 데이터" },
       { href: "/calc/savings-goal", title: "저축 목표 시뮬레이터", desc: "1억까지 걸리는 기간" },
+      { href: "/calc/household-income", title: "가구소득 계산기", desc: "맞벌이 합산소득, 평균·중위소득 대비 위치" },
       { href: "/calc/fire", title: "파이어족 계산기", desc: "조기 은퇴 가능 나이 계산" },
     ],
   },

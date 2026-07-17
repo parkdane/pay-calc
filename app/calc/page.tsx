@@ -44,6 +44,11 @@ const GROUPS = [
         desc: "월급·지출 입력 → 1억까지 걸리는 기간",
       },
       {
+        href: "/calc/household-income",
+        title: "가구소득 계산기",
+        desc: "맞벌이 합산소득, 평균·중위소득 대비 위치",
+      },
+      {
         href: "/calc/fire",
         title: "파이어족 계산기",
         desc: "조기 은퇴 가능 나이, 몬테카를로 성공확률",
