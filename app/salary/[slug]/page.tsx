@@ -3,6 +3,7 @@ import SalaryTable from "@/components/SalaryTable";
 import SoldierTable from "@/components/SoldierTable";
 import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
+import FaqJsonLd from "@/components/FaqJsonLd";
 import CalcCta from "@/components/CalcCta";
 
 import civil from "@/data/salary-civil-2026.json";
@@ -115,6 +116,7 @@ export default async function SalaryPage({
       </section>
 
       <Faq items={d.faq} />
+      <FaqJsonLd items={d.faq} />
 
       {/* 하단 광고 */}
       <AdSlot id={`salary-${slug}-bottom`} />

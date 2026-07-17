@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import BusinessBreakEvenCalc from "@/components/BusinessBreakEvenCalc";
 import Faq from "@/components/Faq";
+import FaqJsonLd from "@/components/FaqJsonLd";
 
 export const metadata: Metadata = {
   title: "자영업 손익분기·투자금 회수 계산기",
@@ -41,6 +42,7 @@ export default function Page() {
       </div>
 
       <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
     </div>
   );
 }

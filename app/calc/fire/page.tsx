@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import FireCalc from "@/components/FireCalc";
 import Faq from "@/components/Faq";
+import FaqJsonLd from "@/components/FaqJsonLd";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -70,6 +71,7 @@ export default function Page() {
       </section>
 
       <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
     </div>
   );
 }

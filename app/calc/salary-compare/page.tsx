@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SalaryCompareCalc from "@/components/SalaryCompareCalc";
 import Faq from "@/components/Faq";
+import FaqJsonLd from "@/components/FaqJsonLd";
 
 export const metadata: Metadata = {
   title: "대기업 평균연봉 비교 (금감원 공시 기준)",
@@ -54,6 +55,7 @@ export default function Page() {
       </section>
 
       <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
     </div>
   );
 }

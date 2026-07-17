@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import IncomeRankCalc from "@/components/IncomeRankCalc";
 import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
+import FaqJsonLd from "@/components/FaqJsonLd";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -66,6 +67,7 @@ export default function Page() {
       </section>
 
       <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
 
       <AdSlot id="calc-income-rank-bottom" />
     </article>

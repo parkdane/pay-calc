@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import WorkerNetCalc from "@/components/WorkerNetCalc";
 import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
+import FaqJsonLd from "@/components/FaqJsonLd";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -67,6 +68,7 @@ export default function Page() {
       </section>
 
       <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
 
       <AdSlot id="calc-worker-net-bottom" />
     </article>
