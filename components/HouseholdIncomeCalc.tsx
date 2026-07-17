@@ -82,8 +82,6 @@ export default function HouseholdIncomeCalc() {
     };
   }, [mySalary, myBonus, spouseSalary, spouseBonus, otherIncome, householdSize, dependents]);
 
-  const chartMax = Math.max(result.monthlyTotal, MEDIAN_INCOME_2026[4]) * 1.1;
-
   return (
     <div className="mx-auto max-w-[1280px] px-4">
       <AdSlot id="calc-household-income-mid" />
@@ -191,38 +189,28 @@ export default function HouseholdIncomeCalc() {
             </p>
           </div>
 
+          {/* 소득 구성 (도넛차트) */}
+          <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
+            <p className="mb-4 font-semibold text-[#1B2A4A]">가구 소득 구성</p>
+            <IncomeDonut
+              segments={[
+                { label: "본인 소득", value: result.myAnnual, color: "#2E4494" },
+                { label: "배우자 소득", value: result.spouseAnnual, color: "#738BE7" },
+                { label: "기타 보상", value: otherIncome, color: "#BFC8EA" },
+              ]}
+            />
+          </div>
+
           {/* 월 소득 위치 비교 (차트) */}
           <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5">
             <p className="font-semibold text-[#1B2A4A]">월 소득 위치 비교</p>
-            <div className="mt-4 space-y-3">
-              <div>
-                <div className="mb-1 flex justify-between text-xs">
-                  <span className="font-bold text-[#2E4494]">우리 가구</span>
-                  <span className="tabular-nums text-[#2E4494]">{manwon(result.monthlyTotal)}</span>
-                </div>
-                <div className="h-4 w-full overflow-hidden rounded bg-slate-100">
-                  <div className="h-full bg-[#2E4494]" style={{ width: `${Math.min((result.monthlyTotal / chartMax) * 100, 100)}%` }} />
-                </div>
-              </div>
-              <div>
-                <div className="mb-1 flex justify-between text-xs">
-                  <span className="text-[#5B6478]">{householdSize}인 기준 중위소득</span>
-                  <span className="tabular-nums text-[#7A8296]">{manwon(result.medianIncome)}</span>
-                </div>
-                <div className="h-4 w-full overflow-hidden rounded bg-slate-100">
-                  <div className="h-full bg-slate-400" style={{ width: `${(result.medianIncome / chartMax) * 100}%` }} />
-                </div>
-              </div>
-              <div>
-                <div className="mb-1 flex justify-between text-xs">
-                  <span className="text-[#5B6478]">평균 가구소득(월 환산)</span>
-                  <span className="tabular-nums text-[#7A8296]">{manwon(AVG_HOUSEHOLD_INCOME / 12)}</span>
-                </div>
-                <div className="h-4 w-full overflow-hidden rounded bg-slate-100">
-                  <div className="h-full bg-slate-400" style={{ width: `${(AVG_HOUSEHOLD_INCOME / 12 / chartMax) * 100}%` }} />
-                </div>
-              </div>
-            </div>
+            <PositionBarChart
+              bars={[
+                { label: "우리 가구", value: result.monthlyTotal, highlight: true },
+                { label: `${householdSize}인 중위소득`, value: result.medianIncome },
+                { label: "평균 가구소득", value: AVG_HOUSEHOLD_INCOME / 12 },
+              ]}
+            />
           </div>
 
           {/* 비교 기준 데이터 */}
@@ -318,6 +306,114 @@ const HOUSEHOLD_DECISION_CARDS = [
     ],
   },
 ];
+
+// 소득 구성 도넛차트
+function IncomeDonut({ segments }: { segments: { label: string; value: number; color: string }[] }) {
+  const total = segments.reduce((s, x) => s + x.value, 0);
+  const visible = segments.filter((s) => s.value > 0);
+  const R = 70;
+  const CX = 100;
+  const CY = 100;
+  const STROKE = 32;
+  const circumference = 2 * Math.PI * R;
+
+  let offset = 0;
+  const arcs = visible.map((s) => {
+    const frac = total > 0 ? s.value / total : 0;
+    const dash = frac * circumference;
+    const arc = { ...s, dash, offset };
+    offset += dash;
+    return arc;
+  });
+
+  return (
+    <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center">
+      <svg viewBox="0 0 200 200" className="h-40 w-40 shrink-0">
+        <circle cx={CX} cy={CY} r={R} fill="none" stroke="#EEF0F4" strokeWidth={STROKE} />
+        {arcs.map((a) => (
+          <circle
+            key={a.label}
+            cx={CX}
+            cy={CY}
+            r={R}
+            fill="none"
+            stroke={a.color}
+            strokeWidth={STROKE}
+            strokeDasharray={`${a.dash} ${circumference - a.dash}`}
+            strokeDashoffset={-a.offset}
+            transform={`rotate(-90 ${CX} ${CY})`}
+            strokeLinecap={arcs.length === 1 ? "butt" : "butt"}
+          />
+        ))}
+        <text x={CX} y={CY - 6} textAnchor="middle" fontSize="12" fill="#8B93A6">
+          합계
+        </text>
+        <text x={CX} y={CY + 16} textAnchor="middle" fontSize="16" fontWeight="700" fill="#1B2A4A">
+          {manwon(total)}
+        </text>
+      </svg>
+      <div className="w-full space-y-2 text-sm">
+        {visible.map((s) => (
+          <div key={s.label} className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: s.color }} />
+            <span className="text-[#5B6478]">{s.label}</span>
+            <span className="ml-auto shrink-0 tabular-nums font-medium text-[#1B2A4A]">
+              {total > 0 ? ((s.value / total) * 100).toFixed(0) : 0}%
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// 월 소득 위치 비교 막대그래프
+function PositionBarChart({ bars }: { bars: { label: string; value: number; highlight?: boolean }[] }) {
+  const W = 400;
+  const H = 220;
+  const padTop = 34;
+  const padBottom = 34;
+  const padSide = 16;
+  const max = Math.max(...bars.map((b) => b.value)) * 1.15;
+  const gap = 20;
+  const barWidth = (W - padSide * 2 - gap * (bars.length - 1)) / bars.length;
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="mt-2 w-full">
+      <line
+        x1={padSide}
+        y1={H - padBottom}
+        x2={W - padSide}
+        y2={H - padBottom}
+        stroke="rgba(46,68,148,0.16)"
+      />
+      {bars.map((b, i) => {
+        const barH = ((H - padTop - padBottom) * b.value) / max;
+        const x = padSide + i * (barWidth + gap);
+        const y = H - padBottom - barH;
+        const color = b.highlight ? "#2E4494" : "#BFC8EA";
+        return (
+          <g key={b.label}>
+            <rect x={x} y={y} width={barWidth} height={Math.max(barH, 1)} rx={6} fill={color} />
+            <text
+              x={x + barWidth / 2}
+              y={y - 10}
+              textAnchor="middle"
+              fontSize="12"
+              fontWeight="700"
+              fill={b.highlight ? "#2E4494" : "#5B6478"}
+            >
+              {manwon(b.value)}
+            </text>
+            <text x={x + barWidth / 2} y={H - padBottom + 18} textAnchor="middle" fontSize="11" fill="#7A8296">
+              {b.label}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
 
 function MoneyField({
   label,
