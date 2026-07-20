@@ -1,57 +1,7 @@
 {
-  "updatedAt": "2026-07-19T21:00:40.939Z",
+  "updatedAt": "2026-07-20T21:00:41.021Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
-    {
-      "bank": "HB저축은행",
-      "product": "스마트회전정기예금",
-      "baseRate": 4.41,
-      "maxRate": 4.41,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "해당사항없음"
-    },
-    {
-      "bank": "스카이저축은행",
-      "product": "회전정기예금",
-      "baseRate": 4.2,
-      "maxRate": 4.4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "영업점 내방 12개월 신규 또는 재예치 시 + 0.2%"
-    },
-    {
-      "bank": "HB저축은행",
-      "product": "e-정기예금",
-      "baseRate": 4.4,
-      "maxRate": 4.4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷",
-      "note": "해당사항없음"
-    },
-    {
-      "bank": "HB저축은행",
-      "product": "스마트정기예금",
-      "baseRate": 4.4,
-      "maxRate": 4.4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "해당사항없음"
-    },
-    {
-      "bank": "키움예스저축은행",
-      "product": "e-정기예금(인터넷뱅킹, 스마트뱅킹)",
-      "baseRate": 4.2,
-      "maxRate": 4.4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "-"
-    },
     {
       "bank": "더케이저축은행",
       "product": "e-정기예금",
@@ -198,6 +148,56 @@
       "baseRate": 4.3,
       "maxRate": 4.3,
       "term": 36,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "없음"
+    },
+    {
+      "bank": "OSB저축은행",
+      "product": "인터넷OSB회전식정기예금",
+      "baseRate": 4.3,
+      "maxRate": 4.3,
+      "term": 36,
+      "group": "저축은행",
+      "joinWay": "인터넷,스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "스카이저축은행",
+      "product": "회전정기예금",
+      "baseRate": 4.1,
+      "maxRate": 4.3,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "영업점 내방 12개월 신규 또는 재예치 시 + 0.2%"
+    },
+    {
+      "bank": "민국저축은행",
+      "product": "정기예금",
+      "baseRate": 4.2,
+      "maxRate": 4.3,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "* 최대우대금리 : 0.1%\n- 창구에서 1년이상 재예치 하는 경우 + 0.1%p"
+    },
+    {
+      "bank": "키움예스저축은행",
+      "product": "e-정기예금(인터넷뱅킹, 스마트뱅킹)",
+      "baseRate": 4.1,
+      "maxRate": 4.3,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷,스마트폰",
+      "note": "-"
+    },
+    {
+      "bank": "유안타저축은행",
+      "product": "정기예금",
+      "baseRate": 4.26,
+      "maxRate": 4.26,
+      "term": 12,
       "group": "저축은행",
       "joinWay": "영업점",
       "note": "없음"
