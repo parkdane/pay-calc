@@ -1,32 +1,12 @@
 {
-  "updatedAt": "2026-07-20T21:00:41.021Z",
+  "updatedAt": "2026-07-21T21:00:29.136Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
     {
-      "bank": "더케이저축은행",
-      "product": "e-정기예금",
-      "baseRate": 4.4,
-      "maxRate": 4.4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "더케이저축은행",
-      "product": "e-회전식정기예금(1년단위 변동금리상품)",
-      "baseRate": 4.4,
-      "maxRate": 4.4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "없음"
-    },
-    {
       "bank": "바로저축은행",
       "product": "스마트정기예금(인터넷)",
-      "baseRate": 4.4,
-      "maxRate": 4.4,
+      "baseRate": 4.35,
+      "maxRate": 4.35,
       "term": 12,
       "group": "저축은행",
       "joinWay": "인터넷",
@@ -35,28 +15,8 @@
     {
       "bank": "바로저축은행",
       "product": "SB톡톡 정기예금(비대면)",
-      "baseRate": 4.4,
-      "maxRate": 4.4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "다올저축은행",
-      "product": "Fi 프리스타일 정기예금 (비대면)",
-      "baseRate": 4.4,
-      "maxRate": 4.4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "흥국저축은행",
-      "product": "비대면 정기예금",
-      "baseRate": 4.4,
-      "maxRate": 4.4,
+      "baseRate": 4.35,
+      "maxRate": 4.35,
       "term": 12,
       "group": "저축은행",
       "joinWay": "스마트폰",
@@ -73,23 +33,13 @@
       "note": "없음"
     },
     {
-      "bank": "바로저축은행",
-      "product": "정기예금",
-      "baseRate": 4.32,
-      "maxRate": 4.32,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "없음"
-    },
-    {
       "bank": "흥국저축은행",
-      "product": "정기예금(부산)",
-      "baseRate": 4.32,
-      "maxRate": 4.32,
+      "product": "비대면 정기예금",
+      "baseRate": 4.35,
+      "maxRate": 4.35,
       "term": 12,
       "group": "저축은행",
-      "joinWay": "영업점",
+      "joinWay": "스마트폰",
       "note": "없음"
     },
     {
@@ -197,6 +147,56 @@
       "product": "정기예금",
       "baseRate": 4.26,
       "maxRate": 4.26,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "없음"
+    },
+    {
+      "bank": "유안타저축은행",
+      "product": "e-정기예금",
+      "baseRate": 4.26,
+      "maxRate": 4.26,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷,스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "유안타저축은행",
+      "product": "SB톡톡 정기예금 (비대면)",
+      "baseRate": 4.26,
+      "maxRate": 4.26,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "HB저축은행",
+      "product": "스마트회전정기예금",
+      "baseRate": 4.23,
+      "maxRate": 4.23,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "해당사항없음"
+    },
+    {
+      "bank": "바로저축은행",
+      "product": "정기예금",
+      "baseRate": 4.22,
+      "maxRate": 4.22,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "없음"
+    },
+    {
+      "bank": "흥국저축은행",
+      "product": "정기예금(부산)",
+      "baseRate": 4.22,
+      "maxRate": 4.22,
       "term": 12,
       "group": "저축은행",
       "joinWay": "영업점",
