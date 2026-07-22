@@ -212,8 +212,10 @@ export default function FireCalc() {
     const reachAge = already ? age : reached ? age + months / 12 : null;
     const reachMonths = already ? 0 : reached ? months : null;
 
-    // 2) 차트용 경로: 달성 시점(또는 100세 한도) 이후 10년을 더 이어서 추세를 보여줌
+    // 2) 차트용 경로: 달성 시점 이후 10년을 더 이어서 추세를 보여줌
     //    실질 기준이므로 목표선(target)은 수평으로 고정된다
+    //    달성 전에는 저축을 넣고, 달성(은퇴) 이후에는 저축이 멈추고 생활비를 인출한다
+    const withdrawPerMonth = Math.max(0, monthlyExpense - sideIncome - pension) * 10000;
     const path: { age: number; asset: number; target: number }[] = [
       { age, asset: startAsset, target: fireNumber },
     ];
@@ -223,8 +225,16 @@ export default function FireCalc() {
         m = 0;
       const cap = reached ? Math.min(months + 12 * 10, maxMonths) : maxMonths;
       while (m < cap) {
-        c = c * (1 + mRet) + cs;
-        cs = cs * saveDecay;
+        const retiredNow = reached && m >= months;
+        if (retiredNow) {
+          // 은퇴 후: 저축 중단, 생활비 인출
+          c = c * (1 + mRet) - withdrawPerMonth;
+          if (c < 0) c = 0;
+        } else {
+          // 은퇴 전: 계속 저축
+          c = c * (1 + mRet) + cs;
+          cs = cs * saveDecay;
+        }
         m++;
         if (m % 12 === 0) path.push({ age: age + m / 12, asset: c, target: fireNumber });
       }
@@ -852,7 +862,8 @@ function GrowthChart({
       <p className="mb-1 text-sm font-semibold text-[#1B2A4A]">자산 성장 시뮬레이션</p>
       <p className="mb-3 text-xs text-[#8B93A6]">
         <span className="text-[#2E4494]">■</span> 내 예상 자산 &nbsp;
-        <span className="text-amber-500">■</span> 필요 목표 자산 · 모두 오늘 화폐가치 기준 · 점에 마우스를 올려보세요
+        <span className="text-amber-500">■</span> 필요 목표 자산 · 모두 오늘 화폐가치 기준 · FIRE 달성 이후는
+        저축이 멈추고 생활비를 인출하는 구간입니다
       </p>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="xMidYMid meet">
         {/* Y 그리드 + 라벨 */}
