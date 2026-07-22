@@ -211,6 +211,8 @@ export default function FireCalc() {
     const reached = already || (cur >= target && months < maxMonths);
     const reachAge = already ? age : reached ? age + months / 12 : null;
     const reachMonths = already ? 0 : reached ? months : null;
+    // 달성 시점의 실제 자산 (목표를 살짝 초과 달성하므로 fireNumber와 다를 수 있다)
+    const assetAtRetire = already ? startAsset : cur;
 
     // 2) 차트용 경로: 달성 시점 이후 10년을 더 이어서 추세를 보여줌
     //    실질 기준이므로 목표선(target)은 수평으로 고정된다
@@ -223,7 +225,8 @@ export default function FireCalc() {
       let c = startAsset,
         cs = save,
         m = 0;
-      const cap = reached ? Math.min(months + 12 * 10, maxMonths) : maxMonths;
+      // 달성 후 최소 30년(또는 100세)까지는 그려서 은퇴 후 자산 추이를 충분히 보여준다
+      const cap = reached ? Math.min(months + 12 * 30, maxMonths) : maxMonths;
       while (m < cap) {
         const retiredNow = reached && m >= months;
         if (retiredNow) {
@@ -290,7 +293,8 @@ export default function FireCalc() {
     const depletionPath: { age: number; asset: number }[] = [];
     // 인출할 금액이 없으면(부수입·연금만으로 생활비가 충당되면) 자산은 줄어들지 않는다
     if (reachAge !== null && monthlyWithdraw > 0) {
-      let c = fireNumber;
+      // 시작 자산은 파이어넘버가 아니라 "실제 달성 시점 자산"이어야 위 성장 차트와 이어진다
+      let c = assetAtRetire;
       const exp = monthlyWithdraw;
       let m = 0;
       // 100세까지만 시뮬레이션
@@ -304,6 +308,37 @@ export default function FireCalc() {
       depletionAge = m >= cap ? null : reachAge + m / 12;
       if (depletionAge !== null && depletionPath[depletionPath.length - 1].asset > 0) {
         depletionPath.push({ age: depletionAge, asset: 0 });
+      }
+    }
+
+    // ── 은퇴 기간 대비 인출률 적정성 진단 ──
+    // 4% 룰은 "30년 은퇴"를 전제로 만들어진 규칙이라, 조기 은퇴로 버텨야 할 기간이 길어지면
+    // 같은 4%라도 자산이 먼저 바닥날 수 있다. 100세까지 버티는 데 필요한 인출률을 역산한다.
+    let safeWithdrawRate: number | null = null;
+    let retirementYears: number | null = null;
+    if (reachAge !== null && assetAtRetire > 0) {
+      retirementYears = Math.max(0, 100 - reachAge);
+      const totalMonths = Math.round(retirementYears * 12);
+      if (totalMonths > 0) {
+        // 자산이 정확히 100세에 0이 되는 월 인출액을 이분탐색으로 찾는다
+        let lo = 0,
+          hi = assetAtRetire;
+        for (let it = 0; it < 60; it++) {
+          const mid = (lo + hi) / 2;
+          let c = assetAtRetire;
+          let survived = true;
+          for (let m = 0; m < totalMonths; m++) {
+            c = c * (1 + mRet) - mid;
+            if (c < 0) {
+              survived = false;
+              break;
+            }
+          }
+          if (survived) lo = mid;
+          else hi = mid;
+        }
+        // 월 인출액 → 연 인출률(달성 시점 자산 대비)
+        safeWithdrawRate = ((lo * 12) / assetAtRetire) * 100;
       }
     }
 
@@ -324,6 +359,9 @@ export default function FireCalc() {
       path,
       realAnnualReturn,
       mRet,
+      assetAtRetire,
+      safeWithdrawRate,
+      retirementYears,
     };
   }, [age, retireAge, asset, monthlySave, monthlyExpense, returnRate, inflation, withdrawRate, sideIncome, pension, growSavings]);
 
@@ -338,7 +376,7 @@ export default function FireCalc() {
     const monthlyMean = r.mRet;
     const monthlySd = ANNUAL_VOL / Math.sqrt(12);
     const months = HORIZON_YEARS * 12;
-    const startCapital = r.fireNumber;
+    const startCapital = r.assetAtRetire;
     const monthlyWithdraw = r.monthlyWithdraw;
 
     const randNormal = () => {
@@ -377,7 +415,7 @@ export default function FireCalc() {
       vol: ANNUAL_VOL,
       realReturn: r.realAnnualReturn * 100,
     };
-  }, [r.reachAge, r.fireNumber, r.monthlyWithdraw, r.mRet, r.realAnnualReturn]);
+  }, [r.reachAge, r.assetAtRetire, r.monthlyWithdraw, r.mRet, r.realAnnualReturn]);
 
   const scenarios = useMemo(() => {
     return [5, 7, 9].map((rate) => {
@@ -387,10 +425,19 @@ export default function FireCalc() {
       const realAnnual = (1 + rate / 100) / (1 + inflation / 100) - 1;
       const mRet = Math.pow(1 + realAnnual, 1 / 12) - 1;
       const saveDecay = growSavings ? 1 : Math.pow(1 / (1 + inflation / 100), 1 / 12);
-      let cur = asset * 10000,
+      const startAsset = asset * 10000;
+      const max = Math.max(0, Math.round((100 - age) * 12));
+      // 이미 달성한 경우 (본 계산의 already와 동일 처리)
+      if (startAsset >= fireNum) {
+        return {
+          rate,
+          label: rate === 5 ? "보수적" : rate === 7 ? "기본" : "공격적",
+          reachAge: age,
+        };
+      }
+      let cur = startAsset,
         curSave = monthlySave * 10000,
         months = 0;
-      const max = Math.max(0, Math.round((100 - age) * 12));
       while (cur < fireNum && months < max) {
         cur = cur * (1 + mRet) + curSave;
         curSave = curSave * saveDecay;
@@ -399,7 +446,7 @@ export default function FireCalc() {
       return {
         rate,
         label: rate === 5 ? "보수적" : rate === 7 ? "기본" : "공격적",
-        reachAge: months < max ? age + Math.floor(months / 12) : null,
+        reachAge: cur >= fireNum && months < max ? age + Math.floor(months / 12) : null,
       };
     });
   }, [age, asset, monthlySave, monthlyExpense, inflation, withdrawRate, sideIncome, pension, growSavings]);
@@ -631,6 +678,21 @@ export default function FireCalc() {
         {/* 한줄 요약 */}
         <div className="rounded-xl bg-[#2E4494] px-5 py-4 text-sm leading-relaxed text-white">{summary}</div>
 
+        {/* 순 생활비 0 경고 */}
+        {r.netMonthly === 0 && (
+          <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm leading-relaxed text-amber-800">
+            <p className="font-semibold">확인이 필요합니다</p>
+            <p className="mt-1">
+              은퇴 후 필요한 순 생활비가 0원으로 계산됐습니다
+              {sideIncome + pension > 0
+                ? " (부수입·연금이 월 생활비 이상으로 입력됨)"
+                : " (월 생활비가 0으로 입력됨)"}
+              . 이 경우 필요한 목표 자산도 0원이 되어 무조건 "달성 완료"로 표시됩니다. 실제 은퇴 후 지출을
+              다시 확인해 입력해주세요.
+            </p>
+          </div>
+        )}
+
         {/* 결과 카드 */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <Card
@@ -646,15 +708,27 @@ export default function FireCalc() {
           />
           <Card
             label="부족 금액"
-            value={r.shortfall && r.shortfall > 0 ? eokFull(r.shortfall) : "없음"}
-            sub={`${retireAge}세 기준 부족분`}
+            value={
+              retireAge <= age
+                ? "계산 불가"
+                : r.shortfall && r.shortfall > 0
+                  ? eokFull(r.shortfall)
+                  : "없음"
+            }
+            sub={retireAge <= age ? "목표 은퇴나이가 현재 나이 이하" : `${retireAge}세 기준 부족분`}
           />
           <Card
             label="추가 필요 월 투자금"
-            value={r.extraSave ? Math.round(r.extraSave / 10000).toLocaleString("ko-KR") + "만원" : "불필요"}
-            sub="목표 시점에 맞추려면 추가 적립"
+            value={
+              retireAge <= age
+                ? "계산 불가"
+                : r.extraSave
+                  ? Math.round(r.extraSave / 10000).toLocaleString("ko-KR") + "만원"
+                  : "불필요"
+            }
+            sub={retireAge <= age ? "목표 은퇴나이를 현재보다 뒤로 설정하세요" : "목표 시점에 맞추려면 추가 적립"}
           />
-          <Card label="은퇴 후 월 인출액" value={won(r.monthlyWithdraw)} sub="목표 자산 기준 월 인출 가능액" />
+          <Card label="은퇴 후 월 인출액" value={won(r.monthlyWithdraw)} sub="입력한 순 생활비 (오늘 가치 기준)" />
           <Card
             label="자산 소진 나이"
             value={r.depletionAge === null ? "100세+" : `${Math.round(r.depletionAge)}세`}
@@ -668,6 +742,49 @@ export default function FireCalc() {
 
         {/* 재정 수명 차트 */}
         <DepletionChart path={r.depletionPath} depletionAge={r.depletionAge} />
+
+        {/* 인출률 적정성 경고 */}
+        {r.safeWithdrawRate !== null && r.retirementYears !== null && r.depletionAge !== null && (
+          <div className="rounded-xl border border-rose-200 bg-rose-50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-rose-700">인출률 점검 필요</p>
+            <p className="mt-1 text-lg font-bold text-rose-700">
+              지금 인출률({withdrawRate}%)로는 {Math.round(r.depletionAge)}세에 자산이 바닥납니다
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-[#5B6478]">
+              {Math.round(r.reachAge ?? 0)}세에 은퇴하면 100세까지{" "}
+              <strong>{Math.round(r.retirementYears)}년</strong>을 버텨야 합니다. 흔히 쓰는 4% 룰은 은퇴 기간을{" "}
+              <strong>30년</strong>으로 가정하고 만들어진 규칙이라, 조기 은퇴로 기간이 길어지면 그대로 적용하기
+              어렵습니다.
+            </p>
+            <div className="mt-3 rounded-lg border border-rose-200 bg-white p-3 text-sm">
+              <p className="font-semibold text-[#1B2A4A]">이렇게 조정해보세요</p>
+              <ul className="mt-1.5 space-y-1 text-[#5B6478]">
+                <li>
+                  · 안전인출률을{" "}
+                  <strong className="text-rose-700">{r.safeWithdrawRate.toFixed(1)}% 이하</strong>로 낮추기 (100세까지
+                  버티는 수준)
+                </li>
+                <li>· 은퇴 나이를 늦춰 버텨야 할 기간을 줄이기</li>
+                <li>· 월 생활비를 줄이거나 은퇴 후에도 부수입·연금을 확보하기</li>
+              </ul>
+            </div>
+          </div>
+        )}
+
+        {r.safeWithdrawRate !== null && r.retirementYears !== null && r.depletionAge === null && (
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">인출률 점검 완료</p>
+            <p className="mt-1 text-lg font-bold text-emerald-700">
+              지금 인출률({withdrawRate}%)로 100세까지 자산이 유지됩니다
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-[#5B6478]">
+              {Math.round(r.reachAge ?? 0)}세 은퇴 기준 <strong>{Math.round(r.retirementYears)}년</strong>을 버텨야
+              하는데, 이 기간을 채우는 데 필요한 인출률 한계는{" "}
+              <strong className="text-emerald-700">{r.safeWithdrawRate.toFixed(1)}%</strong>입니다. 현재 설정이 이보다
+              낮아 여유가 있습니다.
+            </p>
+          </div>
+        )}
 
         {/* 몬테카를로 시뮬레이션 */}
         {monteCarlo ? (
