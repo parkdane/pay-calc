@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-21T21:00:29.136Z",
+  "updatedAt": "2026-07-22T21:00:28.880Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
     {
@@ -37,36 +37,6 @@
       "product": "비대면 정기예금",
       "baseRate": 4.35,
       "maxRate": 4.35,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "유안타저축은행",
-      "product": "회전정기예금 (변동금리)",
-      "baseRate": 4.31,
-      "maxRate": 4.31,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "없음"
-    },
-    {
-      "bank": "유안타저축은행",
-      "product": "e-회전정기예금 (변동금리)",
-      "baseRate": 4.31,
-      "maxRate": 4.31,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "유안타저축은행",
-      "product": "SB톡톡 회전정기예금 (비대면)",
-      "baseRate": 4.31,
-      "maxRate": 4.31,
       "term": 12,
       "group": "저축은행",
       "joinWay": "스마트폰",
@@ -113,66 +83,6 @@
       "note": "없음"
     },
     {
-      "bank": "스카이저축은행",
-      "product": "회전정기예금",
-      "baseRate": 4.1,
-      "maxRate": 4.3,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "영업점 내방 12개월 신규 또는 재예치 시 + 0.2%"
-    },
-    {
-      "bank": "민국저축은행",
-      "product": "정기예금",
-      "baseRate": 4.2,
-      "maxRate": 4.3,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "* 최대우대금리 : 0.1%\n- 창구에서 1년이상 재예치 하는 경우 + 0.1%p"
-    },
-    {
-      "bank": "키움예스저축은행",
-      "product": "e-정기예금(인터넷뱅킹, 스마트뱅킹)",
-      "baseRate": 4.1,
-      "maxRate": 4.3,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "-"
-    },
-    {
-      "bank": "유안타저축은행",
-      "product": "정기예금",
-      "baseRate": 4.26,
-      "maxRate": 4.26,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "없음"
-    },
-    {
-      "bank": "유안타저축은행",
-      "product": "e-정기예금",
-      "baseRate": 4.26,
-      "maxRate": 4.26,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "유안타저축은행",
-      "product": "SB톡톡 정기예금 (비대면)",
-      "baseRate": 4.26,
-      "maxRate": 4.26,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
       "bank": "HB저축은행",
       "product": "스마트회전정기예금",
       "baseRate": 4.23,
@@ -197,6 +107,96 @@
       "product": "정기예금(부산)",
       "baseRate": 4.22,
       "maxRate": 4.22,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "없음"
+    },
+    {
+      "bank": "애큐온저축은행",
+      "product": "처음만난예금(모바일전용)",
+      "baseRate": 4.1,
+      "maxRate": 4.2,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "최고우대금리 : 0.4%\n- 당행 정기예금 첫거래 고객 우대 : 0.3%\n(고시금리 포함)\n- 개인(신용)정보 마케팅(SMS)동의 유지 : 0.1%\n(고시금리 미포함)"
+    },
+    {
+      "bank": "스카이저축은행",
+      "product": "회전정기예금",
+      "baseRate": 4,
+      "maxRate": 4.2,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "영업점 내방 12개월 신규 또는 재예치 시 + 0.2%"
+    },
+    {
+      "bank": "HB저축은행",
+      "product": "정기예금",
+      "baseRate": 4.2,
+      "maxRate": 4.2,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "해당사항없음"
+    },
+    {
+      "bank": "HB저축은행",
+      "product": "e-정기예금",
+      "baseRate": 4.2,
+      "maxRate": 4.2,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷",
+      "note": "해당사항없음"
+    },
+    {
+      "bank": "HB저축은행",
+      "product": "스마트정기예금",
+      "baseRate": 4.2,
+      "maxRate": 4.2,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "해당사항없음"
+    },
+    {
+      "bank": "키움예스저축은행",
+      "product": "e-정기예금(인터넷뱅킹, 스마트뱅킹)",
+      "baseRate": 4,
+      "maxRate": 4.2,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷,스마트폰",
+      "note": "-"
+    },
+    {
+      "bank": "더케이저축은행",
+      "product": "e-정기예금",
+      "baseRate": 4.2,
+      "maxRate": 4.2,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷,스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "더케이저축은행",
+      "product": "e-회전식정기예금(1년단위 변동금리상품)",
+      "baseRate": 4.2,
+      "maxRate": 4.2,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷,스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "조은저축은행",
+      "product": "정기예금(서울본점)",
+      "baseRate": 4.2,
+      "maxRate": 4.2,
       "term": 12,
       "group": "저축은행",
       "joinWay": "영업점",
