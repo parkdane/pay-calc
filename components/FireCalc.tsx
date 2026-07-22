@@ -78,6 +78,7 @@ export default function FireCalc() {
   const [sideIncome, setSideIncome] = useState(0);
   const [pension, setPension] = useState(0);
   const [growSavings, setGrowSavings] = useState(false);
+  const [advanced, setAdvanced] = useState(false);
 
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -102,6 +103,8 @@ export default function FireCalc() {
     num("pension", setPension);
     const g = p.get("growSavings");
     if (g !== null) setGrowSavings(g === "1");
+    const adv = p.get("advanced");
+    if (adv !== null) setAdvanced(adv === "1");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -118,6 +121,7 @@ export default function FireCalc() {
       sideIncome: String(sideIncome),
       pension: String(pension),
       growSavings: growSavings ? "1" : "0",
+      advanced: advanced ? "1" : "0",
     });
     return `${window.location.origin}${window.location.pathname}?${p.toString()}`;
   };
@@ -175,27 +179,32 @@ export default function FireCalc() {
     const netMonthly = Math.max(0, monthlyExpense - sideIncome - pension);
     const annualExpense = netMonthly * 10000 * 12;
     const fireNumber = annualExpense / (withdrawRate / 100);
-    const mRet = returnRate / 100 / 12;
+
+    // ── 실질(오늘 화폐가치) 기준 시뮬레이션 ──
+    // 명목수익률에서 물가상승률을 제거한 "실질수익률"로 자산을 굴린다.
+    // 이러면 목표 자산도, 월 인출액도 물가에 따라 부풀릴 필요 없이 오늘 금액 그대로 쓸 수 있어
+    // 화면에 나오는 모든 금액의 기준 시점이 "오늘"로 통일된다.
+    const realAnnualReturn = (1 + returnRate / 100) / (1 + inflation / 100) - 1;
+    const mRet = Math.pow(1 + realAnnualReturn, 1 / 12) - 1;
     const save = monthlySave * 10000;
-    const targetGrowth = Math.pow(1 + inflation / 100, 1 / 12);
+    // 월 투자금을 물가에 연동하면, 실질 기준에서는 저축액이 그대로 유지되는 것과 같다.
+    // 연동하지 않으면 실질 가치가 매년 물가만큼 깎이므로 그 감소를 반영한다.
+    const saveDecay = growSavings ? 1 : Math.pow(1 / (1 + inflation / 100), 1 / 12);
 
     const startAsset = asset * 10000;
     const already = startAsset >= fireNumber;
     // 100세까지만 시뮬레이션 (그 이후는 의미 없음)
     const maxMonths = Math.max(0, Math.round((100 - age) * 12));
 
-    // 1) 달성 시점 계산 (통계용) — 자산은 입력한 수익률 그대로 복리 성장, 목표 자산은
-    //    물가상승률만큼 매년 커진다 (미래 시점의 실제 원화 금액 기준 시뮬레이션)
-    //    growSavings가 켜져 있으면 월 투자금도 물가상승률만큼 매년 같이 인상된다고 가정
+    // 1) 달성 시점 계산 — 목표 자산(fireNumber)은 오늘 가치로 고정, 자산은 실질수익률로 성장
     let cur = startAsset;
-    let target = fireNumber;
+    const target = fireNumber;
     let curSave = save;
     let months = 0;
     if (!already) {
       while (cur < target && months < maxMonths) {
         cur = cur * (1 + mRet) + curSave;
-        target = target * targetGrowth;
-        if (growSavings) curSave = curSave * targetGrowth;
+        curSave = curSave * saveDecay;
         months++;
       }
     }
@@ -204,21 +213,20 @@ export default function FireCalc() {
     const reachMonths = already ? 0 : reached ? months : null;
 
     // 2) 차트용 경로: 달성 시점(또는 100세 한도) 이후 10년을 더 이어서 추세를 보여줌
+    //    실질 기준이므로 목표선(target)은 수평으로 고정된다
     const path: { age: number; asset: number; target: number }[] = [
       { age, asset: startAsset, target: fireNumber },
     ];
     {
       let c = startAsset,
-        t = fireNumber,
         cs = save,
         m = 0;
       const cap = reached ? Math.min(months + 12 * 10, maxMonths) : maxMonths;
       while (m < cap) {
         c = c * (1 + mRet) + cs;
-        t = t * targetGrowth;
-        if (growSavings) cs = cs * targetGrowth;
+        cs = cs * saveDecay;
         m++;
-        if (m % 12 === 0) path.push({ age: age + m / 12, asset: c, target: t });
+        if (m % 12 === 0) path.push({ age: age + m / 12, asset: c, target: fireNumber });
       }
     }
 
@@ -227,33 +235,34 @@ export default function FireCalc() {
     let shortfall: number | null = null;
     if (retireAge > age) {
       const tM = (retireAge - age) * 12;
-      let tgt = fireNumber;
-      for (let m = 0; m < tM; m++) tgt = tgt * targetGrowth;
       let projected = startAsset;
       let projSave = save;
       for (let m = 0; m < tM; m++) {
         projected = projected * (1 + mRet) + projSave;
-        if (growSavings) projSave = projSave * targetGrowth;
+        projSave = projSave * saveDecay;
       }
-      shortfall = Math.max(0, tgt - projected);
+      shortfall = Math.max(0, fireNumber - projected);
 
       let lo = 0,
         hi = 50000000;
       for (let it = 0; it < 40; it++) {
         const mid = (lo + hi) / 2;
-        let c = startAsset,
-          t = fireNumber;
+        let c = startAsset;
+        let s = mid;
         for (let m = 0; m < tM; m++) {
-          c = c * (1 + mRet) + mid;
-          t = t * targetGrowth;
+          c = c * (1 + mRet) + s;
+          s = s * saveDecay;
         }
-        if (c >= t) hi = mid;
+        if (c >= fireNumber) hi = mid;
         else lo = mid;
       }
       extraSave = Math.max(0, hi - save);
     }
 
-    const monthlyWithdraw = (fireNumber * (withdrawRate / 100)) / 12;
+    // 은퇴 후 월 인출액 = 실제로 필요한 생활비 (오늘 가치 기준)
+    // 파이어넘버 × 인출률 ÷ 12 와 수학적으로 동일하지만, 생활비를 직접 쓰는 쪽이
+    // "내가 입력한 값"과 화면 표시가 어긋나지 않아 명확하다
+    const monthlyWithdraw = netMonthly * 10000;
 
     let fireType = "Regular FIRE";
     let fireTypeDesc = "일반적인 생활비 기준의 표준 시나리오입니다.";
@@ -266,11 +275,13 @@ export default function FireCalc() {
     }
 
     // 자산 소진 나이 + 연도별 경로 (재정 수명 차트용)
+    // 실질 기준이므로 인출액은 오늘 금액 그대로 유지하고, 자산은 실질수익률로 굴린다
     let depletionAge: number | null = null;
     const depletionPath: { age: number; asset: number }[] = [];
-    if (reachAge !== null) {
+    // 인출할 금액이 없으면(부수입·연금만으로 생활비가 충당되면) 자산은 줄어들지 않는다
+    if (reachAge !== null && monthlyWithdraw > 0) {
       let c = fireNumber;
-      const exp = netMonthly * 10000;
+      const exp = monthlyWithdraw;
       let m = 0;
       // 100세까지만 시뮬레이션
       const cap = Math.max(0, Math.round((100 - reachAge) * 12));
@@ -301,21 +312,24 @@ export default function FireCalc() {
       annualExpense,
       netMonthly,
       path,
+      realAnnualReturn,
+      mRet,
     };
   }, [age, retireAge, asset, monthlySave, monthlyExpense, returnRate, inflation, withdrawRate, sideIncome, pension, growSavings]);
 
   // 몬테카를로 시뮬레이션: 매달 수익률을 고정값이 아니라 변동성 있는 랜덤값으로 뽑아
   // 은퇴 후 30년 동안 자산이 몇 %의 확률로 안 바닥나는지 계산한다
+  // (본 계산과 동일하게 실질 기준 — 평균 수익률은 실질수익률을 쓴다)
   const monteCarlo = useMemo(() => {
     if (r.reachAge === null) return null;
     const TRIALS = 500;
     const HORIZON_YEARS = 30;
     const ANNUAL_VOL = 0.15; // 주식 비중 높은 포트폴리오 기준 연 변동성 가정(단순화)
-    const monthlyMean = returnRate / 100 / 12;
+    const monthlyMean = r.mRet;
     const monthlySd = ANNUAL_VOL / Math.sqrt(12);
     const months = HORIZON_YEARS * 12;
     const startCapital = r.fireNumber;
-    const monthlyWithdraw = r.netMonthly * 10000;
+    const monthlyWithdraw = r.monthlyWithdraw;
 
     const randNormal = () => {
       let u = 0,
@@ -351,24 +365,25 @@ export default function FireCalc() {
       horizonYears: HORIZON_YEARS,
       medianFinalBalance: median,
       vol: ANNUAL_VOL,
+      realReturn: r.realAnnualReturn * 100,
     };
-  }, [r.reachAge, r.fireNumber, r.netMonthly, returnRate]);
+  }, [r.reachAge, r.fireNumber, r.monthlyWithdraw, r.mRet, r.realAnnualReturn]);
 
   const scenarios = useMemo(() => {
     return [5, 7, 9].map((rate) => {
       const netMonthly = Math.max(0, monthlyExpense - sideIncome - pension);
       const fireNum = (netMonthly * 10000 * 12) / (withdrawRate / 100);
-      const mRet = rate / 100 / 12;
-      const tg = Math.pow(1 + inflation / 100, 1 / 12);
+      // 본 계산과 동일한 실질 기준
+      const realAnnual = (1 + rate / 100) / (1 + inflation / 100) - 1;
+      const mRet = Math.pow(1 + realAnnual, 1 / 12) - 1;
+      const saveDecay = growSavings ? 1 : Math.pow(1 / (1 + inflation / 100), 1 / 12);
       let cur = asset * 10000,
-        target = fireNum,
         curSave = monthlySave * 10000,
         months = 0;
       const max = Math.max(0, Math.round((100 - age) * 12));
-      while (cur < target && months < max) {
+      while (cur < fireNum && months < max) {
         cur = cur * (1 + mRet) + curSave;
-        target = target * tg;
-        if (growSavings) curSave = curSave * tg;
+        curSave = curSave * saveDecay;
         months++;
       }
       return {
@@ -496,9 +511,30 @@ export default function FireCalc() {
             <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">가정 옵션</p>
             <p className="mt-0.5 text-base font-bold text-[#1B2A4A]">수익률과 인출률 조정</p>
             <p className="mt-0.5 text-xs text-[#8B93A6]">
-              현실적인 범위(연 5~12%)에서 보수적·공격적 시나리오를 함께 비교하세요.
+              기본형은 가장 널리 쓰이는 표준값(물가 2.5%, 인출률 4%)을 그대로 사용합니다.
             </p>
           </div>
+
+          {/* 모드 전환 */}
+          <div className="grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1">
+            {(
+              [
+                { id: false, label: "기본형" },
+                { id: true, label: "상세 설정" },
+              ] as const
+            ).map((m) => (
+              <button
+                key={String(m.id)}
+                onClick={() => setAdvanced(m.id)}
+                className={`rounded-lg py-2 text-sm font-semibold transition ${
+                  advanced === m.id ? "bg-white text-[#2E4494] shadow-sm" : "text-[#7A8296]"
+                }`}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+
           <div>
             <Slider label="기대 연수익률" value={returnRate} onChange={setReturnRate} min={1} max={15} step={0.5} />
             <div className="mt-2 flex flex-wrap gap-1.5">
@@ -516,26 +552,48 @@ export default function FireCalc() {
               <p className="mt-2 text-xs text-amber-600">⚠ 15% 초과는 대가들도 어려운 수준입니다. 참고용으로만.</p>
             )}
           </div>
-          <Slider label="물가상승률" value={inflation} onChange={setInflation} min={0} max={6} step={0.1} />
-          <label className="flex items-start gap-2 text-sm text-[#5B6478]">
-            <input
-              type="checkbox"
-              checked={growSavings}
-              onChange={(e) => setGrowSavings(e.target.checked)}
-              className="mt-0.5 h-4 w-4 rounded border-[rgba(46,68,148,0.22)]"
-            />
-            <span>
-              월 투자금도 물가상승률만큼 매년 인상
-              <span className="block text-xs font-normal text-[#8B93A6]">
-                승진·연봉 인상으로 저축 여력이 같이 늘어난다고 가정 (기본: 지금 금액 그대로 유지)
-              </span>
-            </span>
-          </label>
-          <Slider label="안전인출률" value={withdrawRate} onChange={setWithdrawRate} min={2.5} max={5} step={0.5} />
-          <div className="grid grid-cols-2 gap-4 border-t border-[rgba(46,68,148,0.14)] pt-4">
-            <Field label="월 부수입" value={sideIncome} onChange={setSideIncome} suffix="만원" />
-            <Field label="월 연금 예상액" value={pension} onChange={setPension} suffix="만원" />
-          </div>
+
+          {advanced ? (
+            <>
+              <Slider label="물가상승률" value={inflation} onChange={setInflation} min={0} max={6} step={0.1} />
+              <label className="flex items-start gap-2 text-sm text-[#5B6478]">
+                <input
+                  type="checkbox"
+                  checked={growSavings}
+                  onChange={(e) => setGrowSavings(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 rounded border-[rgba(46,68,148,0.22)]"
+                />
+                <span>
+                  월 투자금도 물가상승률만큼 매년 인상
+                  <span className="block text-xs font-normal text-[#8B93A6]">
+                    승진·연봉 인상으로 저축 여력이 같이 늘어난다고 가정 (기본: 지금 금액 그대로 유지)
+                  </span>
+                </span>
+              </label>
+              <Slider label="안전인출률" value={withdrawRate} onChange={setWithdrawRate} min={2.5} max={5} step={0.5} />
+              <p className="text-xs leading-relaxed text-[#8B93A6]">
+                안전인출률은 은퇴 후 자산의 몇 %를 매년 꺼내 쓸지를 정하는 값입니다. 4%가 표준으로 쓰이며,
+                낮출수록 목표 자산이 커지는 대신 자산이 바닥날 위험이 줄어듭니다.
+              </p>
+              <div className="grid grid-cols-2 gap-4 border-t border-[rgba(46,68,148,0.14)] pt-4">
+                <Field label="월 부수입" value={sideIncome} onChange={setSideIncome} suffix="만원" />
+                <Field label="월 연금 예상액" value={pension} onChange={setPension} suffix="만원" />
+              </div>
+            </>
+          ) : (
+            <div className="rounded-lg border border-[rgba(46,68,148,0.14)] bg-white p-3 text-xs leading-relaxed text-[#7A8296]">
+              <p className="font-semibold text-[#5B6478]">기본형에서 적용 중인 값</p>
+              <div className="mt-1.5 space-y-1">
+                <p>· 물가상승률 {inflation}% (한국은행 목표치 수준)</p>
+                <p>· 안전인출률 {withdrawRate}% (가장 널리 쓰이는 표준)</p>
+                <p>· 월 부수입·연금 미반영</p>
+              </div>
+              <p className="mt-2">
+                실질수익률 <strong className="text-[#5B6478]">연 {(r.realAnnualReturn * 100).toFixed(1)}%</strong>로
+                계산됩니다. 이 값들을 직접 바꾸려면 "상세 설정"을 선택하세요.
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -616,7 +674,8 @@ export default function FireCalc() {
                 <p className={`text-xs font-semibold uppercase tracking-wide ${COLOR.text}`}>몬테카를로 시뮬레이션</p>
                 <p className={`mt-1 text-2xl font-bold ${COLOR.text}`}>성공 확률 {monteCarlo.successRate.toFixed(0)}%</p>
                 <p className="mt-1 text-sm leading-relaxed text-[#5B6478]">
-                  은퇴 후 {monteCarlo.horizonYears}년 동안 매년 수익률이 평균 {returnRate}%를 중심으로 표준편차{" "}
+                  은퇴 후 {monteCarlo.horizonYears}년 동안 매년 실질수익률이 평균{" "}
+                  {monteCarlo.realReturn.toFixed(1)}%를 중심으로 표준편차{" "}
                   {(monteCarlo.vol * 100).toFixed(0)}%p만큼 무작위로 변동한다고 가정하고 {monteCarlo.trials}번
                   반복 시뮬레이션했습니다. {monteCarlo.trials}번 중 <strong>{successCount}번</strong>은{" "}
                   {monteCarlo.horizonYears}년 내내 자산이 유지됐습니다.
@@ -639,13 +698,17 @@ export default function FireCalc() {
         <div className="space-y-1.5 rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 text-xs leading-relaxed text-[#7A8296]">
           <p className="font-semibold text-[#5B6478]">이 차트는 이렇게 계산됩니다</p>
           <p>
-            자산(파랑 선)은 입력한 기대수익률 그대로 매달 복리로 불어나고, 목표 자산(주황 선)은 물가상승률만큼
-            매년 커집니다. 즉 오늘 화폐가치가 아니라, 실제 미래 시점에 필요한 원화 금액 기준의 시뮬레이션입니다.
+            화면의 모든 금액은 <strong className="text-[#5B6478]">오늘 화폐가치 기준</strong>입니다. 물가상승은
+            수익률에서 차감하는 방식(실질수익률 = 기대수익률 {returnRate}% − 물가 {inflation}% ≈{" "}
+            <strong className="text-[#5B6478]">연 {(r.realAnnualReturn * 100).toFixed(1)}%</strong>)으로
+            반영했습니다. 그래서 목표 자산(주황 선)은 수평으로 고정되고, 은퇴 후 인출액도 지금 입력한 생활비
+            그대로 유지됩니다 — 30년 뒤의 부풀려진 금액이 아니라 지금 감각으로 바로 이해할 수 있는 숫자입니다.
           </p>
           <p>
-            월 투자금은 기본적으로 지금 입력한 금액 그대로 계속 유지된다고 가정합니다. "월 투자금도 물가상승률만큼
-            매년 인상" 옵션을 켜면 승진·연봉 인상으로 저축 여력이 함께 늘어나는 경우까지 반영해 다시 계산합니다 —
-            같은 조건이라도 이 옵션 하나로 달성 시점이 꽤 앞당겨질 수 있습니다.
+            월 투자금은 기본적으로 매년 물가만큼 실질 가치가 줄어든다고 봅니다(같은 50만 원이라도 시간이
+            지날수록 구매력이 떨어지므로). "월 투자금도 물가상승률만큼 매년 인상" 옵션을 켜면 승진·연봉
+            인상으로 저축액을 매년 물가만큼 올린다고 가정해, 실질 저축액이 그대로 유지됩니다 — 같은 조건이라도
+            이 옵션 하나로 달성 시점이 꽤 앞당겨집니다.
           </p>
         </div>
 
@@ -733,9 +796,8 @@ export default function FireCalc() {
         </p>
       </section>
       <p className="text-xs leading-relaxed text-[#8B93A6]">
-        ※ 입력한 수익률을 매년 그대로 적용하고, 목표 자산은 물가상승률만큼 매년 커진다고 가정한 추정치입니다.
-        실제 수익률은 매년 변동하며 세금·건강보험료는 반영하지 않았습니다. 보수적 수익률(5~7%)로 함께
-        비교하는 것이 안전합니다.
+        ※ 물가상승을 수익률에서 차감한 실질 기준(오늘 화폐가치) 추정치입니다. 실제 수익률은 매년 변동하며
+        세금·건강보험료는 반영하지 않았습니다. 보수적 수익률(5~7%)로 함께 비교하는 것이 안전합니다.
       </p>
     </div>
   </div>
@@ -790,7 +852,7 @@ function GrowthChart({
       <p className="mb-1 text-sm font-semibold text-[#1B2A4A]">자산 성장 시뮬레이션</p>
       <p className="mb-3 text-xs text-[#8B93A6]">
         <span className="text-[#2E4494]">■</span> 내 예상 자산 &nbsp;
-        <span className="text-amber-500">■</span> 필요 목표 자산(물가상승률만큼 매년 증가) · 점에 마우스를 올려보세요
+        <span className="text-amber-500">■</span> 필요 목표 자산 · 모두 오늘 화폐가치 기준 · 점에 마우스를 올려보세요
       </p>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="xMidYMid meet">
         {/* Y 그리드 + 라벨 */}
