@@ -181,8 +181,8 @@ export default function FireCalc() {
   const r = useMemo(() => {
     const netMonthly = Math.max(0, monthlyExpense - sideIncome - pension);
     const annualExpense = netMonthly * 10000 * 12;
-    // 사용자가 입력한 인출률 기준 목표 자산 (흔히 말하는 "4% 룰" 방식)
-    const fireNumber = annualExpense / (withdrawRate / 100);
+    // 흔히 말하는 "4% 룰" 기준 목표 자산 (참고 표시용 — 30년 은퇴를 전제로 한 근사값)
+    const ruleOfThumbNumber = annualExpense / (withdrawRate / 100);
 
     // ── 실질(오늘 화폐가치) 기준 시뮬레이션 ──
     // 명목수익률에서 물가상승률을 제거한 "실질수익률"로 자산을 굴린다.
@@ -196,7 +196,6 @@ export default function FireCalc() {
     const saveDecay = growSavings ? 1 : Math.pow(1 / (1 + inflation / 100), 1 / 12);
 
     const startAsset = asset * 10000;
-    const already = startAsset >= fireNumber;
     // 설정한 기대수명까지만 시뮬레이션
     const maxMonths = Math.max(0, Math.round((lifeExpectancy - age) * 12));
 
@@ -225,23 +224,28 @@ export default function FireCalc() {
       return hi;
     };
 
-    // 1) 달성 시점 계산 — 목표 자산(fireNumber)은 오늘 가치로 고정, 자산은 실질수익률로 성장
+    // 1) 달성 시점 계산 — 매달 "그 나이에 은퇴할 경우 필요한 자산"과 현재 자산을 비교한다.
+    //    늦게 은퇴할수록 써야 할 기간이 짧아 필요 자산이 줄어들기 때문에,
+    //    고정된 목표(4% 룰 근사값)를 쓰면 실제보다 은퇴 시점을 늦게 잡게 된다.
+    const already = startAsset >= requiredAssetFor(age);
     let cur = startAsset;
-    const target = fireNumber;
     let curSave = save;
     let months = 0;
     if (!already) {
-      while (cur < target && months < maxMonths) {
+      while (months < maxMonths) {
         cur = cur * (1 + mRet) + curSave;
         curSave = curSave * saveDecay;
         months++;
+        if (cur >= requiredAssetFor(age + months / 12)) break;
       }
     }
-    const reached = already || (cur >= target && months < maxMonths);
+    const reached = already || (months < maxMonths && cur >= requiredAssetFor(age + months / 12));
     const reachAge = already ? age : reached ? age + months / 12 : null;
     const reachMonths = already ? 0 : reached ? months : null;
-    // 달성 시점의 실제 자산 (목표를 살짝 초과 달성하므로 fireNumber와 다를 수 있다)
+    // 달성 시점의 실제 자산 (목표를 살짝 초과 달성하므로 목표치와 다를 수 있다)
     const assetAtRetire = already ? startAsset : cur;
+    // 화면에 표시할 목표 자산 = 실제 은퇴 시점 기준 필요 자산
+    const fireNumber = reachAge !== null ? requiredAssetFor(reachAge) : requiredAssetFor(retireAge > age ? retireAge : age);
 
     // 2) 차트용 경로: 달성 시점 이후 10년을 더 이어서 추세를 보여줌
     //    실질 기준이므로 목표선(target)은 수평으로 고정된다
@@ -396,6 +400,7 @@ export default function FireCalc() {
       safeWithdrawRate,
       retirementYears,
       requiredAtRetireAge,
+      ruleOfThumbNumber,
     };
   }, [age, retireAge, asset, monthlySave, monthlyExpense, returnRate, inflation, withdrawRate, sideIncome, pension, growSavings, lifeExpectancy]);
 
@@ -405,7 +410,7 @@ export default function FireCalc() {
   const monteCarlo = useMemo(() => {
     if (r.reachAge === null) return null;
     const TRIALS = 500;
-    const HORIZON_YEARS = 30;
+    const HORIZON_YEARS = Math.max(1, Math.round(r.retirementYears ?? 30));
     const ANNUAL_VOL = 0.15; // 주식 비중 높은 포트폴리오 기준 연 변동성 가정(단순화)
     const monthlyMean = r.mRet;
     const monthlySd = ANNUAL_VOL / Math.sqrt(12);
@@ -533,6 +538,12 @@ export default function FireCalc() {
               suffix="세"
               max={110}
             />
+            {lifeExpectancy <= age && (
+              <p className="mt-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                자금 사용 계획 나이가 현재 나이보다 낮거나 같습니다. 은퇴 후 쓸 기간이 없어 목표 자산이 0으로
+                계산됩니다. 현재 나이보다 높게 설정해주세요.
+              </p>
+            )}
             <div className="mt-2 flex flex-wrap gap-1.5">
               {[85, 90, 95, 100].map((v) => (
                 <button
@@ -691,10 +702,11 @@ export default function FireCalc() {
                   </span>
                 </span>
               </label>
-              <Slider label="안전인출률" value={withdrawRate} onChange={setWithdrawRate} min={2.5} max={5} step={0.5} />
+              <Slider label="안전인출률 (참고용)" value={withdrawRate} onChange={setWithdrawRate} min={2.5} max={5} step={0.5} />
               <p className="text-xs leading-relaxed text-[#8B93A6]">
-                안전인출률은 은퇴 후 자산의 몇 %를 매년 꺼내 쓸지를 정하는 값입니다. 4%가 표준으로 쓰이며,
-                낮출수록 목표 자산이 커지는 대신 자산이 바닥날 위험이 줄어듭니다.
+                이 계산기의 목표 자산은 인출률이 아니라 "자금 사용 계획 나이까지 실제로 버티는 금액"을 직접
+                역산해 정합니다. 여기서 정한 인출률은 결과 화면에서 흔히 쓰는 4% 룰과 비교해보는 참고값으로만
+                쓰입니다.
               </p>
               <div className="grid grid-cols-2 gap-4 border-t border-[rgba(46,68,148,0.14)] pt-4">
                 <Field label="월 부수입" value={sideIncome} onChange={setSideIncome} suffix="만원" />
@@ -763,7 +775,13 @@ export default function FireCalc() {
             highlight
             label="FIRE 목표 자산"
             value={eokFull(r.fireNumber)}
-            sub={`순 생활비 ${(r.netMonthly * 12).toLocaleString("ko-KR")}만원 / 인출률 ${withdrawRate.toFixed(1)}%`}
+            sub={
+              r.reachAge !== null
+                ? `${Math.round(r.reachAge)}세 은퇴 → ${lifeExpectancy}세까지 ${Math.round(
+                    lifeExpectancy - r.reachAge
+                  )}년 사용 기준`
+                : `순 생활비 월 ${r.netMonthly.toLocaleString("ko-KR")}만원 기준`
+            }
           />
           <Card
             label="예상 달성 시점"
@@ -807,46 +825,34 @@ export default function FireCalc() {
         {/* 재정 수명 차트 */}
         <DepletionChart path={r.depletionPath} depletionAge={r.depletionAge} lifeExpectancy={lifeExpectancy} />
 
-        {/* 인출률 적정성 경고 */}
-        {r.safeWithdrawRate !== null && r.retirementYears !== null && r.depletionAge !== null && (
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-5">
-            <p className="text-xs font-semibold uppercase tracking-wide text-rose-700">인출률 점검 필요</p>
-            <p className="mt-1 text-lg font-bold text-rose-700">
-              지금 인출률({withdrawRate}%)로는 {Math.round(r.depletionAge)}세에 자산이 바닥납니다
+        {/* 4% 룰 대비 안내 */}
+        {r.reachAge !== null && r.retirementYears !== null && (
+          <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.06)] p-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">목표 자산 계산 방식</p>
+            <p className="mt-1 text-lg font-bold text-[#1B2A4A]">
+              {Math.round(r.retirementYears)}년 사용 기준으로 {eokFull(r.fireNumber)}
             </p>
             <p className="mt-1 text-sm leading-relaxed text-[#5B6478]">
-              {Math.round(r.reachAge ?? 0)}세에 은퇴하면 {lifeExpectancy}세까지{" "}
-              <strong>{Math.round(r.retirementYears)}년</strong>을 버텨야 합니다. 흔히 쓰는 4% 룰은 은퇴 기간을{" "}
-              <strong>30년</strong>으로 가정하고 만들어진 규칙이라, 조기 은퇴로 기간이 길어지면 그대로 적용하기
-              어렵습니다.
+              흔히 쓰는 <strong>4% 룰</strong>(자산의 4%씩 인출)로 계산하면{" "}
+              <strong className="tabular-nums">{eokFull(r.ruleOfThumbNumber)}</strong>가 나옵니다. 하지만 4% 룰은
+              은퇴 기간을 <strong>30년</strong>으로 가정해 만든 규칙이라, {Math.round(r.reachAge)}세에 은퇴해
+              {lifeExpectancy}세까지 <strong>{Math.round(r.retirementYears)}년</strong>을 써야 하는 지금 상황과는
+              전제가 다릅니다.
             </p>
-            <div className="mt-3 rounded-lg border border-rose-200 bg-white p-3 text-sm">
-              <p className="font-semibold text-[#1B2A4A]">이렇게 조정해보세요</p>
-              <ul className="mt-1.5 space-y-1 text-[#5B6478]">
-                <li>
-                  · 안전인출률을{" "}
-                  <strong className="text-rose-700">{r.safeWithdrawRate.toFixed(1)}% 이하</strong>로 낮추기 ({lifeExpectancy}세까지
-                  버티는 수준)
-                </li>
-                <li>· 은퇴 나이를 늦춰 버텨야 할 기간을 줄이기</li>
-                <li>· 월 생활비를 줄이거나 은퇴 후에도 부수입·연금을 확보하기</li>
-              </ul>
-            </div>
-          </div>
-        )}
-
-        {r.safeWithdrawRate !== null && r.retirementYears !== null && r.depletionAge === null && (
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
-            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">인출률 점검 완료</p>
-            <p className="mt-1 text-lg font-bold text-emerald-700">
-              지금 인출률({withdrawRate}%)로 {lifeExpectancy}세까지 자산이 유지됩니다
+            <p className="mt-2 text-sm leading-relaxed text-[#5B6478]">
+              그래서 이 계산기는 4% 룰을 그대로 쓰지 않고,{" "}
+              <strong>실제 사용 기간 동안 자산이 정확히 버티는 금액</strong>을 직접 역산합니다.
+              {r.fireNumber > r.ruleOfThumbNumber
+                ? " 사용 기간이 30년보다 길어 4% 룰보다 더 많은 자산이 필요합니다."
+                : r.fireNumber < r.ruleOfThumbNumber
+                  ? " 사용 기간이 30년보다 짧아 4% 룰보다 적은 자산으로도 충분합니다."
+                  : ""}
             </p>
-            <p className="mt-1 text-sm leading-relaxed text-[#5B6478]">
-              {Math.round(r.reachAge ?? 0)}세 은퇴 기준 <strong>{Math.round(r.retirementYears)}년</strong>을 버텨야
-              하는데, 이 기간을 채우는 데 필요한 인출률 한계는{" "}
-              <strong className="text-emerald-700">{r.safeWithdrawRate.toFixed(1)}%</strong>입니다. 현재 설정이 이보다
-              낮아 여유가 있습니다.
-            </p>
+            {r.safeWithdrawRate !== null && (
+              <p className="mt-2 text-xs text-[#8B93A6]">
+                이 목표 자산은 연 {r.safeWithdrawRate.toFixed(1)}% 인출에 해당합니다.
+              </p>
+            )}
           </div>
         )}
 
