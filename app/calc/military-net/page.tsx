@@ -6,11 +6,10 @@ import FaqJsonLd from "@/components/FaqJsonLd";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "군인 간부 실수령액 계산기 (2026년 기준)",
+  title: "군인 월급 실수령액 계산기 (2026 봉급표 기준 세후 계산)",
   description:
-    "계급·호봉과 수당을 입력하면 군인연금·건강보험·소득세를 공제한 2026년 직업군인(부사관·장교) 세후 월급을 계산합니다.",
+    "2026년 군인 봉급표 기준 계급·호봉과 수당을 입력하면 군인연금·건강보험·소득세를 공제한 부사관·장교 세후 월급을 계산합니다.",
 };
-
 const FAQ = [
   {
     q: "병사 실수령액도 계산되나요?",
@@ -25,7 +24,6 @@ const FAQ = [
     a: "군인연금 기여율은 기준소득월액의 7%로, 공무원연금(9%)과 다릅니다. 이 계산기는 기본급을 기준으로 근사 계산합니다.",
   },
 ];
-
 export default function Page() {
   return (
     <article className="space-y-8">
@@ -38,11 +36,9 @@ export default function Page() {
           계산합니다.
         </p>
       </header>
-
       <div className="mx-[calc(50%-50vw)] w-screen">
         <MilitaryNetCalc />
       </div>
-
       <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
         <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
@@ -59,10 +55,8 @@ export default function Page() {
           를 기준으로 합니다.
         </p>
       </section>
-
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />
-
       <AdSlot id="calc-military-net-bottom" />
     </article>
   );

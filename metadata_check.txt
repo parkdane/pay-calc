@@ -1,0 +1,16 @@
+app\calc\business-breakeven\page.tsx
+app\calc\civil-net\page.tsx
+app\calc\deposit\page.tsx
+app\calc\fire\page.tsx
+app\calc\household-income\page.tsx
+app\calc\income-rank\page.tsx
+app\calc\leap-save\page.tsx
+app\calc\military-net\page.tsx
+app\calc\naeil-save\page.tsx
+app\calc\page.tsx
+app\calc\salary-compare\page.tsx
+app\calc\savings-goal\page.tsx
+app\calc\soldier-save\page.tsx
+app\calc\worker-net\page.tsx
+app\calc\youth-compare\page.tsx
+app\calc\youth-save\page.tsx
