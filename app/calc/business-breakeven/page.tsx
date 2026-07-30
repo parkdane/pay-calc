@@ -2,13 +2,11 @@ import type { Metadata } from "next";
 import BusinessBreakEvenCalc from "@/components/BusinessBreakEvenCalc";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
-
 export const metadata: Metadata = {
-  title: "자영업 손익분기·투자금 회수 계산기",
+  title: "자영업자 매출 실수령액 · 손익분기점 계산기",
   description:
-    "일매출·월매출, 원가율, 월세·인건비 등 고정비, 창업 초기 투자금을 입력하면 손익분기 매출과 투자금 회수 기간을 계산합니다.",
+    "일매출·월매출, 원가율, 월세·인건비 등 고정비를 입력하면 매출 구간별 실수령액(순수익)과 손익분기 매출, 창업 초기 투자금 회수 기간을 계산합니다.",
 };
-
 const FAQ = [
   {
     q: "보증금은 왜 고정비가 아니라 초기 투자금인가요?",
@@ -23,7 +21,6 @@ const FAQ = [
     a: "고정비를 마진율로 나눈 값으로, 이 매출을 넘으면 흑자, 밑돌면 적자가 되는 경계선입니다. 매출이 이 선에 가깝다면 작은 매출 변동에도 적자로 전환될 수 있어 주의가 필요합니다.",
   },
 ];
-
 export default function Page() {
   return (
     <div className="space-y-8">
@@ -36,11 +33,9 @@ export default function Page() {
           남는 돈을 계산합니다.
         </p>
       </header>
-
       <div className="mx-[calc(50%-50vw)] w-screen">
         <BusinessBreakEvenCalc />
       </div>
-
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />
     </div>
