@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-04T21:00:43.130Z",
+  "updatedAt": "2026-08-05T21:00:39.392Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
     {
@@ -76,26 +76,6 @@
       "bank": "다올저축은행",
       "product": "Fi 하이브리드 정기예금 (비대면)",
       "baseRate": 2.6,
-      "maxRate": 4.1,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "DH저축은행",
-      "product": "정기예금",
-      "baseRate": 4.1,
-      "maxRate": 4.1,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "없음"
-    },
-    {
-      "bank": "DH저축은행",
-      "product": "정기예금(비대면)",
-      "baseRate": 4.1,
       "maxRate": 4.1,
       "term": 12,
       "group": "저축은행",
@@ -197,6 +177,26 @@
       "product": "SB톡톡 정기예금(비대면)",
       "baseRate": 4.02,
       "maxRate": 4.02,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "흥국저축은행",
+      "product": "비대면 정기예금",
+      "baseRate": 4.02,
+      "maxRate": 4.02,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "애큐온저축은행",
+      "product": "플러스회전식정기예금(모바일)",
+      "baseRate": 4,
+      "maxRate": 4,
       "term": 12,
       "group": "저축은행",
       "joinWay": "스마트폰",
