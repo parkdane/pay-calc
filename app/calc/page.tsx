@@ -24,6 +24,11 @@ const GROUPS = [
     desc: "저축·자산 계획",
     items: [
       {
+        href: "/calc/fire",
+        title: "파이어족 계산기",
+        desc: "조기 은퇴 가능 나이, 몬테카를로 성공확률",
+      },
+      {
         href: "/calc/deposit",
         title: "적금·예금 이자 계산기",
         desc: "세후 만기 수령액 (15.4% 반영)",
@@ -48,11 +53,6 @@ const GROUPS = [
         title: "가구소득 계산기",
         desc: "맞벌이 합산소득, 평균·중위소득 대비 위치",
       },
-      {
-        href: "/calc/fire",
-        title: "파이어족 계산기",
-        desc: "조기 은퇴 가능 나이, 몬테카를로 성공확률",
-      },
     ],
   },
   {
@@ -63,6 +63,11 @@ const GROUPS = [
         href: "/calc/civil-net",
         title: "공무원·경찰·소방 실수령액",
         desc: "직급·호봉 + 가족·근속·시간외 반영",
+      },
+      {
+        href: "/calc/teacher-net",
+        title: "교사 실수령액",
+        desc: "교원 호봉 + 교직수당·담임수당 반영",
       },
       {
         href: "/calc/military-net",

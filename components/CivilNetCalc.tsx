@@ -36,8 +36,18 @@ function childAllowance(n: number): number {
   return fa.child1 + fa.child2 + (n - 2) * fa.child3plus;
 }
 
-export default function CivilNetCalc() {
-  const [occIdx, setOccIdx] = useState(0);
+export default function CivilNetCalc({
+  defaultOccId,
+}: {
+  defaultOccId?: (typeof OCCUPATIONS)[number]["id"];
+} = {}) {
+  const initialOccIdx = defaultOccId
+    ? Math.max(
+        OCCUPATIONS.findIndex((o) => o.id === defaultOccId),
+        0
+      )
+    : 0;
+  const [occIdx, setOccIdx] = useState(initialOccIdx);
   const [gradeIdx, setGradeIdx] = useState(0);
   const [hobong, setHobong] = useState(1);
   // 상세 옵션
