@@ -5,6 +5,7 @@ import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
 import CalcCta from "@/components/CalcCta";
+import Link from "next/link";
 
 import civil from "@/data/salary-civil-2026.json";
 import military from "@/data/salary-military-2026.json";
@@ -112,6 +113,30 @@ export default async function SalaryPage({
           등 수당이 더해지고 연금 기여금·건강보험·소득세가 공제됩니다. 따라서
           통장에 들어오는 금액은 표의 금액과 다릅니다. 정확한 세후 금액은
           실수령액 계산기에서 확인할 수 있습니다.
+        </p>
+      </section>
+
+      <section className="space-y-3 text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">호봉은 어떻게 오르나요</h2>
+        <p>
+          정기승급은 매년 1회, 근무 1년마다 1호봉씩 오르는 것이 원칙입니다.
+          휴직·직위해제·정직 등 승급 제한 사유가 있으면 그 기간만큼 승급이
+          늦어질 수 있습니다. 임용 전 경력(군 복무, 관련 자격증 소지 경력,
+          유사 직무의 민간 경력 등)이 인정되면 초임 호봉이 1호봉보다 높게
+          책정되는 경우가 많습니다.
+          {isMilitary &&
+            " 다만 병사는 호봉이 아니라 계급(이병·일병·상병·병장)에 따라 봉급이 고정되며, 호봉 승급 개념은 부사관·장교 등 간부에게만 적용됩니다."}{" "}
+          정확한 초임 호봉과 경력 환산율은 소속 기관 인사부서에서 최종
+          확정합니다.
+        </p>
+        <p>
+          <Link
+            href="/guide/2026-pay-changes"
+            className="text-[#2E4494] underline"
+          >
+            2026년 보수 변경사항 총정리
+          </Link>
+          에서 인상률과 수당 변경 내용을 자세히 확인할 수 있습니다.
         </p>
       </section>
 
