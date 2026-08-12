@@ -29,6 +29,11 @@ const GROUPS = [
         desc: "조기 은퇴 가능 나이, 몬테카를로 성공확률",
       },
       {
+        href: "/calc/pension-net",
+        title: "공무원연금 예상수령액 계산기",
+        desc: "실제 봉급표(1997~2026) 기반, 3단계 산식 반영",
+      },
+      {
         href: "/calc/deposit",
         title: "적금·예금 이자 계산기",
         desc: "세후 만기 수령액 (15.4% 반영)",
