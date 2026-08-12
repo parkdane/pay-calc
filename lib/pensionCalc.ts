@@ -103,24 +103,32 @@ function findSnapshotForDate(historicalData: HistorySnapshot[], dateStr: string)
 
 function lookupPay(snapshot: HistorySnapshot, gradeColumnIndex: number | null, hobong: number) {
   if (!snapshot || !snapshot.rows || snapshot.rows.length === 0) return null;
+
   if (snapshot.format === "single_column") {
-    const row = snapshot.rows.find((r) => r.hobong === hobong) as
-      | { hobong: number; value: number | null }
-      | undefined;
-    return row ? row.value : null;
+    const rows = snapshot.rows as { hobong: number; value: number | null }[];
+    const exact = rows.find((r) => r.hobong === hobong);
+    if (exact && exact.value != null) return exact.value;
+    // 최대 정의 호봉을 넘으면 그 이하 중 값이 있는 가장 높은 호봉으로 고정(호봉상한 동결)
+    const candidates = rows.filter((r) => r.hobong <= hobong && r.value != null);
+    if (candidates.length === 0) return null;
+    candidates.sort((a, b) => b.hobong - a.hobong);
+    return candidates[0].value;
   }
-  const row = snapshot.rows.find((r) => r.hobong === hobong) as
-    | { hobong: number; values: (number | null)[] }
-    | undefined;
-  if (!row || gradeColumnIndex === null) return null;
-  const v = row.values[gradeColumnIndex];
-  return v === undefined ? null : v;
+
+  if (gradeColumnIndex === null) return null;
+  const rows = snapshot.rows as { hobong: number; values: (number | null)[] }[];
+  const exact = rows.find((r) => r.hobong === hobong);
+  if (exact && exact.values[gradeColumnIndex] != null) return exact.values[gradeColumnIndex];
+  // 이 급수 컬럼에서 값이 있는 것 중, 요청 호봉 이하로 가장 가까운 호봉의 값으로 고정
+  const candidates = rows.filter((r) => r.hobong <= hobong && r.values[gradeColumnIndex] != null);
+  if (candidates.length === 0) return null;
+  candidates.sort((a, b) => b.hobong - a.hobong);
+  return candidates[0].values[gradeColumnIndex];
 }
 
-export function gradeToColumnIndex(gradeLabel: string): number | null {
-  const m = gradeLabel.match(/(\d+)급/);
-  if (!m) return null;
-  return parseInt(m[1], 10) - 1;
+export function gradeToColumnIndex(gradeLabel: string, gradeList: readonly string[]): number | null {
+  const idx = gradeList.indexOf(gradeLabel);
+  return idx === -1 ? null : idx;
 }
 
 export type CareerYear = {
@@ -135,7 +143,8 @@ export function simulateCareer(
   historicalData: HistorySnapshot[],
   segments: CareerSegment[],
   hireDate: string,
-  retireDate: string
+  retireDate: string,
+  gradeList: readonly string[] = []
 ): CareerYear[] {
   const sorted = [...segments].sort((a, b) => (a.startDate > b.startDate ? 1 : -1));
   const results: CareerYear[] = [];
@@ -158,7 +167,7 @@ export function simulateCareer(
     const hobong = seg.startHobong + Math.floor(yearsSinceSegStart);
 
     const snapshot = findSnapshotForDate(historicalData, dateStr);
-    const gradeColumnIndex = seg.grade ? gradeToColumnIndex(seg.grade) : null;
+    const gradeColumnIndex = seg.grade ? gradeToColumnIndex(seg.grade, gradeList) : null;
     const pay = lookupPay(snapshot, gradeColumnIndex, hobong);
 
     results.push({ date: dateStr, year: cursor.getFullYear(), grade: seg.grade, hobong, pay });
@@ -206,6 +215,110 @@ export function estimateEligibleAge(hireDate: string): number {
   return 65;
 }
 
+// ── 6-M. 군인연금 전용 산식 (공무원연금과 구조 자체가 다름) ──
+// 확인된 사실:
+//  - 2단계 구조 (2013.7.1 시행일 기준, 공무원연금의 2010/2016과 무관한 별도 기준)
+//  - 소득재분배(균등+비례) 없음 -> 신법기간은 단순 1.9%/년 정률
+//  - 상한 62.7% (공무원연금 76%와 다름)
+//  - 최소 20년(19년6개월 이상은 20년으로 인정) 미만 복무는 월연금이 아니라 일시금 대상
+//  - 수급개시 연령 제한 없음 (전역 즉시 수급, 조기퇴직 감액 로직 적용 안 함)
+//  - "이행률"(신법기간에 곱하는 전환계수) 정확한 스케줄 미확보 -> 100%로 근사
+const MILITARY_REFORM_DATE = "2013-07-01";
+const MILITARY_TRANSITION_RATE_APPROX = 1.0; // 근사치, 실제 스케줄 미확인
+
+export function splitMilitaryPeriods(hireDate: string, retireDate: string) {
+  const hire = new Date(hireDate);
+  const retire = new Date(retireDate);
+  const cutoff = new Date(MILITARY_REFORM_DATE);
+
+  function overlapYears(periodStart: Date, periodEnd: Date) {
+    const start = hire > periodStart ? hire : periodStart;
+    const end = retire < periodEnd ? retire : periodEnd;
+    if (end <= start) return 0;
+    return (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+  }
+
+  return {
+    legacyYears: overlapYears(new Date("1900-01-01"), cutoff),
+    newYears: overlapYears(cutoff, new Date("2100-01-01")),
+  };
+}
+
+export function calcMilitaryLegacyPart(
+  avgIncomeLegacy: number,
+  legacyYears: number,
+  totalYears: number
+) {
+  if (legacyYears <= 0 || totalYears <= 0) return 0;
+  const rate = 0.5 + Math.max(totalYears - 20, 0) * 0.02;
+  return avgIncomeLegacy * rate * (legacyYears / totalYears);
+}
+
+export function calcMilitaryNewPart(
+  avgIncomeNew: number,
+  newYears: number,
+  transitionRate: number = MILITARY_TRANSITION_RATE_APPROX
+) {
+  if (newYears <= 0) return 0;
+  return avgIncomeNew * newYears * 0.019 * transitionRate;
+}
+
+export function applyMilitaryCap(pension: number, avgIncome: number) {
+  const cap = avgIncome * 0.627;
+  return Math.min(pension, cap);
+}
+
+export function calcMilitaryPension(params: {
+  historicalData: HistorySnapshot[];
+  segments: CareerSegment[];
+  hireDate: string;
+  retireDate: string;
+  gradeColumns: readonly string[];
+}) {
+  const { historicalData, segments, hireDate, retireDate, gradeColumns } = params;
+
+  const careerResults = simulateCareer(historicalData, segments, hireDate, retireDate, gradeColumns);
+  const periods = splitMilitaryPeriods(hireDate, retireDate);
+  const totalYears = periods.legacyYears + periods.newYears;
+
+  const eligible = totalYears >= 19.5;
+
+  const legacyIncomes = careerResults
+    .filter((r) => r.year < 2013 || (r.year === 2013 && new Date(r.date) < new Date(MILITARY_REFORM_DATE)))
+    .map((r) => r.pay)
+    .filter((p): p is number => p != null);
+  const newIncomes = careerResults
+    .filter((r) => r.year > 2013 || (r.year === 2013 && new Date(r.date) >= new Date(MILITARY_REFORM_DATE)))
+    .map((r) => r.pay)
+    .filter((p): p is number => p != null);
+
+  const avg = (arr: number[]) => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0);
+  const avgIncomeLegacy = avg(legacyIncomes);
+  const avgIncomeNew = avg(newIncomes);
+
+  const legacyPart = calcMilitaryLegacyPart(avgIncomeLegacy, periods.legacyYears, totalYears);
+  const newPart = calcMilitaryNewPart(avgIncomeNew, periods.newYears);
+  const beforeCap = legacyPart + newPart;
+
+  // 상한 기준 소득: 전체 재직기간 평균 (신법기간 평균을 대표값으로 근사 사용, 신법기간 없으면 구법 평균 사용)
+  const capBaseIncome = avgIncomeNew > 0 ? avgIncomeNew : avgIncomeLegacy;
+  const finalPension = applyMilitaryCap(beforeCap, capBaseIncome);
+
+  return {
+    eligible,
+    totalYears,
+    periods,
+    avgIncomeLegacy,
+    avgIncomeNew,
+    legacyPart,
+    newPart,
+    beforeCap,
+    finalPension: eligible ? finalPension : 0,
+    wasCapApplied: eligible && finalPension < beforeCap,
+    careerResults,
+  };
+}
+
 // ── 6. 전체 파이프라인 ──
 export function calcPension(params: {
   historicalData: HistorySnapshot[];
@@ -213,10 +326,11 @@ export function calcPension(params: {
   hireDate: string;
   retireDate: string;
   retireAge: number;
+  gradeColumns: readonly string[];
 }) {
-  const { historicalData, segments, hireDate, retireDate, retireAge } = params;
+  const { historicalData, segments, hireDate, retireDate, retireAge, gradeColumns } = params;
 
-  const careerResults = simulateCareer(historicalData, segments, hireDate, retireDate);
+  const careerResults = simulateCareer(historicalData, segments, hireDate, retireDate, gradeColumns);
   const periods = splitServicePeriods(hireDate, retireDate);
   const totalYears = periods.tier1Years + periods.tier2Years + periods.tier3Years;
   const agg = aggregateByTier(careerResults);
@@ -236,8 +350,10 @@ export function calcPension(params: {
 
   const last5avg = avgLastNYears(careerResults, 5);
   const cappedPension = applyCap(pension, last5avg);
+  const eligible = totalYears >= 10; // 최소재직요건 10년 (2016년 개혁 이후 기준, 확인됨)
 
   return {
+    eligible,
     totalYears,
     periods,
     tierIncomes: agg,

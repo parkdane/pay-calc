@@ -17,6 +17,15 @@ import teacher from "@/data/salary-teacher-2026.json";
 const DATA: Record<string, any> = { civil, military, police, fire, teacher };
 type Slug = keyof typeof DATA;
 
+// 각 slug를 연금 계산기의 직군 옵션과 매핑 (경찰·소방은 계산기에서 하나로 통합되어 있음)
+const PENSION_OCC: Record<string, string> = {
+  civil: "civil",
+  military: "military",
+  police: "police_fire",
+  fire: "police_fire",
+  teacher: "teacher",
+};
+
 export function generateStaticParams() {
   return Object.keys(DATA).map((slug) => ({ slug }));
 }
@@ -42,6 +51,7 @@ export default async function SalaryPage({
   const { slug } = await params;
   const d = DATA[slug as Slug];
   const isMilitary = d.type === "military";
+  const pensionOcc = PENSION_OCC[slug] ?? "civil";
 
   return (
     <article className="space-y-8">
@@ -78,6 +88,20 @@ export default async function SalaryPage({
       ) : (
         <CalcCta />
       )}
+
+      {/* 예상연금 계산기 배너 (직군별 딥링크) */}
+      <Link
+        href={`/calc/pension-net?occ=${pensionOcc}`}
+        className="block rounded-xl border-2 border-[#2E4494] bg-[rgba(46,68,148,0.06)] p-5 text-center transition hover:bg-[rgba(46,68,148,0.10)] hover:shadow-md"
+      >
+        <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">퇴직 후가 궁금하다면</p>
+        <p className="mt-1 text-lg font-bold text-[#1B2A4A]">
+          내 {d.title} 예상연금 계산해보기 →
+        </p>
+        <p className="mt-1 text-xs text-[#7A8296]">
+          1997~2026년 실제 봉급표 기반, 임용일·호봉만 입력하면 바로 확인
+        </p>
+      </Link>
 
       {/* 광고 (CTA와 표 사이) */}
       <AdSlot id={`salary-${slug}-top`} />

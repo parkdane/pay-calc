@@ -24,7 +24,8 @@ const CALC_GROUPS = [
       { href: "/calc/salary-compare", title: "대기업 평균연봉 비교", desc: "금감원 DART 공시 기준 실제 데이터" },
       { href: "/calc/savings-goal", title: "저축 목표 시뮬레이터", desc: "1억까지 걸리는 기간" },
       { href: "/calc/household-income", title: "가구소득 계산기", desc: "맞벌이 합산소득, 평균·중위소득 대비 위치" },
-      { href: "/calc/fire", title: "파이어족 계산기", desc: "조기 은퇴 가능 나이 계산" },
+          { href: "/calc/fire", title: "파이어족 계산기", desc: "조기 은퇴 가능 나이 계산" },
+      { href: "/calc/pension-net", title: "공무원연금 예상수령액 계산기", desc: "실제 봉급표(1997~2026) 기반, 직군별 산식 반영" },
     ],
   },
   {
