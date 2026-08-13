@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: "적금 계산기 · 예금 이자 계산기",
   description:
     "월 납입액·기간·금리를 입력하면 이자소득세 15.4%를 반영한 적금·예금 만기 수령액을 바로 계산합니다.",
+  openGraph: {
+    title: "적금 계산기 · 예금 이자 계산기",
+    description: "월 납입액·기간·금리를 입력하면 이자소득세 15.4%를 반영한 적금·예금 만기 수령액을 바로 계산합니다.",
+  },
 };
 
 const FAQ = [

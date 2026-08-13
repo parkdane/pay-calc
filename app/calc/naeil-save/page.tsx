@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: "청년내일저축계좌 계산기 (만기 수령액)",
   description:
     "월 10만 원 저축에 정부가 최대 30만 원을 매칭하는 청년내일저축계좌의 3년 만기 수령액을 계산합니다.",
+  openGraph: {
+    title: "청년내일저축계좌 계산기 (만기 수령액)",
+    description: "월 10만 원 저축에 정부가 최대 30만 원을 매칭하는 청년내일저축계좌의 3년 만기 수령액을 계산합니다.",
+  },
 };
 
 const FAQ = [

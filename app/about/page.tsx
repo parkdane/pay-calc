@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "사이트 소개",
   description: "봉급계산소는 공무원·군인·직장인 실수령액과 청년 정책 적금을 무료로 계산해주는 사이트입니다.",
+  openGraph: {
+    title: "사이트 소개",
+    description: "봉급계산소는 공무원·군인·직장인 실수령액과 청년 정책 적금을 무료로 계산해주는 사이트입니다.",
+  },
 };
 
 export default function AboutPage() {

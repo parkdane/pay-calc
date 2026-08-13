@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "개인정보처리방침",
   description: "봉급계산소의 개인정보 수집·이용, 쿠키, 광고 서비스에 대한 안내입니다.",
+  openGraph: {
+    title: "개인정보처리방침",
+    description: "봉급계산소의 개인정보 수집·이용, 쿠키, 광고 서비스에 대한 안내입니다.",
+  },
 };
 
 const EFFECTIVE_DATE = "2026-07-20";

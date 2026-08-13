@@ -117,7 +117,7 @@ export default function PensionNetCalc() {
                   setCurrentGrade(OCCUPATIONS[idx].grades[OCCUPATIONS[idx].grades.length - 1] || "");
                   setPromotions([]);
                 }}
-                className="mt-1.5 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-3"
+                className="mt-1.5 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-3"
               >
                 {OCCUPATIONS.map((o, i) => (
                   <option key={o.id} value={i}>{o.label}</option>
@@ -131,7 +131,7 @@ export default function PensionNetCalc() {
                 type="date"
                 value={hireDate}
                 onChange={(e) => setHireDate(e.target.value)}
-                className="mt-1.5 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
+                className="mt-1.5 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
               />
             </label>
 
@@ -141,7 +141,7 @@ export default function PensionNetCalc() {
                 type="date"
                 value={retireDate}
                 onChange={(e) => setRetireDate(e.target.value)}
-                className="mt-1.5 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
+                className="mt-1.5 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
               />
               <span className="mt-1 block text-xs font-normal text-[#8B93A6]">
                 연금을 실제로 받기 시작하는 날짜 기준입니다. 조기수급 시 감액에 반영됩니다.
@@ -156,7 +156,7 @@ export default function PensionNetCalc() {
                 max={75}
                 value={retireAge}
                 onChange={(e) => setRetireAge(Number(e.target.value) || 60)}
-                className="mt-1.5 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
+                className="mt-1.5 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
               />
             </label>
 
@@ -166,7 +166,7 @@ export default function PensionNetCalc() {
                 <select
                   value={currentGrade}
                   onChange={(e) => setCurrentGrade(e.target.value)}
-                  className="mt-1.5 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-3"
+                  className="mt-1.5 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-3"
                 >
                   {occ.grades.map((g) => (
                     <option key={g} value={g}>{g}</option>
@@ -183,7 +183,7 @@ export default function PensionNetCalc() {
                 max={45}
                 value={currentHobong}
                 onChange={(e) => setCurrentHobong(Number(e.target.value) || 1)}
-                className="mt-1.5 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
+                className="mt-1.5 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
               />
             </label>
           </div>
@@ -202,19 +202,46 @@ export default function PensionNetCalc() {
                 실제 승진 이력(발령일·직급·그 시점 호봉)을 입력하면 과거 소득을 더 정확히 반영합니다.
               </p>
               {promotions.map((p, i) => (
-                <div key={p.id} className="grid grid-cols-[1fr_1fr_70px_28px] gap-2 items-end">
-                  <label className="block">
-                    <span className="text-xs text-[#5B6478]">발령일</span>
-                    <input
-                      type="date"
-                      value={p.startDate}
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        setPromotions((prev) => prev.map((x, idx) => (idx === i ? { ...x, startDate: v } : x)));
-                      }}
-                      className="mt-1 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-2 py-2 text-sm"
-                    />
-                  </label>
+                <div key={p.id} className="rounded-lg border border-[rgba(46,68,148,0.18)] bg-white p-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-[#2E4494]">
+                      발령 {i + 1}{i === 0 ? " (임용 당시)" : ""}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setPromotions((prev) => prev.filter((_, idx) => idx !== i))}
+                      className="min-h-[36px] min-w-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] px-3 text-xs text-[#7A8296] active:bg-[rgba(46,68,148,0.06)]"
+                    >
+                      삭제
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <label className="block">
+                      <span className="text-xs text-[#5B6478]">발령일</span>
+                      <input
+                        type="date"
+                        value={p.startDate}
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          setPromotions((prev) => prev.map((x, idx) => (idx === i ? { ...x, startDate: v } : x)));
+                        }}
+                        className="mt-1 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-2 py-2 text-sm"
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="text-xs text-[#5B6478]">호봉</span>
+                      <input
+                        type="number"
+                        min={1}
+                        value={p.hobong}
+                        onChange={(e) => {
+                          const v = Number(e.target.value) || 1;
+                          setPromotions((prev) => prev.map((x, idx) => (idx === i ? { ...x, hobong: v } : x)));
+                        }}
+                        className="mt-1 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-2 py-2 text-sm"
+                      />
+                    </label>
+                  </div>
                   {!occ.singleColumn && (
                     <label className="block">
                       <span className="text-xs text-[#5B6478]">직급</span>
@@ -224,7 +251,7 @@ export default function PensionNetCalc() {
                           const v = e.target.value;
                           setPromotions((prev) => prev.map((x, idx) => (idx === i ? { ...x, grade: v } : x)));
                         }}
-                        className="mt-1 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-2 py-2 text-sm"
+                        className="mt-1 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-2 py-2 text-sm"
                       >
                         {occ.grades.map((g) => (
                           <option key={g} value={g}>{g}</option>
@@ -232,32 +259,12 @@ export default function PensionNetCalc() {
                       </select>
                     </label>
                   )}
-                  <label className="block">
-                    <span className="text-xs text-[#5B6478]">호봉</span>
-                    <input
-                      type="number"
-                      min={1}
-                      value={p.hobong}
-                      onChange={(e) => {
-                        const v = Number(e.target.value) || 1;
-                        setPromotions((prev) => prev.map((x, idx) => (idx === i ? { ...x, hobong: v } : x)));
-                      }}
-                      className="mt-1 w-full rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-2 py-2 text-sm"
-                    />
-                  </label>
-                  <button
-                    type="button"
-                    onClick={() => setPromotions((prev) => prev.filter((_, idx) => idx !== i))}
-                    className="mb-0.5 h-9 rounded-lg border border-[rgba(46,68,148,0.22)] text-xs text-[#7A8296] hover:bg-white"
-                  >
-                    삭제
-                  </button>
                 </div>
               ))}
               <button
                 type="button"
                 onClick={addPromotion}
-                className="w-full rounded-lg border border-dashed border-[rgba(46,68,148,0.3)] py-2 text-sm font-medium text-[#2E4494] hover:bg-white"
+                className="w-full min-h-[44px] rounded-lg border border-dashed border-[rgba(46,68,148,0.3)] py-2 text-sm font-medium text-[#2E4494] active:bg-white hover:bg-white"
               >
                 + 발령 구간 추가 (첫 구간은 임용 당시 직급·호봉)
               </button>
@@ -284,9 +291,9 @@ export default function PensionNetCalc() {
                 </div>
                 <dl className="divide-y divide-[rgba(46,68,148,0.10)] bg-white text-sm">
                   <Row label="총 재직연수" value={`${result.totalYears.toFixed(1)}년`} />
-                  <Row label="1구간(~2009, 구법)" value={`${result.periods.tier1Years.toFixed(1)}년 · ${won(result.tierPensions.t1)}`} muted />
-                  <Row label="2구간(2010~2015, 과도기)" value={`${result.periods.tier2Years.toFixed(1)}년 · ${won(result.tierPensions.t2)}`} muted />
-                  <Row label="3구간(2016~, 신법)" value={`${result.periods.tier3Years.toFixed(1)}년 · ${won(result.tierPensions.t3)}`} muted />
+                  <StackedRow label="1구간 (~2009, 구법)" value={`${result.periods.tier1Years.toFixed(1)}년 · ${won(result.tierPensions.t1)}`} />
+                  <StackedRow label="2구간 (2010~2015, 과도기)" value={`${result.periods.tier2Years.toFixed(1)}년 · ${won(result.tierPensions.t2)}`} />
+                  <StackedRow label="3구간 (2016~, 신법)" value={`${result.periods.tier3Years.toFixed(1)}년 · ${won(result.tierPensions.t3)}`} />
                   <Row label="상한 적용 전 합계" value={won(result.beforeCap)} bold />
                   {result.yearsEarly > 0 && (
                     <Row label="조기수급 감액" value={`-${(result.yearsEarly * 5)}% (${result.yearsEarly}년 조기)`} muted />
@@ -324,11 +331,20 @@ export default function PensionNetCalc() {
 
 function Row({ label, value, bold, muted }: { label: string; value: string; bold?: boolean; muted?: boolean }) {
   return (
-    <div className="flex items-center justify-between px-5 py-2.5">
+    <div className="flex items-center justify-between gap-3 px-5 py-2.5">
       <dt className={muted ? "text-[#7A8296]" : "font-medium text-[#1B2A4A]"}>{label}</dt>
-      <dd className={`tabular-nums text-right ${bold ? "font-bold text-[#1B2A4A]" : muted ? "text-[#7A8296]" : "text-[#1B2A4A]"}`}>
+      <dd className={`shrink-0 tabular-nums text-right ${bold ? "font-bold text-[#1B2A4A]" : muted ? "text-[#7A8296]" : "text-[#1B2A4A]"}`}>
         {value}
       </dd>
+    </div>
+  );
+}
+
+function StackedRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="px-5 py-2.5">
+      <dt className="text-xs text-[#7A8296]">{label}</dt>
+      <dd className="mt-0.5 tabular-nums text-[#1B2A4A]">{value}</dd>
     </div>
   );
 }

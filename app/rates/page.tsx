@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: "예금·적금 금리 비교 (매일 갱신)",
   description:
     "시중은행·저축은행·인터넷은행의 정기예금과 적금 최고금리를 금융감독원 공시 기준으로 매일 비교합니다.",
+  openGraph: {
+    title: "예금·적금 금리 비교 (매일 갱신)",
+    description: "시중은행·저축은행·인터넷은행의 정기예금과 적금 최고금리를 금융감독원 공시 기준으로 매일 비교합니다.",
+  },
 };
 
 const FAQ = [

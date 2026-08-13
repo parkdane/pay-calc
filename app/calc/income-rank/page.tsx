@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: "내 연봉 상위 몇 %? 연봉 순위 계산기",
   description:
     "연봉을 입력하면 국세청 근로소득 백분위 자료 기준으로 대한민국에서 상위 몇 %인지 바로 확인합니다.",
+  openGraph: {
+    title: "내 연봉 상위 몇 %? 연봉 순위 계산기",
+    description: "연봉을 입력하면 국세청 근로소득 백분위 자료 기준으로 대한민국에서 상위 몇 %인지 바로 확인합니다.",
+  },
 };
 
 const FAQ = [

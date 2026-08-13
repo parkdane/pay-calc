@@ -31,7 +31,11 @@ export async function generateMetadata({
   return {
     title: `${d.year}년 ${d.title} 봉급표`,
     description: `${d.year}년 ${d.title} 봉급표를 계급·호봉별로 정리했습니다. 실수령액 계산기로 세후 월급까지 확인하세요.`,
-  };
+  openGraph: {
+    title: `${d.year}년 ${d.title} 봉급표`,
+    description: `${d.year}년 ${d.title} 봉급표를 계급·호봉별로 정리했습니다. 실수령액 계산기로 세후 월급까지 확인하세요.`,
+  },
+};
 }
 
 export default async function SalaryPage({

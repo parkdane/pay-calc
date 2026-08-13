@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   title: "봉급표 전체 보기",
   description:
     "2026년 일반직 공무원·군인·경찰·소방 봉급표를 직급·호봉별로 확인하세요.",
+  openGraph: {
+    title: "봉급표 전체 보기",
+    description: "2026년 일반직 공무원·군인·경찰·소방 봉급표를 직급·호봉별로 확인하세요.",
+  },
 };
 
 const ITEMS = [

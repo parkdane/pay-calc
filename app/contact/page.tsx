@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "문의하기",
   description: "봉급계산소 계산 오류 제보, 데이터 업데이트 요청, 광고·제휴 문의는 이메일로 받습니다.",
+  openGraph: {
+    title: "문의하기",
+    description: "봉급계산소 계산 오류 제보, 데이터 업데이트 요청, 광고·제휴 문의는 이메일로 받습니다.",
+  },
 };
 
 // TODO: 실제 사용하는 이메일 주소로 교체하세요

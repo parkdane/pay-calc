@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   title: "계산기 전체 보기",
   description:
     "실수령액 계산기, 정책 적금 계산기, 재테크 도구를 한눈에 보고 이용하세요.",
+  openGraph: {
+    title: "계산기 전체 보기",
+    description: "실수령액 계산기, 정책 적금 계산기, 재테크 도구를 한눈에 보고 이용하세요.",
+  },
 };
 
 const GROUPS = [

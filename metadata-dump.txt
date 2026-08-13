@@ -1,0 +1,217 @@
+
+===== app\about\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "사이트 소개",
+  description: "봉급계산소는 공무원·군인·직장인 실수령액과 청년 정책 적금을 무료로 계산해주는 사이트입니다.",
+}
+
+===== app\calc\business-breakeven\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "자영업자 매출 실수령액 · 손익분기점 계산기",
+  description:
+    "일매출·월매출, 원가율, 월세·인건비 등 고정비를 입력하면 매출 구간별 실수령액(순수익)과 손익분기 매출, 창업 초기 투자금 회수 기간을 계산합니다.",
+}
+
+===== app\calc\civil-net\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "공무원·경찰·소방 실수령액 계산기 (2026년 기준)",
+  description:
+    "직종·직급·호봉과 가족·근속연수·시간외근무를 입력하면 간이세액표 방식으로 2026년 세후 월급과 연간 수령액을 계산합니다.",
+}
+
+===== app\calc\deposit\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "적금 계산기 · 예금 이자 계산기",
+  description:
+    "월 납입액·기간·금리를 입력하면 이자소득세 15.4%를 반영한 적금·예금 만기 수령액을 바로 계산합니다.",
+}
+
+===== app\calc\fire\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "파이어족 계산기 (조기 은퇴 시뮬레이터)",
+  description:
+    "현재 자산과 월 투자금, 생활비, 기대수익률을 넣으면 FIRE 목표 자산, 달성 나이, 부족 금액, 추가 필요 투자금과 시나리오를 바로 계산합니다.",
+}
+
+===== app\calc\household-income\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "가구소득 계산기 (맞벌이 합산·평균·중위소득 비교)",
+  description:
+    "본인·배우자 연봉과 성과급, 기타 보상을 합쳐 가구 연 총소득과 월 실수령을 계산하고, 평균 가구소득·기준 중위소득 대비 위치를 확인합니다.",
+}
+
+===== app\calc\income-rank\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "내 연봉 상위 몇 %? 연봉 순위 계산기",
+  description:
+    "연봉을 입력하면 국세청 근로소득 백분위 자료 기준으로 대한민국에서 상위 몇 %인지 바로 확인합니다.",
+}
+
+===== app\calc\leap-save\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "청년도약계좌 만기 수령액 계산기",
+  description:
+    "소득구간과 월 납입액을 넣으면 2025년 확대된 정부기여금(월 최대 3.3만 원)과 비과세 이자를 포함한 5년 만기 수령액을 계산합니다.",
+}
+
+===== app\calc\military-net\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "군인 월급 실수령액 계산기 (2026 봉급표 기준 세후 계산)",
+  description:
+    "2026년 군인 봉급표 기준 계급·호봉과 수당을 입력하면 군인연금·건강보험·소득세를 공제한 부사관·장교 세후 월급을 계산합니다.",
+}
+
+===== app\calc\naeil-save\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "청년내일저축계좌 계산기 (만기 수령액)",
+  description:
+    "월 10만 원 저축에 정부가 최대 30만 원을 매칭하는 청년내일저축계좌의 3년 만기 수령액을 계산합니다.",
+}
+
+===== app\calc\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "계산기 전체 보기",
+  description:
+    "실수령액 계산기, 정책 적금 계산기, 재테크 도구를 한눈에 보고 이용하세요.",
+}
+
+===== app\calc\pension-net\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "공무원연금 예상수령액 계산기 (실제 봉급표 기반)",
+  description:
+    "임용일·직급·호봉을 입력하면 1997~2026년 실제 봉급표와 공무원연금법 3단계 산식(구법·과도기·소득재분배)을 반영한 예상 월 연금액을 계산합니다.",
+}
+
+===== app\calc\salary-compare\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "대기업 평균연봉 비교 (금감원 공시 기준)",
+  description:
+    "삼성전자·SK하이닉스·현대차 등 국내 대기업의 1인평균급여액을 금융감독원 전자공시(DART) 사업보고서 기준으로 비교합니다. 내 연봉을 입력하면 상위 몇 %인지 바로 확인할 수 있습니다.",
+}
+
+===== app\calc\savings-goal\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "1억 모으기 시뮬레이터 (저축 목표 계산기)",
+  description:
+    "월급·고정비·생활비를 입력하면 매달 저축 가능액과 목표 금액(1억 등) 달성까지 걸리는 기간을 계산합니다.",
+}
+
+===== app\calc\soldier-save\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "장병내일준비적금 계산기 (2026년 기준)",
+  description:
+    "월 납입액과 복무기간을 입력하면 정부 매칭지원금(100%)과 비과세 이자를 포함한 전역 시 예상 수령액을 계산합니다.",
+}
+
+===== app\calc\teacher-net\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "교사 실수령액 계산기 (2026년 호봉표 기준)",
+  description:
+    "유·초·중·고 교사의 호봉과 담임·보직 여부를 입력하면 교직수당·담임수당을 반영한 2026년 세후 월급을 계산합니다.",
+}
+
+===== app\calc\worker-net\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "연봉 실수령액 계산기 (직장인, 2026년 기준)",
+  description:
+    "연봉을 입력하면 4대보험과 소득세를 공제한 월 실수령액을 계산하고, 연봉별 실수령 비율을 그래프로 비교합니다.",
+}
+
+===== app\calc\youth-compare\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "청년 정책 적금 비교 (청년미래적금·도약계좌·내일저축계좌)",
+  description:
+    "청년미래적금, 청년도약계좌, 청년내일저축계좌, 장병내일준비적금, 일반 적금의 만기 수령액을 한 화면에서 비교합니다. 월 납입액만 입력하면 정부기여금까지 반영해 계산합니다.",
+}
+
+===== app\calc\youth-save\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "청년미래적금 계산기 (2026년 기준)",
+  description:
+    "월 납입액과 가입 유형을 선택하면 정부기여금(6%/12%)과 비과세 이자를 포함한 청년미래적금 3년 만기 수령액을 계산합니다.",
+}
+
+===== app\contact\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "문의하기",
+  description: "봉급계산소 계산 오류 제보, 데이터 업데이트 요청, 광고·제휴 문의는 이메일로 받습니다.",
+}
+
+===== app\guide\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "가이드",
+  description:
+    "봉급표 보는 법, 공무원 수당, 정책 적금 가입 조건 등 급여·자산 형성 가이드를 제공합니다.",
+}
+
+===== app\guide\[slug]\page.tsx =====
+[openGraph 이미 있음: NO]
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const g = GUIDES.find((x) => x.slug === slug)!;
+  return { title: g.title, description: g.desc }
+
+===== app\page.tsx =====
+[metadata 없음]
+
+===== app\privacy\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "개인정보처리방침",
+  description: "봉급계산소의 개인정보 수집·이용, 쿠키, 광고 서비스에 대한 안내입니다.",
+}
+
+===== app\rates\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "예금·적금 금리 비교 (매일 갱신)",
+  description:
+    "시중은행·저축은행·인터넷은행의 정기예금과 적금 최고금리를 금융감독원 공시 기준으로 매일 비교합니다.",
+}
+
+===== app\salary\page.tsx =====
+[openGraph 이미 있음: NO]
+export const metadata: Metadata = {
+  title: "봉급표 전체 보기",
+  description:
+    "2026년 일반직 공무원·군인·경찰·소방 봉급표를 직급·호봉별로 확인하세요.",
+}
+
+===== app\salary\[slug]\page.tsx =====
+[openGraph 이미 있음: NO]
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const d = DATA[slug as Slug];
+  return {
+    title: `${d.year}년 ${d.title} 봉급표`,
+    description: `${d.year}년 ${d.title} 봉급표를 계급·호봉별로 정리했습니다. 실수령액 계산기로 세후 월급까지 확인하세요.`,
+  }

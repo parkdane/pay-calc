@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: "가이드",
   description:
     "봉급표 보는 법, 공무원 수당, 정책 적금 가입 조건 등 급여·자산 형성 가이드를 제공합니다.",
+  openGraph: {
+    title: "가이드",
+    description: "봉급표 보는 법, 공무원 수당, 정책 적금 가입 조건 등 급여·자산 형성 가이드를 제공합니다.",
+  },
 };
 
 export default function Page() {
