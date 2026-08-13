@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import civilHistory from "@/data/pension-civil-history.json";
 import policeFireHistory from "@/data/pension-police_fire-history.json";
 import teacherHistory from "@/data/pension-teacher-history.json";
 import militaryHistory from "@/data/pension-military-history.json";
 import {
   calcPension,
+  calcMilitaryPension,
   type HistorySnapshot,
   type CareerSegment,
 } from "@/lib/pensionCalc";
@@ -30,9 +31,34 @@ function yearsBetween(a: string, b: string) {
 
 type PromotionRow = { id: string; startDate: string; grade: string; hobong: number };
 
+type DisplayResult = {
+  finalPension: number;
+  totalYears: number;
+  eligible: boolean;
+  minServiceLabel: string;
+  rows: { label: string; value: string }[];
+  capNote?: string;
+  earlyReductionNote?: string;
+  approximationNotes: string[];
+};
+
 export default function PensionNetCalc() {
   const [occIdx, setOccIdx] = useState(0);
   const occ = OCCUPATIONS[occIdx];
+  const isMilitary = occ.id === "military";
+
+  // URL의 ?occ=military 같은 쿼리파라미터로 직군을 미리 선택 (salary 페이지 배너에서 딥링크용)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const occParam = params.get("occ");
+    if (!occParam) return;
+    const idx = OCCUPATIONS.findIndex((o) => o.id === occParam);
+    if (idx >= 0) {
+      setOccIdx(idx);
+      setCurrentGrade(OCCUPATIONS[idx].grades[OCCUPATIONS[idx].grades.length - 1] || "");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [hireDate, setHireDate] = useState("2015-03-01");
   const [retireDate, setRetireDate] = useState("2050-03-01");
@@ -46,7 +72,6 @@ export default function PensionNetCalc() {
 
   const segments: CareerSegment[] = useMemo(() => {
     if (!useDetail || promotions.length === 0) {
-      // 기본 모드: 현재 직급을 임용일부터 유지했다고 가정, 오늘 기준 호봉에서 역산
       const yearsSinceHire = Math.max(yearsBetween(hireDate, todayStr()), 0);
       const startHobong = Math.max(currentHobong - Math.floor(yearsSinceHire), 1);
       return [
@@ -57,7 +82,6 @@ export default function PensionNetCalc() {
         },
       ];
     }
-    // 상세 모드: 승진 이력 그대로 세그먼트로 사용
     return promotions
       .slice()
       .sort((a, b) => (a.startDate > b.startDate ? 1 : -1))
@@ -68,21 +92,68 @@ export default function PensionNetCalc() {
       }));
   }, [useDetail, promotions, hireDate, currentGrade, currentHobong, occ.singleColumn]);
 
-  const result = useMemo(() => {
+  const result: DisplayResult | null = useMemo(() => {
     if (!hireDate || !retireDate || new Date(retireDate) <= new Date(hireDate)) return null;
     if (useDetail && promotions.length === 0) return null;
     try {
-      return calcPension({
+      if (isMilitary) {
+        const r = calcMilitaryPension({
+          historicalData: occ.history,
+          segments,
+          hireDate,
+          retireDate,
+          gradeColumns: occ.grades,
+        });
+        return {
+          finalPension: r.finalPension,
+          totalYears: r.totalYears,
+          eligible: r.eligible,
+          minServiceLabel: "19년 6개월",
+          rows: [
+            { label: "2013.7.1 이전 (구법)", value: `${r.periods.legacyYears.toFixed(1)}년 · ${won(r.legacyPart)}` },
+            { label: "2013.7.1 이후 (신법)", value: `${r.periods.newYears.toFixed(1)}년 · ${won(r.newPart)}` },
+          ],
+          capNote: r.wasCapApplied ? "62.7% 상한이 적용된 금액입니다" : undefined,
+          approximationNotes: [
+            "군인연금은 공무원연금과 달리 소득재분배(균등+비례 분리) 제도가 없습니다. 이 계산기도 단순 정률(연 1.9%)로 계산합니다.",
+            "2013.7.1 이후 구간에 적용되는 \"이행률\"(전환계수)의 정확한 스케줄을 확보하지 못해 100%로 근사했습니다.",
+            "군인연금은 전역 즉시 수급되어(65세 대기 없음) 조기퇴직 감액을 적용하지 않았습니다.",
+            "기준소득월액을 봉급표 값으로 근사했습니다. 실제로는 각종 수당이 포함되어 더 높을 수 있습니다.",
+          ],
+        };
+      }
+
+      const r = calcPension({
         historicalData: occ.history,
         segments,
         hireDate,
         retireDate,
         retireAge,
+        gradeColumns: occ.grades,
       });
+      return {
+        finalPension: r.finalPension,
+        totalYears: r.totalYears,
+        eligible: r.eligible,
+        minServiceLabel: "10년",
+        rows: [
+          { label: "1구간 (~2009, 구법)", value: `${r.periods.tier1Years.toFixed(1)}년 · ${won(r.tierPensions.t1)}` },
+          { label: "2구간 (2010~2015, 과도기)", value: `${r.periods.tier2Years.toFixed(1)}년 · ${won(r.tierPensions.t2)}` },
+          { label: "3구간 (2016~, 신법)", value: `${r.periods.tier3Years.toFixed(1)}년 · ${won(r.tierPensions.t3)}` },
+        ],
+        capNote: r.wasCapApplied ? "76% 상한이 적용된 금액입니다" : undefined,
+        earlyReductionNote:
+          r.yearsEarly > 0 ? `-${r.yearsEarly * 5}% (${r.yearsEarly}년 조기, 개시가능나이 ${r.eligibleAge}세 근사 기준)` : undefined,
+        approximationNotes: [
+          "기준소득월액을 봉급표 값으로 근사했습니다. 실제 기준소득월액은 각종 수당이 포함되어 이보다 높을 수 있습니다.",
+          "소득재분배 계산에 쓰이는 \"전체 공무원 평균 기준소득월액\"은 2026년 값(571만원)을 고정 사용했습니다.",
+          "연금개시가능연령은 65세로 근사했습니다. 2010년 이전 임용자는 실제로 이보다 빠를 수 있습니다(60~64세).",
+        ],
+      };
     } catch {
       return null;
     }
-  }, [occ.history, segments, hireDate, retireDate, retireAge, useDetail, promotions.length]);
+  }, [occ, isMilitary, segments, hireDate, retireDate, retireAge, useDetail, promotions.length]);
 
   function addPromotion() {
     setPromotions((prev) => [
@@ -136,7 +207,9 @@ export default function PensionNetCalc() {
             </label>
 
             <label className="block">
-              <span className="text-sm font-medium text-[#5B6478]">예상 퇴직(연금개시)일</span>
+              <span className="text-sm font-medium text-[#5B6478]">
+                예상 퇴직{isMilitary ? "(전역)" : "(연금개시)"}일
+              </span>
               <input
                 type="date"
                 value={retireDate}
@@ -144,25 +217,29 @@ export default function PensionNetCalc() {
                 className="mt-1.5 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
               />
               <span className="mt-1 block text-xs font-normal text-[#8B93A6]">
-                연금을 실제로 받기 시작하는 날짜 기준입니다. 조기수급 시 감액에 반영됩니다.
+                {isMilitary
+                  ? "군인연금은 전역 즉시 수급되므로 이 날짜가 곧 연금 개시일입니다."
+                  : "연금을 실제로 받기 시작하는 날짜 기준입니다. 조기수급 시 감액에 반영됩니다."}
               </span>
             </label>
 
-            <label className="block">
-              <span className="text-sm font-medium text-[#5B6478]">퇴직(수급개시) 시 나이</span>
-              <input
-                type="number"
-                min={40}
-                max={75}
-                value={retireAge}
-                onChange={(e) => setRetireAge(Number(e.target.value) || 60)}
-                className="mt-1.5 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
-              />
-            </label>
+            {!isMilitary && (
+              <label className="block">
+                <span className="text-sm font-medium text-[#5B6478]">퇴직(수급개시) 시 나이</span>
+                <input
+                  type="number"
+                  min={40}
+                  max={75}
+                  value={retireAge}
+                  onChange={(e) => setRetireAge(Number(e.target.value) || 60)}
+                  className="mt-1.5 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
+                />
+              </label>
+            )}
 
             {!occ.singleColumn && (
               <label className="block">
-                <span className="text-sm font-medium text-[#5B6478]">현재 직급</span>
+                <span className="text-sm font-medium text-[#5B6478]">현재 {isMilitary ? "계급" : "직급"}</span>
                 <select
                   value={currentGrade}
                   onChange={(e) => setCurrentGrade(e.target.value)}
@@ -198,8 +275,8 @@ export default function PensionNetCalc() {
             </summary>
             <div className="mt-4 space-y-3">
               <p className="text-xs text-[#8B93A6]">
-                기본값은 &quot;현재 직급을 임용일부터 계속 유지했다&quot;고 가정한 근사치입니다.
-                실제 승진 이력(발령일·직급·그 시점 호봉)을 입력하면 과거 소득을 더 정확히 반영합니다.
+                기본값은 &quot;현재 {isMilitary ? "계급" : "직급"}을 임용일부터 계속 유지했다&quot;고 가정한 근사치입니다.
+                실제 승진 이력(발령일·{isMilitary ? "계급" : "직급"}·그 시점 호봉)을 입력하면 과거 소득을 더 정확히 반영합니다.
               </p>
               {promotions.map((p, i) => (
                 <div key={p.id} className="rounded-lg border border-[rgba(46,68,148,0.18)] bg-white p-3 space-y-2">
@@ -244,7 +321,7 @@ export default function PensionNetCalc() {
                   </div>
                   {!occ.singleColumn && (
                     <label className="block">
-                      <span className="text-xs text-[#5B6478]">직급</span>
+                      <span className="text-xs text-[#5B6478]">{isMilitary ? "계급" : "직급"}</span>
                       <select
                         value={p.grade}
                         onChange={(e) => {
@@ -266,7 +343,7 @@ export default function PensionNetCalc() {
                 onClick={addPromotion}
                 className="w-full min-h-[44px] rounded-lg border border-dashed border-[rgba(46,68,148,0.3)] py-2 text-sm font-medium text-[#2E4494] active:bg-white hover:bg-white"
               >
-                + 발령 구간 추가 (첫 구간은 임용 당시 직급·호봉)
+                + 발령 구간 추가 (첫 구간은 임용 당시 {isMilitary ? "계급" : "직급"}·호봉)
               </button>
               {useDetail && promotions.length === 0 && (
                 <p className="text-xs text-[#C0392B]">
@@ -285,28 +362,34 @@ export default function PensionNetCalc() {
                 <div className="bg-[#2E4494] px-5 py-4 text-white">
                   <p className="text-sm opacity-80">예상 월 연금액</p>
                   <p className="text-3xl font-bold tabular-nums">{won(result.finalPension)}</p>
-                  {result.wasCapApplied && (
-                    <p className="mt-1 text-xs opacity-80">※ 76% 상한이 적용된 금액입니다</p>
+                  {result.capNote && (
+                    <p className="mt-1 text-xs opacity-80">※ {result.capNote}</p>
                   )}
                 </div>
+                {!result.eligible && (
+                  <div className="border-t border-[rgba(46,68,148,0.10)] bg-[#FDF3F2] px-5 py-3 text-xs leading-relaxed text-[#B3372C]">
+                    최소재직요건({result.minServiceLabel})을 채우지 못했습니다. 이 경우 매월 연금이 아니라
+                    {isMilitary ? " 퇴역연금일시금(목돈)" : " 퇴직일시금"} 형태로 받게 되며, 위 금액은 참고용 수치일 뿐
+                    실제로 매월 지급되지 않습니다.
+                  </div>
+                )}
                 <dl className="divide-y divide-[rgba(46,68,148,0.10)] bg-white text-sm">
                   <Row label="총 재직연수" value={`${result.totalYears.toFixed(1)}년`} />
-                  <StackedRow label="1구간 (~2009, 구법)" value={`${result.periods.tier1Years.toFixed(1)}년 · ${won(result.tierPensions.t1)}`} />
-                  <StackedRow label="2구간 (2010~2015, 과도기)" value={`${result.periods.tier2Years.toFixed(1)}년 · ${won(result.tierPensions.t2)}`} />
-                  <StackedRow label="3구간 (2016~, 신법)" value={`${result.periods.tier3Years.toFixed(1)}년 · ${won(result.tierPensions.t3)}`} />
-                  <Row label="상한 적용 전 합계" value={won(result.beforeCap)} bold />
-                  {result.yearsEarly > 0 && (
-                    <Row label="조기수급 감액" value={`-${(result.yearsEarly * 5)}% (${result.yearsEarly}년 조기)`} muted />
+                  {result.rows.map((row) => (
+                    <StackedRow key={row.label} label={row.label} value={row.value} />
+                  ))}
+                  {result.earlyReductionNote && (
+                    <Row label="조기수급 감액" value={result.earlyReductionNote} muted />
                   )}
                 </dl>
               </div>
 
               <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5 text-xs leading-relaxed text-[#7A8296]">
-                <p className="font-semibold text-[#5B6478] mb-2">이 계산의 근사치 3가지</p>
+                <p className="font-semibold text-[#5B6478] mb-2">이 계산의 근사치</p>
                 <ul className="space-y-1">
-                  <li>· 기준소득월액을 봉급표 값으로 근사했습니다. 실제 기준소득월액은 각종 수당이 포함되어 이보다 높을 수 있습니다.</li>
-                  <li>· 소득재분배 계산에 쓰이는 &quot;전체 공무원 평균 기준소득월액&quot;은 2026년 값(571만원)을 고정 사용했습니다.</li>
-                  <li>· 연금개시가능연령은 65세로 근사했습니다. 2010년 이전 임용자는 실제로 이보다 빠를 수 있습니다(60~64세).</li>
+                  {result.approximationNotes.map((note) => (
+                    <li key={note}>· {note}</li>
+                  ))}
                 </ul>
               </div>
             </>
@@ -321,9 +404,9 @@ export default function PensionNetCalc() {
       </div>
 
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
-        ※ 참고용 추정치입니다. 실제 수령액은 공무원연금공단의 공식 계산 결과를 기준으로 삼으시기 바랍니다.
+        ※ 참고용 추정치입니다. 실제 수령액은 공무원연금공단·군인연금과의 공식 계산 결과를 기준으로 삼으시기 바랍니다.
         이 계산기는 1997~2026년 실제 봉급표(국가법령정보 공동활용 API)를 기반으로 재직기간 평균소득을 추정하고,
-        공무원연금법상 3단계 산식(구법·과도기·신법 소득재분배)을 반영합니다.
+        직군별 연금법 산식(공무원연금 3단계 소득재분배 / 군인연금 2단계 정률)을 각각 반영합니다.
       </p>
     </div>
   );
