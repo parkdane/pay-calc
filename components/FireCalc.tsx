@@ -1093,13 +1093,20 @@ function GrowthChart({
             cy={y(p.target)}
             r={hover === i ? 4 : 2.5}
             fill="#f59e0b"
-            onMouseEnter={() => setHover(i)}
-            onMouseLeave={() => setHover(null)}
+            onPointerEnter={(e) => {
+              if (e.pointerType === "mouse") setHover(i);
+            }}
+            onPointerLeave={(e) => {
+              if (e.pointerType === "mouse") setHover(null);
+            }}
+            onClick={() => setHover(i)}
             style={{ cursor: "pointer" }}
           />
         ))}
 
-        {/* 예상 자산(파랑) 점 - 보이는 점은 작게, 탭/클릭 영역은 투명하게 크게 (모바일 터치 대응) */}
+        {/* 예상 자산(파랑) 점 - 보이는 점은 작게, 탭/클릭 영역은 투명하게 크게 (모바일 터치 대응)
+            마우스 호버는 pointerType으로 구분해서 데스크톱에서만 동작시키고,
+            터치는 순수 클릭(setHover(i) 고정, 토글 아님)으로만 동작시켜 탭 직후 사라지는 문제를 방지함 */}
         {path.map((p, i) => (
           <g key={`a-${i}`}>
             <circle
@@ -1114,9 +1121,13 @@ function GrowthChart({
               cy={y(p.asset)}
               r={12}
               fill="transparent"
-              onMouseEnter={() => setHover(i)}
-              onMouseLeave={() => setHover(null)}
-              onClick={() => setHover((prev) => (prev === i ? null : i))}
+              onPointerEnter={(e) => {
+                if (e.pointerType === "mouse") setHover(i);
+              }}
+              onPointerLeave={(e) => {
+                if (e.pointerType === "mouse") setHover(null);
+              }}
+              onClick={() => setHover(i)}
               style={{ cursor: "pointer" }}
             />
           </g>
@@ -1250,9 +1261,13 @@ function DepletionChart({
               cy={y(p.asset)}
               r={12}
               fill="transparent"
-              onMouseEnter={() => setHover(i)}
-              onMouseLeave={() => setHover(null)}
-              onClick={() => setHover((prev) => (prev === i ? null : i))}
+              onPointerEnter={(e) => {
+                if (e.pointerType === "mouse") setHover(i);
+              }}
+              onPointerLeave={(e) => {
+                if (e.pointerType === "mouse") setHover(null);
+              }}
+              onClick={() => setHover(i)}
               style={{ cursor: "pointer" }}
             />
           </g>
