@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-17T21:00:43.335Z",
+  "updatedAt": "2026-08-18T21:00:50.224Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
     {
@@ -123,36 +123,6 @@
       "note": "해당사항없음"
     },
     {
-      "bank": "유안타저축은행",
-      "product": "회전정기예금 (변동금리)",
-      "baseRate": 3.96,
-      "maxRate": 3.96,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "없음"
-    },
-    {
-      "bank": "유안타저축은행",
-      "product": "e-회전정기예금 (변동금리)",
-      "baseRate": 3.96,
-      "maxRate": 3.96,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "유안타저축은행",
-      "product": "SB톡톡 회전정기예금 (비대면)",
-      "baseRate": 3.96,
-      "maxRate": 3.96,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
       "bank": "디비저축은행",
       "product": "DreamBig 정기예금",
       "baseRate": 3.95,
@@ -201,6 +171,36 @@
       "group": "저축은행",
       "joinWay": "인터넷",
       "note": "해당사항없음"
+    },
+    {
+      "bank": "HB저축은행",
+      "product": "스마트정기예금",
+      "baseRate": 3.95,
+      "maxRate": 3.95,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "해당사항없음"
+    },
+    {
+      "bank": "키움예스저축은행",
+      "product": "회전yes정기예금(1년단위 변동금리상품)",
+      "baseRate": 3.95,
+      "maxRate": 3.95,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "*회전시점의 정기예금 12개월 금리 + 우대금리 0.1% 적용, 매1년 회전주기 단위로 약정이율이 변동\n*중도해지시 회전주기 충족분에는 약정이율, 잔여기간에는 중도해지이율 적용"
+    },
+    {
+      "bank": "바로저축은행",
+      "product": "스마트정기예금(인터넷)",
+      "baseRate": 3.95,
+      "maxRate": 3.95,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷",
+      "note": "없음"
     }
   ],
   "savings": [
