@@ -69,6 +69,12 @@ export default function Page() {
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />
+
+      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 text-sm">
+        <Link href="/guide/teacher-net-guide" className="font-medium text-[#2E4494] underline">
+          교직수당·담임수당까지 반영한 계산법 자세히 보기 →
+        </Link>
+      </div>
       <AdSlot id="calc-teacher-net-bottom" />
     </article>
   );

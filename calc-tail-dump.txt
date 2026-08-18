@@ -1,0 +1,242 @@
+
+===== app/calc/teacher-net/page.tsx =====
+      </div>
+
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
+        <p>
+          교원 봉급표 기본급에 교직수당(월 25만 원), 담임을 맡으면 담임수당(월 20만
+          원)을 더한 세전 금액에서 공무원연금 기여금, 건강보험료, 장기요양보험료,
+          소득세·지방소득세를 공제하여 산출합니다.
+        </p>
+        <p>
+          기본급은{" "}
+          <Link href="/salary/teacher" className="text-[#2E4494] underline">
+            2026년 교원 봉급표
+          </Link>
+          를 기준으로 합니다.
+        </p>
+      </section>
+
+      <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
+      <AdSlot id="calc-teacher-net-bottom" />
+    </article>
+  );
+}
+
+
+===== app/calc/pension-net/page.tsx =====
+
+export default function Page() {
+  return (
+    <div className="space-y-8">
+      <header className="space-y-2">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
+          공무원연금 예상수령액 계산기
+        </h1>
+        <p className="text-sm text-[#5B6478]">
+          임용일·직급·호봉을 입력하면 실제 봉급표 이력과 공무원연금법 3단계 산식을 반영한
+          예상 월 연금액을 계산합니다. 일반직·경찰·소방·교사·군인 간부 대상입니다.
+        </p>
+      </header>
+
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <PensionNetCalc />
+      </div>
+
+      <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
+      <AdSlot id="calc-pension-net-bottom" />
+    </div>
+  );
+}
+
+
+===== app/calc/household-income/page.tsx =====
+];
+
+export default function Page() {
+  return (
+    <div className="space-y-8">
+      <header className="space-y-2">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
+          가구소득 계산기
+        </h1>
+        <p className="text-sm text-[#5B6478]">
+          본인·배우자 연봉과 성과급, 기타 보상을 합쳐 가구 연 총소득과 월 실수령을 계산하고, 평균 가구소득·
+          기준 중위소득 대비 우리 집 위치를 확인합니다.
+        </p>
+      </header>
+
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <HouseholdIncomeCalc />
+      </div>
+
+      <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
+    </div>
+  );
+}
+
+
+===== app/calc/income-rank/page.tsx =====
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
+        <p>
+          국세청이 공개하는 근로소득 백분위(천분위) 자료의 구간별 평균
+          총급여를 앵커로 삼고, 구간 사이는 보간하여 상위 %를 추정합니다.
+          연말정산 신고 근로자 전체가 모수이며, 개인별 정확한 순위 확정이
+          아닌 참고용 추정입니다.
+        </p>
+        <p>
+          내 연봉의 세후 실수령액이 궁금하다면{" "}
+          <Link href="/calc/worker-net" className="text-[#2E4494] underline">
+            연봉 실수령액 계산기
+          </Link>
+          에서 확인하고, 연봉별 실수령 비율 그래프도 함께 볼 수 있습니다.
+        </p>
+      </section>
+
+      <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
+
+      <AdSlot id="calc-income-rank-bottom" />
+    </article>
+  );
+}
+
+
+===== app/calc/salary-compare/page.tsx =====
+        <p className="text-sm text-[#5B6478]">
+          국내 대기업의 1인평균급여액을 금융감독원 전자공시(DART) 사업보고서 기준으로 비교합니다. 내 연봉을
+          입력하면 비교 대상 기업들 중 어느 위치인지 바로 확인할 수 있습니다.
+        </p>
+      </header>
+
+      <div className="mx-[calc(50%-50vw)] w-screen">
+        <SalaryCompareCalc />
+      </div>
+
+      <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
+        <p>
+          각 기업의 사업보고서 "직원현황"에 보고된 1인평균급여액을 그대로 사용합니다. 사업부문·성별로 나뉘어
+          보고되는 경우(예: DX/DS 사업부문) 인원수를 가중치로 삼아 회사 전체 평균을 계산합니다. 입력한 연봉을
+          이 목록의 기업들과 비교해 상위 몇 % 위치인지, 평균 대비 몇 배인지 계산합니다.
+        </p>
+      </section>
+
+      <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
+    </div>
+  );
+}
+
+
+===== app/calc/deposit/page.tsx =====
+          붙습니다. 일반 과세 시 이자의 15.4%(소득세 14% + 지방소득세 1.4%)가
+          공제됩니다.
+        </p>
+        <p>
+          정부 지원이 붙는 정책 적금은 일반 적금보다 훨씬 유리합니다.{" "}
+          <Link href="/calc/youth-save" className="text-[#2E4494] underline">
+            청년미래적금
+          </Link>
+          은 정부기여금과 비과세,{" "}
+          <Link href="/calc/soldier-save" className="text-[#2E4494] underline">
+            장병내일준비적금
+          </Link>
+          은 납입원금 100% 매칭을 받을 수 있으니 가입 대상이라면 먼저
+          확인하세요.
+        </p>
+      </section>
+
+      <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
+
+      <AdSlot id="calc-deposit-bottom" />
+    </article>
+  );
+}
+
+
+===== app/calc/savings-goal/page.tsx =====
+        <p>
+          내 월 실수령액을 모른다면{" "}
+          <Link href="/calc/worker-net" className="text-[#2E4494] underline">
+            연봉 실수령액 계산기
+          </Link>
+          에서 먼저 확인하고, 저축 상품은{" "}
+          <Link href="/calc/youth-save" className="text-[#2E4494] underline">
+            청년미래적금
+          </Link>
+          과{" "}
+          <Link href="/calc/deposit" className="text-[#2E4494] underline">
+            일반 적금
+          </Link>
+          을 비교해보세요.
+        </p>
+      </section>
+
+      <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
+
+      <AdSlot id="calc-savings-goal-bottom" />
+    </article>
+  );
+}
+
+
+===== app/calc/naeil-save/page.tsx =====
+          + 이자로 구성됩니다. 정부지원금은 본인 저축액과 무관하게 소득
+          구간별 정액으로, 기준중위소득 50% 이하는 월 30만 원, 50~100%는 월
+          10만 원이 적립됩니다.
+        </p>
+        <p>
+          소득 요건에 해당하지 않는 청년이라면{" "}
+          <Link href="/calc/youth-save" className="text-[#2E4494] underline">
+            청년미래적금
+          </Link>
+          이 대안입니다. 일반 적금과의 수익 차이는{" "}
+          <Link href="/calc/deposit" className="text-[#2E4494] underline">
+            적금 이자 계산기
+          </Link>
+          에서 비교해볼 수 있습니다.
+        </p>
+      </section>
+
+      <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
+
+      <AdSlot id="calc-naeil-save-bottom" />
+    </article>
+  );
+}
+
+
+===== app/calc/leap-save/page.tsx =====
+          + 비과세 이자로 구성됩니다. 기여금은 소득구간별 기준한도까지
+          기본 매칭비율을, 초과분(70만 원까지)에는 3.0%를 적용하는 2025년 1월
+          확대 기준을 반영했습니다.
+        </p>
+        <p>
+          신규 가입이 종료된 상품이므로, 새로 시작한다면 후속 상품인{" "}
+          <Link href="/calc/youth-save" className="text-[#2E4494] underline">
+            청년미래적금
+          </Link>
+          을, 저소득 청년이라면{" "}
+          <Link href="/calc/naeil-save" className="text-[#2E4494] underline">
+            청년내일저축계좌
+          </Link>
+          를 확인하세요.
+        </p>
+      </section>
+
+      <Faq items={FAQ} />
+      <FaqJsonLd items={FAQ} />
+
+      <AdSlot id="calc-leap-save-bottom" />
+    </article>
+  );
+}

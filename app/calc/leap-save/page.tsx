@@ -77,6 +77,12 @@ export default function Page() {
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />
 
+      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 text-sm">
+        <Link href="/guide/leap-save-guide" className="font-medium text-[#2E4494] underline">
+          2025년 기여금 확대, 뭐가 달라졌는지 보기 →
+        </Link>
+      </div>
+
       <AdSlot id="calc-leap-save-bottom" />
     </article>
   );

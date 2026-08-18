@@ -51,6 +51,12 @@ export default function Page() {
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />
+
+      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 text-sm">
+        <Link href="/guide/household-income-guide" className="font-medium text-[#2E4494] underline">
+          가구소득과 개인 연봉이 다른 이유 알아보기 →
+        </Link>
+      </div>
     </div>
   );
 }

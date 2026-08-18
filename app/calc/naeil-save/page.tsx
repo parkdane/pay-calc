@@ -77,6 +77,12 @@ export default function Page() {
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />
 
+      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 text-sm">
+        <Link href="/guide/naeil-save-guide" className="font-medium text-[#2E4494] underline">
+          정부지원 30만 원 받는 조건 자세히 보기 →
+        </Link>
+      </div>
+
       <AdSlot id="calc-naeil-save-bottom" />
     </article>
   );
