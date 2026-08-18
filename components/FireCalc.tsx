@@ -1050,14 +1050,14 @@ function GrowthChart({
       <p className="mb-3 text-xs text-[#8B93A6]">
         <span className="text-[#2E4494]">■</span> 내 예상 자산 &nbsp;
         <span className="text-amber-500">■</span> 필요 목표 자산 · 모두 오늘 화폐가치 기준 · FIRE 달성 이후는
-        저축이 멈추고 생활비를 인출하는 구간입니다
+        저축이 멈추고 생활비를 인출하는 구간입니다 · 점을 탭하거나 마우스를 올리면 상세 금액이 보입니다
       </p>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="xMidYMid meet">
         {/* Y 그리드 + 라벨 */}
         {yTicks.map((v, i) => (
           <g key={`y-${i}`}>
             <line x1={padL} y1={y(v)} x2={W - padR} y2={y(v)} stroke="#f1f5f9" />
-            <text x={padL - 6} y={y(v) + 3} fontSize="9" fill="#94a3b8" textAnchor="end">
+            <text x={padL - 6} y={y(v) + 3} fontSize="11" fill="#94a3b8" textAnchor="end">
               {v === 0 ? "0" : eokShort(v)}
             </text>
           </g>
@@ -1076,7 +1076,7 @@ function GrowthChart({
               strokeDasharray="3 3"
               strokeOpacity="0.4"
             />
-            <text x={x(reachAge)} y={padT - 6} fontSize="9" fill="#2563eb" textAnchor="middle">
+            <text x={x(reachAge)} y={padT - 6} fontSize="11" fill="#2563eb" textAnchor="middle">
               FIRE {Math.round(reachAge)}세
             </text>
           </g>
@@ -1099,18 +1099,27 @@ function GrowthChart({
           />
         ))}
 
-        {/* 예상 자산(파랑) 점 */}
+        {/* 예상 자산(파랑) 점 - 보이는 점은 작게, 탭/클릭 영역은 투명하게 크게 (모바일 터치 대응) */}
         {path.map((p, i) => (
-          <circle
-            key={`a-${i}`}
-            cx={x(p.age)}
-            cy={y(p.asset)}
-            r={hover === i ? 5 : 3}
-            fill="#2563eb"
-            onMouseEnter={() => setHover(i)}
-            onMouseLeave={() => setHover(null)}
-            style={{ cursor: "pointer" }}
-          />
+          <g key={`a-${i}`}>
+            <circle
+              cx={x(p.age)}
+              cy={y(p.asset)}
+              r={hover === i ? 5 : 3}
+              fill="#2563eb"
+              style={{ pointerEvents: "none" }}
+            />
+            <circle
+              cx={x(p.age)}
+              cy={y(p.asset)}
+              r={12}
+              fill="transparent"
+              onMouseEnter={() => setHover(i)}
+              onMouseLeave={() => setHover(null)}
+              onClick={() => setHover((prev) => (prev === i ? null : i))}
+              style={{ cursor: "pointer" }}
+            />
+          </g>
         ))}
 
         {/* 툴팁 — 모든 점을 다 그린 다음, 가장 마지막에 그려서 항상 맨 위에 보이도록 함 */}
@@ -1123,13 +1132,13 @@ function GrowthChart({
             return (
               <g>
                 <rect x={boxX} y={boxY} width="124" height="52" rx="4" fill="#1e293b" />
-                <text x={boxX + 6} y={boxY + 16} fontSize="11" fill="#fff">
+                <text x={boxX + 6} y={boxY + 16} fontSize="12" fill="#fff">
                   {Math.round(p.age)}세
                 </text>
-                <text x={boxX + 6} y={boxY + 30} fontSize="11" fill="#93c5fd">
+                <text x={boxX + 6} y={boxY + 30} fontSize="12" fill="#93c5fd">
                   자산 {eokShort(p.asset)}
                 </text>
-                <text x={boxX + 6} y={boxY + 44} fontSize="11" fill="#fcd34d">
+                <text x={boxX + 6} y={boxY + 44} fontSize="12" fill="#fcd34d">
                   목표 {eokShort(p.target)}
                 </text>
               </g>
@@ -1138,7 +1147,7 @@ function GrowthChart({
 
         {/* X축 라벨 */}
         {xTicks.map((a, i) => (
-          <text key={`x-${i}`} x={x(a)} y={H - 8} fontSize="10" fill="#94a3b8" textAnchor="middle">
+          <text key={`x-${i}`} x={x(a)} y={H - 8} fontSize="11" fill="#94a3b8" textAnchor="middle">
             {Math.round(a)}세
           </text>
         ))}
@@ -1195,13 +1204,13 @@ function DepletionChart({
       <p className="mb-1 text-sm font-semibold text-[#1B2A4A]">재정 수명 차트</p>
       <p className="mb-3 text-xs text-[#8B93A6]">
         <span className="text-rose-500">■</span> 은퇴 후 자산 잔액 · FIRE 달성 시점부터 적립을 멈추고 생활비를
-        인출한다고 가정합니다. 점에 마우스를 올려보세요
+        인출한다고 가정합니다. 점을 탭하거나 마우스를 올려보세요
       </p>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" preserveAspectRatio="xMidYMid meet">
         {yTicks.map((v, i) => (
           <g key={`y-${i}`}>
             <line x1={padL} y1={y(v)} x2={W - padR} y2={y(v)} stroke="#f1f5f9" />
-            <text x={padL - 6} y={y(v) + 3} fontSize="9" fill="#94a3b8" textAnchor="end">
+            <text x={padL - 6} y={y(v) + 3} fontSize="11" fill="#94a3b8" textAnchor="end">
               {v === 0 ? "0" : eokShort(v)}
             </text>
           </g>
@@ -1219,7 +1228,7 @@ function DepletionChart({
               strokeDasharray="3 3"
               strokeOpacity="0.4"
             />
-            <text x={x(depletionAge)} y={padT - 6} fontSize="9" fill="#e11d48" textAnchor="middle">
+            <text x={x(depletionAge)} y={padT - 6} fontSize="11" fill="#e11d48" textAnchor="middle">
               소진 {Math.round(depletionAge)}세
             </text>
           </g>
@@ -1228,16 +1237,25 @@ function DepletionChart({
         <path d={line} fill="none" stroke="#e11d48" strokeWidth="2.5" />
 
         {path.map((p, i) => (
-          <circle
-            key={i}
-            cx={x(p.age)}
-            cy={y(p.asset)}
-            r={hover === i ? 5 : 3}
-            fill="#e11d48"
-            onMouseEnter={() => setHover(i)}
-            onMouseLeave={() => setHover(null)}
-            style={{ cursor: "pointer" }}
-          />
+          <g key={i}>
+            <circle
+              cx={x(p.age)}
+              cy={y(p.asset)}
+              r={hover === i ? 5 : 3}
+              fill="#e11d48"
+              style={{ pointerEvents: "none" }}
+            />
+            <circle
+              cx={x(p.age)}
+              cy={y(p.asset)}
+              r={12}
+              fill="transparent"
+              onMouseEnter={() => setHover(i)}
+              onMouseLeave={() => setHover(null)}
+              onClick={() => setHover((prev) => (prev === i ? null : i))}
+              style={{ cursor: "pointer" }}
+            />
+          </g>
         ))}
 
         {hover !== null &&
@@ -1248,10 +1266,10 @@ function DepletionChart({
             return (
               <g>
                 <rect x={boxX} y={boxY} width="104" height="38" rx="4" fill="#1e293b" />
-                <text x={boxX + 6} y={boxY + 16} fontSize="11" fill="#fff">
+                <text x={boxX + 6} y={boxY + 16} fontSize="12" fill="#fff">
                   {Math.round(p.age)}세
                 </text>
-                <text x={boxX + 6} y={boxY + 30} fontSize="11" fill="#fda4af">
+                <text x={boxX + 6} y={boxY + 30} fontSize="12" fill="#fda4af">
                   잔액 {eokShort(p.asset)}
                 </text>
               </g>
@@ -1259,7 +1277,7 @@ function DepletionChart({
           })()}
 
         {xTicks.map((a, i) => (
-          <text key={`x-${i}`} x={x(a)} y={H - 8} fontSize="10" fill="#94a3b8" textAnchor="middle">
+          <text key={`x-${i}`} x={x(a)} y={H - 8} fontSize="11" fill="#94a3b8" textAnchor="middle">
             {Math.round(a)}세
           </text>
         ))}
