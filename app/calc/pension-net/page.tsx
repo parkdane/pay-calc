@@ -3,6 +3,7 @@ import PensionNetCalc from "@/components/PensionNetCalc";
 import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "공무원연금 예상수령액 계산기 (실제 봉급표 기반)",

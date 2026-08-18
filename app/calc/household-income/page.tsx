@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import HouseholdIncomeCalc from "@/components/HouseholdIncomeCalc";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "가구소득 계산기 (맞벌이 합산·평균·중위소득 비교)",
