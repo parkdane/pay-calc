@@ -26,6 +26,15 @@ const PENSION_OCC: Record<string, string> = {
   teacher: "teacher",
 };
 
+// 배너 문구는 실제 검색어(경찰연금, 소방공무원연금, 교사 은퇴 등)에 맞춰 자연스럽게 표현
+const PENSION_LABEL: Record<string, string> = {
+  civil: "공무원연금",
+  military: "군인연금",
+  police: "경찰연금",
+  fire: "소방공무원연금",
+  teacher: "교사 은퇴 후 연금",
+};
+
 export function generateStaticParams() {
   return Object.keys(DATA).map((slug) => ({ slug }));
 }
@@ -56,6 +65,7 @@ export default async function SalaryPage({
   const d = DATA[slug as Slug];
   const isMilitary = d.type === "military";
   const pensionOcc = PENSION_OCC[slug] ?? "civil";
+  const pensionLabel = PENSION_LABEL[slug] ?? "공무원연금";
 
   return (
     <article className="space-y-8">
@@ -100,7 +110,7 @@ export default async function SalaryPage({
       >
         <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">퇴직 후가 궁금하다면</p>
         <p className="mt-1 text-lg font-bold text-[#1B2A4A]">
-          내 {d.title} 예상연금 계산해보기 →
+          내 {pensionLabel} 예상수령액 계산해보기 →
         </p>
         <p className="mt-1 text-xs text-[#7A8296]">
           1997~2026년 실제 봉급표 기반, 임용일·호봉만 입력하면 바로 확인
