@@ -464,7 +464,7 @@ export default function YouthSavingsCompareCalc() {
           {bestByRate && bestByRate.key !== best.key && (
             <div className="mt-3 rounded-lg border border-[#2E4494]/30 bg-white p-3">
               <p className="text-sm font-semibold text-[#2E4494]">
-                근데 "연간 효율"로 보면 얘기가 다릅니다
+                근데 &quot;연간 효율&quot;로 보면 얘기가 다릅니다
               </p>
               <p className="mt-1 text-sm leading-relaxed text-[#5B6478]">
                 {best.name}은 만기 기간이 {best.months}개월로 길어서 총액이 커 보이지만, 정부기여금·이자를 전부
@@ -480,7 +480,7 @@ export default function YouthSavingsCompareCalc() {
 
           {!sameDuration && (
             <p className="mt-2 text-xs text-[#8B93A6]">
-              비교 대상 만기 기간이 서로 다릅니다(아래 표 "만기"·"연환산 수익률" 열 확인). 기간이 긴 상품은
+              비교 대상 만기 기간이 서로 다릅니다(아래 표 &quot;만기&quot;·&quot;연환산 수익률&quot; 열 확인). 기간이 긴 상품은
               총액이 자연히 커지니 단순 액수보다 연환산 수익률로 효율을 비교하세요.
             </p>
           )}

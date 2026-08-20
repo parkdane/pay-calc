@@ -317,14 +317,15 @@ function IncomeDonut({ segments }: { segments: { label: string; value: number; c
   const STROKE = 32;
   const circumference = 2 * Math.PI * R;
 
-  let offset = 0;
-  const arcs = visible.map((s) => {
+  const arcs = visible.reduce<
+    { label: string; value: number; color: string; dash: number; offset: number }[]
+  >((acc, s) => {
     const frac = total > 0 ? s.value / total : 0;
     const dash = frac * circumference;
-    const arc = { ...s, dash, offset };
-    offset += dash;
-    return arc;
-  });
+    const prevOffset = acc.length > 0 ? acc[acc.length - 1].offset + acc[acc.length - 1].dash : 0;
+    acc.push({ ...s, dash, offset: prevOffset });
+    return acc;
+  }, []);
 
   return (
     <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center">

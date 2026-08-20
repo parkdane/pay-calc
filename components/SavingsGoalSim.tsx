@@ -92,7 +92,7 @@ export default function SavingsGoalSim() {
             <NumInput label="월 실수령" value={income} onChange={setIncome} hint="만원" />
             <NumInput label="고정비" value={fixedCost} onChange={setFixedCost} hint="월세·통신 등" />
             <NumInput label="변동비" value={variableCost} onChange={setVariableCost} hint="식비·여가 등" />
-            <NumInput label="목표 금액" value={goalManwon} onChange={setGoalManwon} hint="1억 = 10000" step={500} />
+            <NumInput label="목표 금액" value={goalManwon} onChange={setGoalManwon} hint="1억 = 10000" />
 
             <div className="text-sm font-medium text-[#5B6478]">
               <div className="flex items-center justify-between">
@@ -255,13 +255,11 @@ function NumInput({
   value,
   onChange,
   hint,
-  step = 10,
 }: {
   label: string;
   value: number;
   onChange: (n: number) => void;
   hint?: string;
-  step?: number;
 }) {
   return (
     <label className="block text-sm font-medium text-[#5B6478]">

@@ -211,7 +211,7 @@ export function avgLastNYears(careerResults: CareerYear[], n = 5) {
 // ── 5. 연금개시가능연령 (근사치: 2010년 이후 임용자는 65세 고정.
 //      1996~2009년 임용자는 60~64세로 더 빠를 수 있으나 정확한 단계적 기준을
 //      확보하지 못해 65세로 보수적 근사 처리. 실제로는 더 일찍 받을 수 있음) ──
-export function estimateEligibleAge(hireDate: string): number {
+export function estimateEligibleAge(_hireDate: string): number {
   return 65;
 }
 

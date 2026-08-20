@@ -47,6 +47,16 @@ export default function PensionNetCalc() {
   const occ = OCCUPATIONS[occIdx];
   const isMilitary = occ.id === "military";
 
+  const [hireDate, setHireDate] = useState("2015-03-01");
+  const [retireDate, setRetireDate] = useState("2050-03-01");
+  const [retireAge, setRetireAge] = useState(60);
+
+  const [currentGrade, setCurrentGrade] = useState<string>(occ.grades[occ.grades.length - 1] || "");
+  const [currentHobong, setCurrentHobong] = useState(10);
+
+  const [useDetail, setUseDetail] = useState(false);
+  const [promotions, setPromotions] = useState<PromotionRow[]>([]);
+
   // URL의 ?occ=military 같은 쿼리파라미터로 직군을 미리 선택 (salary 페이지 배너에서 딥링크용)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -59,16 +69,6 @@ export default function PensionNetCalc() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const [hireDate, setHireDate] = useState("2015-03-01");
-  const [retireDate, setRetireDate] = useState("2050-03-01");
-  const [retireAge, setRetireAge] = useState(60);
-
-  const [currentGrade, setCurrentGrade] = useState<string>(occ.grades[occ.grades.length - 1] || "");
-  const [currentHobong, setCurrentHobong] = useState(10);
-
-  const [useDetail, setUseDetail] = useState(false);
-  const [promotions, setPromotions] = useState<PromotionRow[]>([]);
 
   const segments: CareerSegment[] = useMemo(() => {
     if (!useDetail || promotions.length === 0) {
