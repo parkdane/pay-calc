@@ -93,6 +93,9 @@ export default function RootLayout({
               <Link href="/about" className="hover:text-[#2E4494]">
                 사이트 소개
               </Link>
+              <Link href="/terms" className="hover:text-[#2E4494]">
+                이용약관
+              </Link>
               <Link href="/privacy" className="hover:text-[#2E4494]">
                 개인정보처리방침
               </Link>
