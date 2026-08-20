@@ -51,6 +51,14 @@ export default function Page() {
         <PensionNetCalc />
       </div>
 
+      <Link
+        href="/calc/severance-pay"
+        className="block rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 transition hover:shadow-md"
+      >
+        <p className="text-xs font-semibold text-[#2E4494]">연금 말고 목돈도 있습니다</p>
+        <p className="mt-0.5 font-bold text-[#1B2A4A]">퇴직 시 별도로 받는 퇴직수당 계산해보기 →</p>
+      </Link>
+
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />
 

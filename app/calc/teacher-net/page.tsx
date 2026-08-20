@@ -51,6 +51,23 @@ export default function Page() {
         <CivilNetCalc defaultOccId="teacher" />
       </div>
 
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Link
+          href="/calc/overtime-pay"
+          className="block rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 transition hover:shadow-md"
+        >
+          <p className="text-xs font-semibold text-[#2E4494]">초과근무가 많다면</p>
+          <p className="mt-0.5 font-bold text-[#1B2A4A]">시간외수당만 따로 계산하기 →</p>
+        </Link>
+        <Link
+          href="/calc/severance-pay"
+          className="block rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 transition hover:shadow-md"
+        >
+          <p className="text-xs font-semibold text-[#2E4494]">퇴직을 앞두고 있다면</p>
+          <p className="mt-0.5 font-bold text-[#1B2A4A]">퇴직수당 계산해보기 →</p>
+        </Link>
+      </div>
+
       <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
         <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
