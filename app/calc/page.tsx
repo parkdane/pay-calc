@@ -91,6 +91,22 @@ const GROUPS = [
     ],
   },
   {
+    title: "수당·퇴직급여",
+    desc: "실수령액 계산에 포함 안 된 별도 항목",
+    items: [
+      {
+        href: "/calc/overtime-pay",
+        title: "시간외수당 계산기",
+        desc: "직급·계급별 초과근무 시간당 단가",
+      },
+      {
+        href: "/calc/severance-pay",
+        title: "퇴직수당 계산기",
+        desc: "재직기간별 지급율(6.5~39%) 반영",
+      },
+    ],
+  },
+  {
     title: "정책 적금·지원금",
     desc: "정부가 돈을 얹어주는 상품",
     items: [
