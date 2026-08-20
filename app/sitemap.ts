@@ -17,6 +17,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/calc",
     "/guide",
     "/rates",
+    "/about",
+    "/terms",
+    "/privacy",
+    "/contact",
   ];
 
   // 봉급표
