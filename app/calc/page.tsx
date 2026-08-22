@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import CalcListClient from "@/components/CalcListClient";
 
 export const metadata: Metadata = {
   title: "계산기 전체 보기",
@@ -91,6 +91,22 @@ const GROUPS = [
     ],
   },
   {
+    title: "수당·퇴직급여",
+    desc: "실수령액 계산에 포함 안 된 별도 항목",
+    items: [
+      {
+        href: "/calc/overtime-pay",
+        title: "시간외수당 계산기",
+        desc: "직급·계급별 초과근무 시간당 단가",
+      },
+      {
+        href: "/calc/severance-pay",
+        title: "퇴직수당 계산기",
+        desc: "재직기간별 지급율(6.5~39%) 반영",
+      },
+    ],
+  },
+  {
     title: "정책 적금·지원금",
     desc: "정부가 돈을 얹어주는 상품",
     items: [
@@ -125,7 +141,7 @@ const GROUPS = [
 
 export default function Page() {
   return (
-    <div className="space-y-10">
+    <div className="space-y-8">
       <header className="space-y-2">
         <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
           계산기
@@ -135,26 +151,7 @@ export default function Page() {
         </p>
       </header>
 
-      {GROUPS.map((g) => (
-        <section key={g.title} className="space-y-4">
-          <div>
-            <h2 className="text-lg font-bold text-[#1B2A4A]">{g.title}</h2>
-            <p className="text-sm text-[#7A8296]">{g.desc}</p>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {g.items.map((c) => (
-              <Link
-                key={c.href}
-                href={c.href}
-                className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.05)] p-5 transition hover:shadow-md"
-              >
-                <h3 className="font-semibold text-[#1B2A4A]">{c.title}</h3>
-                <p className="mt-1 text-sm text-[#7A8296]">{c.desc}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-      ))}
+      <CalcListClient groups={GROUPS} />
     </div>
   );
 }
