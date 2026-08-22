@@ -43,6 +43,13 @@ export default function Page() {
       <div className="mx-[calc(50%-50vw)] w-screen">
         <MilitaryNetCalc />
       </div>
+      <Link
+        href="/calc/severance-pay"
+        className="block rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 transition hover:shadow-md"
+      >
+        <p className="text-xs font-semibold text-[#2E4494]">전역을 앞두고 있다면</p>
+        <p className="mt-0.5 font-bold text-[#1B2A4A]">퇴직수당 계산해보기 →</p>
+      </Link>
       <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
         <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>

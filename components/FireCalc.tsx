@@ -704,7 +704,7 @@ export default function FireCalc() {
               </label>
               <Slider label="안전인출률 (참고용)" value={withdrawRate} onChange={setWithdrawRate} min={2.5} max={5} step={0.5} />
               <p className="text-xs leading-relaxed text-[#8B93A6]">
-                이 계산기의 목표 자산은 인출률이 아니라 "자금 사용 계획 나이까지 실제로 버티는 금액"을 직접
+                이 계산기의 목표 자산은 인출률이 아니라 &quot;자금 사용 계획 나이까지 실제로 버티는 금액&quot;을 직접
                 역산해 정합니다. 여기서 정한 인출률은 결과 화면에서 흔히 쓰는 4% 룰과 비교해보는 참고값으로만
                 쓰입니다.
               </p>
@@ -723,7 +723,7 @@ export default function FireCalc() {
               </div>
               <p className="mt-2">
                 실질수익률 <strong className="text-[#5B6478]">연 {(r.realAnnualReturn * 100).toFixed(1)}%</strong>로
-                계산됩니다. 이 값들을 직접 바꾸려면 "상세 설정"을 선택하세요.
+                계산됩니다. 이 값들을 직접 바꾸려면 &quot;상세 설정&quot;을 선택하세요.
               </p>
             </div>
           )}
@@ -763,7 +763,7 @@ export default function FireCalc() {
               {sideIncome + pension > 0
                 ? " (부수입·연금이 월 생활비 이상으로 입력됨)"
                 : " (월 생활비가 0으로 입력됨)"}
-              . 이 경우 필요한 목표 자산도 0원이 되어 무조건 "달성 완료"로 표시됩니다. 실제 은퇴 후 지출을
+              . 이 경우 필요한 목표 자산도 0원이 되어 무조건 &quot;달성 완료&quot;로 표시됩니다. 실제 은퇴 후 지출을
               다시 확인해 입력해주세요.
             </p>
           </div>
@@ -903,7 +903,7 @@ export default function FireCalc() {
           </p>
           <p>
             월 투자금은 기본적으로 매년 물가만큼 실질 가치가 줄어든다고 봅니다(같은 50만 원이라도 시간이
-            지날수록 구매력이 떨어지므로). "월 투자금도 물가상승률만큼 매년 인상" 옵션을 켜면 승진·연봉
+            지날수록 구매력이 떨어지므로). &quot;월 투자금도 물가상승률만큼 매년 인상&quot; 옵션을 켜면 승진·연봉
             인상으로 저축액을 매년 물가만큼 올린다고 가정해, 실질 저축액이 그대로 유지됩니다 — 같은 조건이라도
             이 옵션 하나로 달성 시점이 꽤 앞당겨집니다.
           </p>
