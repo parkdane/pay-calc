@@ -10,16 +10,51 @@ const SALARY = [
   { href: "/salary/teacher", title: "교사 봉급표", desc: "유·초·중·고 교원 호봉표" },
 ] as const;
 
-// 홈에는 자주 찾는 계산기만 촘촘하게 보여주고, 나머지는 /calc(검색 가능)에서 찾도록 유도
-const POPULAR_CALCS = [
-  { href: "/calc/civil-net", title: "공무원·경찰·소방 실수령액", desc: "직급·호봉 + 가족·근속·시간외 반영" },
-  { href: "/calc/military-net", title: "군인 간부 실수령액", desc: "부사관·장교 계급·호봉 + 수당 선택" },
-  { href: "/calc/teacher-net", title: "교사 실수령액", desc: "교원 호봉 + 교직수당·담임수당 반영" },
-  { href: "/calc/pension-net", title: "공무원연금 예상수령액 계산기", desc: "실제 봉급표(1997~2026) 기반, 직군별 산식 반영" },
-  { href: "/calc/fire", title: "파이어족 계산기", desc: "조기 은퇴 가능 나이, 몬테카를로 성공확률" },
-  { href: "/calc/youth-compare", title: "청년 정책 적금 비교", desc: "4개 상품 + 일반적금 한눈에 비교" },
-  { href: "/calc/overtime-pay", title: "시간외수당 계산기", desc: "직급·계급별 초과근무 시간당 단가" },
-  { href: "/calc/severance-pay", title: "퇴직수당 계산기", desc: "재직기간별 지급율(6.5~39%) 반영" },
+const CALC_GROUPS = [
+  {
+    title: "자영업자 도구",
+    items: [
+      { href: "/calc/business-breakeven", title: "손익분기·투자금 회수 계산기", desc: "매출·비용으로 사업성 진단" },
+    ],
+  },
+  {
+    title: "재테크 도구",
+    items: [
+      { href: "/calc/fire", title: "파이어족 계산기", desc: "조기 은퇴 가능 나이, 몬테카를로 성공확률" },
+      { href: "/calc/pension-net", title: "공무원연금 예상수령액 계산기", desc: "실제 봉급표(1997~2026) 기반, 직군별 산식 반영" },
+      { href: "/calc/deposit", title: "적금·예금 이자 계산기", desc: "세후 만기 수령액" },
+      { href: "/calc/income-rank", title: "내 연봉 상위 몇 %?", desc: "국세청 통계 기준 순위" },
+      { href: "/calc/salary-compare", title: "대기업 평균연봉 비교", desc: "금감원 DART 공시 기준 실제 데이터" },
+      { href: "/calc/savings-goal", title: "저축 목표 시뮬레이터", desc: "1억까지 걸리는 기간" },
+      { href: "/calc/household-income", title: "가구소득 계산기", desc: "맞벌이 합산소득, 평균·중위소득 대비 위치" },
+    ],
+  },
+  {
+    title: "실수령액 계산",
+    items: [
+      { href: "/calc/civil-net", title: "공무원·경찰·소방 실수령액", desc: "직급·호봉 + 가족·근속·시간외 반영" },
+      { href: "/calc/teacher-net", title: "교사 실수령액", desc: "교원 호봉 + 교직수당·담임수당 반영" },
+      { href: "/calc/military-net", title: "군인 간부 실수령액", desc: "부사관·장교 계급·호봉 + 수당 선택" },
+      { href: "/calc/worker-net", title: "직장인 연봉 실수령액", desc: "연봉별 비교 그래프 포함" },
+    ],
+  },
+  {
+    title: "수당·퇴직급여",
+    items: [
+      { href: "/calc/overtime-pay", title: "시간외수당 계산기", desc: "직급·계급별 초과근무 시간당 단가" },
+      { href: "/calc/severance-pay", title: "퇴직수당 계산기", desc: "재직기간별 지급율(6.5~39%) 반영" },
+    ],
+  },
+  {
+    title: "정책 적금·지원금",
+    items: [
+      { href: "/calc/youth-compare", title: "청년 정책 적금 비교", desc: "4개 상품 + 일반적금 한눈에 비교" },
+      { href: "/calc/youth-save", title: "청년미래적금", desc: "정부기여금 포함 3년 만기액" },
+      { href: "/calc/naeil-save", title: "청년내일저축계좌", desc: "정부지원 월 30만 포함" },
+      { href: "/calc/leap-save", title: "청년도약계좌", desc: "기존 가입자 만기 계산" },
+      { href: "/calc/soldier-save", title: "장병내일준비적금", desc: "정부 매칭 포함 전역 수령액" },
+    ],
+  },
 ] as const;
 
 // 최신순으로 정렬해 상위 8개만 홈에 노출 (data/guides.ts에서 자동으로 가져옴 -> 새 가이드 추가해도 홈은 자동 반영됨)
@@ -55,32 +90,17 @@ export default function Home() {
         </p>
       </Link>
 
-      <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-[#1B2A4A]">많이 찾는 계산기</h2>
-          <Link href="/calc" className="text-sm font-medium text-[#2E4494] hover:underline">
-            전체 계산기 보기 →
-          </Link>
-        </div>
-        <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)] bg-white">
-          {POPULAR_CALCS.map((c, i) => (
-            <Link
-              key={c.href}
-              href={c.href}
-              className={`flex items-center justify-between gap-4 px-4 py-3.5 transition hover:bg-[rgba(46,68,148,0.04)] ${
-                i !== 0 ? "border-t border-[rgba(46,68,148,0.10)]" : ""
-              }`}
-            >
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-[#1B2A4A]">{c.title}</p>
-                <p className="truncate text-xs text-[#8B93A6]">{c.desc}</p>
-              </div>
-              <span className="shrink-0 text-[#8B93A6]">→</span>
-            </Link>
-          ))}
-        </div>
-        <AdSlot id="home-mid" />
-      </section>
+      {CALC_GROUPS.map((g, i) => (
+        <section key={g.title} className="space-y-3">
+          <h2 className="text-lg font-bold text-[#1B2A4A]">{g.title}</h2>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {g.items.map((c) => (
+              <Card key={c.href} {...c} accent compact />
+            ))}
+          </div>
+          {i === 0 && <AdSlot id="home-mid" />}
+        </section>
+      ))}
 
       <section className="space-y-4">
         <h2 className="text-lg font-bold text-[#1B2A4A]">봉급표</h2>
@@ -113,21 +133,25 @@ function Card({
   title,
   desc,
   accent,
+  compact,
 }: {
   href: string;
   title: string;
   desc: string;
   accent?: boolean;
+  compact?: boolean;
 }) {
   return (
     <Link
       href={href}
-      className={`rounded-xl border p-5 transition hover:shadow-md ${
+      className={`rounded-lg border transition hover:shadow-md ${
+        compact ? "p-3.5" : "rounded-xl p-5"
+      } ${
         accent ? "border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.05)]" : "border-[rgba(46,68,148,0.14)] bg-white"
       }`}
     >
-      <h3 className="font-semibold text-[#1B2A4A]">{title}</h3>
-      <p className="mt-1 text-sm text-[#7A8296]">{desc}</p>
+      <h3 className={`font-semibold text-[#1B2A4A] ${compact ? "text-sm leading-snug" : ""}`}>{title}</h3>
+      <p className={`text-[#7A8296] ${compact ? "mt-1 text-xs leading-snug" : "mt-1 text-sm"}`}>{desc}</p>
     </Link>
   );
 }

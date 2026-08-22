@@ -88,7 +88,7 @@ export default function CalcListClient({ groups }: { groups: CalcGroup[] }) {
         </p>
       )}
 
-      {/* 목록 (촘촘한 리스트) */}
+      {/* 목록 (작은 카드 3열) */}
       {visibleGroups.length === 0 ? (
         <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-8 text-center">
           <p className="text-sm text-[#7A8296]">
@@ -98,27 +98,22 @@ export default function CalcListClient({ groups }: { groups: CalcGroup[] }) {
       ) : (
         <div className="space-y-8">
           {visibleGroups.map((g) => (
-            <section key={g.title} className="space-y-2">
+            <section key={g.title} className="space-y-3">
               {!isSearching && (
                 <div>
                   <h2 className="text-base font-bold text-[#1B2A4A]">{g.title}</h2>
                   <p className="text-xs text-[#8B93A6]">{g.desc}</p>
                 </div>
               )}
-              <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)] bg-white">
-                {g.items.map((c, i) => (
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {g.items.map((c) => (
                   <Link
                     key={c.href}
                     href={c.href}
-                    className={`flex items-center justify-between gap-4 px-4 py-3.5 transition hover:bg-[rgba(46,68,148,0.04)] ${
-                      i !== 0 ? "border-t border-[rgba(46,68,148,0.10)]" : ""
-                    }`}
+                    className="rounded-lg border border-[rgba(46,68,148,0.14)] bg-white p-3.5 transition hover:border-[rgba(46,68,148,0.35)] hover:shadow-sm"
                   >
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-[#1B2A4A]">{c.title}</p>
-                      <p className="truncate text-xs text-[#8B93A6]">{c.desc}</p>
-                    </div>
-                    <span className="shrink-0 text-[#8B93A6]">→</span>
+                    <p className="text-sm font-semibold leading-snug text-[#1B2A4A]">{c.title}</p>
+                    <p className="mt-1 text-xs leading-snug text-[#8B93A6]">{c.desc}</p>
                   </Link>
                 ))}
               </div>
