@@ -67,9 +67,9 @@ export default function Home() {
   return (
     <div className="space-y-12">
       <section className="space-y-3 pt-4">
-        <h1 className="text-3xl font-bold tracking-tight text-[#1B2A4A]">
+        <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] break-keep sm:text-3xl">
           2026년 봉급표, 표만 보지 말고
-          <br />
+          <br className="hidden sm:block" />{" "}
           <span className="text-[#2E4494]">실수령액까지 계산</span>하세요
         </h1>
         <p className="text-[#5B6478]">
