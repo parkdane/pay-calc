@@ -38,6 +38,11 @@ const GROUPS = [
         desc: "실제 봉급표(1997~2026) 기반, 3단계 산식 반영",
       },
       {
+        href: "/calc/national-pension",
+        title: "국민연금 예상수령액 계산기",
+        desc: "직장인·자영업자 대상, 조기·연기수급 반영",
+      },
+      {
         href: "/calc/deposit",
         title: "적금·예금 이자 계산기",
         desc: "세후 만기 수령액 (15.4% 반영)",
