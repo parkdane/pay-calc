@@ -47,11 +47,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const d = DATA[slug as Slug];
   return {
-    title: `${d.year}년 ${d.title} 봉급표`,
-    description: `${d.year}년 ${d.title} 봉급표를 계급·호봉별로 정리했습니다. 실수령액 계산기로 세후 월급까지 확인하세요.`,
+    title: `${d.year}년 ${d.title} 봉급표·호봉표`,
+    description: `${d.year}년 ${d.title} 봉급표(호봉표)를 계급·호봉별로 정리했습니다. 실수령액 계산기로 세후 월급까지 확인하세요.`,
   openGraph: {
-    title: `${d.year}년 ${d.title} 봉급표`,
-    description: `${d.year}년 ${d.title} 봉급표를 계급·호봉별로 정리했습니다. 실수령액 계산기로 세후 월급까지 확인하세요.`,
+    title: `${d.year}년 ${d.title} 봉급표·호봉표`,
+    description: `${d.year}년 ${d.title} 봉급표(호봉표)를 계급·호봉별로 정리했습니다. 실수령액 계산기로 세후 월급까지 확인하세요.`,
   },
 };
 }
