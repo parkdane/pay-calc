@@ -6,6 +6,8 @@ export type Guide = {
   date: string;
   calcHref?: string;
   calcLabel?: string;
+  relatedHref?: string;
+  relatedLabel?: string;
   sections: GuideSection[];
 };
 
@@ -93,6 +95,8 @@ export const GUIDES: Guide[] = [
     date: "2026-07-17",
     calcHref: "/calc/worker-net",
     calcLabel: "내 실수령액 계산하기",
+    relatedHref: "/calc/national-pension",
+    relatedLabel: "국민연금 예상수령액도 계산해보기",
     sections: [
       {
         h2: "국민연금 4.5%, 상한액이 있다",

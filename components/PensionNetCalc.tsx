@@ -14,11 +14,14 @@ import {
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
+// 경찰-소방 계급 대응: 동일한 공안직 봉급표(1997~2026 이력)를 공유하며 계급 명칭만 다름
+// 치안정감↔소방정감, 치안감↔소방감, 경무관↔소방준감, 총경↔소방정, 경정↔소방령,
+// 경감↔소방경, 경위↔소방위, 경사↔소방장, 경장↔소방교, 순경↔소방사
 const OCCUPATIONS = [
-  { id: "civil", label: "일반직 공무원", history: civilHistory as HistorySnapshot[], grades: ["1급","2급","3급","4급","5급","6급","7급","8급","9급"], singleColumn: false },
-  { id: "police_fire", label: "경찰·소방", history: policeFireHistory as HistorySnapshot[], grades: ["치안정감","치안감","경무관","총경","경정","경감","경위","경사","경장","순경"], singleColumn: false },
-  { id: "teacher", label: "교사 (유·초·중·고)", history: teacherHistory as HistorySnapshot[], grades: [], singleColumn: true },
-  { id: "military", label: "군인 간부", history: militaryHistory as HistorySnapshot[], grades: ["소장","준장","대령","중령","소령","대위","중위","소위","준위","원사","상사","중사","하사"], singleColumn: false },
+  { id: "civil", label: "일반직 공무원", history: civilHistory as HistorySnapshot[], grades: ["1급","2급","3급","4급","5급","6급","7급","8급","9급"], fireGrades: [] as readonly string[], singleColumn: false },
+  { id: "police_fire", label: "경찰·소방", history: policeFireHistory as HistorySnapshot[], grades: ["치안정감","치안감","경무관","총경","경정","경감","경위","경사","경장","순경"], fireGrades: ["소방정감","소방감","소방준감","소방정","소방령","소방경","소방위","소방장","소방교","소방사"] as readonly string[], singleColumn: false },
+  { id: "teacher", label: "교사 (유·초·중·고)", history: teacherHistory as HistorySnapshot[], grades: [], fireGrades: [] as readonly string[], singleColumn: true },
+  { id: "military", label: "군인 간부", history: militaryHistory as HistorySnapshot[], grades: ["소장","준장","대령","중령","소령","대위","중위","소위","준위","원사","상사","중사","하사"], fireGrades: [] as readonly string[], singleColumn: false },
 ] as const;
 
 function todayStr() {
@@ -53,6 +56,11 @@ export default function PensionNetCalc() {
 
   const [currentGrade, setCurrentGrade] = useState<string>(occ.grades[occ.grades.length - 1] || "");
   const [currentHobong, setCurrentHobong] = useState(10);
+  // "경찰·소방"은 같은 봉급표를 공유하므로 값(grade)은 항상 경찰 계급명 기준으로 저장하고,
+  // jobBranch는 화면에 어느 쪽 계급명을 보여줄지만 결정한다 (계산 로직에는 영향 없음)
+  const [jobBranch, setJobBranch] = useState<"police" | "fire">("police");
+  const hasBranch = occ.id === "police_fire";
+  const displayGrades = hasBranch && jobBranch === "fire" ? occ.fireGrades : occ.grades;
 
   const [useDetail, setUseDetail] = useState(false);
   const [promotions, setPromotions] = useState<PromotionRow[]>([]);
@@ -67,6 +75,8 @@ export default function PensionNetCalc() {
       setOccIdx(idx);
       setCurrentGrade(OCCUPATIONS[idx].grades[OCCUPATIONS[idx].grades.length - 1] || "");
     }
+    const branchParam = params.get("branch");
+    if (branchParam === "fire") setJobBranch("fire");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -237,6 +247,31 @@ export default function PensionNetCalc() {
               </label>
             )}
 
+            {hasBranch && (
+              <div className="block">
+                <span className="text-sm font-medium text-[#5B6478]">계급 표시 기준</span>
+                <div className="mt-1.5 grid grid-cols-2 gap-2">
+                  {(["police", "fire"] as const).map((b) => (
+                    <button
+                      key={b}
+                      type="button"
+                      onClick={() => setJobBranch(b)}
+                      className={`min-h-[44px] rounded-lg border px-3 py-2 text-sm font-medium transition ${
+                        jobBranch === b
+                          ? "border-[#2E4494] bg-[#2E4494] text-white"
+                          : "border-[rgba(46,68,148,0.22)] bg-white text-[#5B6478]"
+                      }`}
+                    >
+                      {b === "police" ? "경찰" : "소방"}
+                    </button>
+                  ))}
+                </div>
+                <span className="mt-1 block text-xs font-normal text-[#8B93A6]">
+                  경찰·소방은 동일한 봉급표를 공유합니다. 계급 명칭만 소속에 맞게 바꿔 표시합니다.
+                </span>
+              </div>
+            )}
+
             {!occ.singleColumn && (
               <label className="block">
                 <span className="text-sm font-medium text-[#5B6478]">현재 {isMilitary ? "계급" : "직급"}</span>
@@ -245,8 +280,8 @@ export default function PensionNetCalc() {
                   onChange={(e) => setCurrentGrade(e.target.value)}
                   className="mt-1.5 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-3"
                 >
-                  {occ.grades.map((g) => (
-                    <option key={g} value={g}>{g}</option>
+                  {occ.grades.map((g, i) => (
+                    <option key={g} value={g}>{displayGrades[i] ?? g}</option>
                   ))}
                 </select>
               </label>
@@ -330,8 +365,8 @@ export default function PensionNetCalc() {
                         }}
                         className="mt-1 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-2 py-2 text-sm"
                       >
-                        {occ.grades.map((g) => (
-                          <option key={g} value={g}>{g}</option>
+                        {occ.grades.map((g, i) => (
+                          <option key={g} value={g}>{displayGrades[i] ?? g}</option>
                         ))}
                       </select>
                     </label>

@@ -103,9 +103,9 @@ export default async function SalaryPage({
         <CalcCta />
       )}
 
-      {/* 예상연금 계산기 배너 (직군별 딥링크) */}
+      {/* 예상연금 계산기 배너 (직군별 딥링크, 소방은 경찰과 계산기가 통합되어 있어 branch로 계급명 표시만 분리) */}
       <Link
-        href={`/calc/pension-net?occ=${pensionOcc}`}
+        href={`/calc/pension-net?occ=${pensionOcc}${slug === "fire" ? "&branch=fire" : ""}`}
         className="block rounded-xl border-2 border-[#2E4494] bg-[rgba(46,68,148,0.06)] p-5 text-center transition hover:bg-[rgba(46,68,148,0.10)] hover:shadow-md"
       >
         <p className="text-xs font-semibold uppercase tracking-wide text-[#2E4494]">퇴직 후가 궁금하다면</p>

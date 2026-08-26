@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GUIDES } from "@/data/guides";
 import AdSlot from "@/components/AdSlot";
 import CalcCta from "@/components/CalcCta";
+import Link from "next/link";
 
 export function generateStaticParams() {
   return GUIDES.map((g) => ({ slug: g.slug }));
@@ -55,6 +56,15 @@ export default async function GuidePage({
 
       {g.calcHref && (
         <CalcCta href={g.calcHref} label={g.calcLabel ?? "계산기 사용하기"} />
+      )}
+
+      {g.relatedHref && (
+        <Link
+          href={g.relatedHref}
+          className="block rounded-xl border border-[rgba(46,68,148,0.22)] bg-white px-6 py-3 text-center text-sm font-medium text-[#2E4494] transition hover:bg-[rgba(46,68,148,0.06)]"
+        >
+          {g.relatedLabel ?? "관련 계산기 보기"} →
+        </Link>
       )}
 
       <AdSlot id={`guide-${g.slug}-bottom`} />
