@@ -47,6 +47,14 @@ export default function Page() {
         </p>
       </header>
 
+      <Link
+        href="/calc/retirement-pay"
+        className="block rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 transition hover:shadow-md"
+      >
+        <p className="text-xs font-semibold text-[#2E4494]">일반 사기업 근로자라면</p>
+        <p className="mt-0.5 font-bold text-[#1B2A4A]">이 페이지가 아니라 퇴직금 계산기로 이동 →</p>
+      </Link>
+
       <div className="mx-[calc(50%-50vw)] w-screen">
         <SeverancePayCalc />
       </div>

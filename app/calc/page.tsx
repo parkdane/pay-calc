@@ -115,6 +115,11 @@ const GROUPS = [
         desc: "재직기간별 지급율(6.5~39%) 반영",
       },
       {
+        href: "/calc/retirement-pay",
+        title: "퇴직금 계산기",
+        desc: "일반 근로자 대상, 평균임금 기준(근로기준법)",
+      },
+      {
         href: "/calc/parental-leave",
         title: "육아휴직급여 계산기",
         desc: "월별 상한액 + 6+6 부모육아휴직제 특례 반영",

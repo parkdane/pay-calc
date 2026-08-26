@@ -56,6 +56,14 @@ export default function Page() {
         <p className="mt-0.5 font-bold text-[#1B2A4A]">내 국민연금 예상수령액 계산해보기 →</p>
       </Link>
 
+      <Link
+        href="/calc/retirement-pay"
+        className="block rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 transition hover:shadow-md"
+      >
+        <p className="text-xs font-semibold text-[#2E4494]">퇴사를 앞두고 있다면</p>
+        <p className="mt-0.5 font-bold text-[#1B2A4A]">내 퇴직금 미리 계산해보기 →</p>
+      </Link>
+
       <AdSlot id="calc-worker-net-result" />
 
       <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
