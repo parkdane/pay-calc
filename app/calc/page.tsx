@@ -120,6 +120,11 @@ const GROUPS = [
         desc: "일반 근로자 대상, 평균임금 기준(근로기준법)",
       },
       {
+        href: "/calc/unemployment-benefit",
+        title: "실업급여 계산기",
+        desc: "소정급여일수(120~270일)·상하한액 반영",
+      },
+      {
         href: "/calc/parental-leave",
         title: "육아휴직급여 계산기",
         desc: "월별 상한액 + 6+6 부모육아휴직제 특례 반영",

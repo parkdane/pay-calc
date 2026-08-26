@@ -46,6 +46,7 @@ const CALC_GROUPS = [
       { href: "/calc/overtime-pay", title: "시간외수당 계산기", desc: "직급·계급별 초과근무 시간당 단가" },
       { href: "/calc/severance-pay", title: "퇴직수당 계산기", desc: "재직기간별 지급율(6.5~39%) 반영" },
       { href: "/calc/retirement-pay", title: "퇴직금 계산기", desc: "일반 근로자 대상, 평균임금 기준" },
+      { href: "/calc/unemployment-benefit", title: "실업급여 계산기", desc: "소정급여일수·상하한액 반영" },
       { href: "/calc/parental-leave", title: "육아휴직급여 계산기", desc: "월별 상한액 + 6+6 부모육아휴직제 특례 반영" },
     ],
   },
