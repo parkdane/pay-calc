@@ -3,19 +3,19 @@
 import { useMemo, useState } from "react";
 import MoneyInput from "@/components/MoneyInput";
 import AdSlot from "@/components/AdSlot";
-import { calcParentalLeave } from "@/lib/parentalLeaveCalc";
+import { calcParentalLeave, type LeaveMode } from "@/lib/parentalLeaveCalc";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
 export default function ParentalLeaveCalc() {
   const [wageManwon, setWageManwon] = useState(300);
   const [months, setMonths] = useState(6);
-  const [isSpecialCase, setIsSpecialCase] = useState(false);
+  const [mode, setMode] = useState<LeaveMode>("general");
 
   const result = useMemo(() => {
     const wage = wageManwon * 10000;
-    return calcParentalLeave(wage, months, isSpecialCase);
-  }, [wageManwon, months, isSpecialCase]);
+    return calcParentalLeave(wage, months, mode);
+  }, [wageManwon, months, mode]);
 
   return (
     <div className="mx-auto max-w-[1280px] px-4">
@@ -48,18 +48,23 @@ export default function ParentalLeaveCalc() {
               />
             </label>
 
-            <label className="flex items-start gap-2.5 rounded-lg border border-[rgba(46,68,148,0.14)] bg-white p-3">
-              <input
-                type="checkbox"
-                checked={isSpecialCase}
-                onChange={(e) => setIsSpecialCase(e.target.checked)}
-                className="mt-0.5 h-4 w-4 shrink-0"
-              />
-              <span className="text-sm text-[#5B6478]">
-                <span className="font-medium text-[#1B2A4A]">부모가 함께 육아휴직 사용</span>
-                <br />
-                자녀가 생후 18개월 이내이고 부모 모두 육아휴직을 사용하는 경우(&apos;6+6 부모육아휴직제&apos;),
-                첫 6개월은 상한액이 더 높게 적용됩니다.
+            <label className="block">
+              <span className="text-sm font-medium text-[#5B6478]">대상 구분</span>
+              <select
+                value={mode}
+                onChange={(e) => setMode(e.target.value as LeaveMode)}
+                className="mt-1.5 w-full min-h-[44px] rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-3 py-2.5"
+              >
+                <option value="general">일반</option>
+                <option value="single-parent">한부모가족</option>
+                <option value="both-parents">부모 함께 육아휴직(6+6)</option>
+              </select>
+              <span className="mt-1 block text-xs font-normal text-[#8B93A6]">
+                {mode === "single-parent" &&
+                  "한부모가족지원법상 모 또는 부에 해당하면 1~3개월 상한액이 300만원으로 올라갑니다."}
+                {mode === "both-parents" &&
+                  "자녀가 생후 18개월 이내이고 부모 모두 육아휴직을 사용하는 경우, 첫 6개월 상한액이 매달 올라갑니다."}
+                {mode === "general" && "부모 중 한 명만 사용하거나 위 특례에 해당하지 않는 일반적인 경우입니다."}
               </span>
             </label>
           </div>
@@ -70,7 +75,9 @@ export default function ParentalLeaveCalc() {
           <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
             <div className="bg-[#2E4494] px-5 py-4 text-white">
               <p className="text-sm opacity-80">
-                {months}개월 합산 예상 수령액{isSpecialCase ? " (부모 함께 사용 특례 적용)" : ""}
+                {months}개월 합산 예상 수령액
+                {mode === "single-parent" && " (한부모가족 특례 적용)"}
+                {mode === "both-parents" && " (부모 함께 사용 특례 적용)"}
               </p>
               <p className="text-3xl font-bold tabular-nums">{won(result.total)}</p>
             </div>
@@ -109,6 +116,7 @@ export default function ParentalLeaveCalc() {
             <p className="font-semibold text-[#5B6478] mb-2">월별 상한액 (2026년 기준)</p>
             <ul className="space-y-1">
               <li>· 일반: 1~3개월 250만원 / 4~6개월 200만원 / 7개월~ 160만원(통상임금 80%)</li>
+              <li>· 한부모가족 특례: 1~3개월만 300만원으로 상향, 4개월째부터는 일반과 동일</li>
               <li>· 부모 함께 사용 특례(6+6): 1~2개월 250만원 / 3개월 300만원 / 4개월 350만원 / 5개월 400만원 / 6개월 450만원, 7개월째부터는 일반 기준으로 복귀</li>
               <li>· 하한액은 공통으로 월 70만원입니다.</li>
             </ul>
@@ -121,7 +129,10 @@ export default function ParentalLeaveCalc() {
       </div>
 
       <p className="mt-6 text-xs leading-relaxed text-[#8B93A6]">
-        ※ 참고용 추정치입니다. 공무원은 국가공무원 복무규정·수당 규정에 따라 세부 조건이 다를 수
+        ※ 참고용 추정치입니다. 육아휴직 시작 전 고용보험 피보험단위기간이 합산 180일 이상이어야
+        지급 대상이 됩니다. &apos;부모 함께 사용 특례&apos;는 실제로는 부모 각각의 육아휴직 기간이
+        겹치는 만큼만 적용되는데, 이 계산기는 입력한 전체 기간이 특례 대상이라고 가정한
+        단순화된 값입니다. 공무원은 국가공무원 복무규정·수당 규정에 따라 세부 조건이 다를 수
         있고, 자영업 소득 등이 발생하면 해당 기간 지급이 제한됩니다. 정확한 금액과 대상 여부는
         고용24(work24.go.kr) 또는 고용노동부 상담센터(1350)에서 확인하시기 바랍니다.
       </p>
