@@ -23,6 +23,7 @@ const CALC_GROUPS = [
       { href: "/calc/fire", title: "파이어족 계산기", desc: "조기 은퇴 가능 나이, 몬테카를로 성공확률" },
       { href: "/calc/pension-net", title: "공무원연금 예상수령액 계산기", desc: "실제 봉급표(1997~2026) 기반, 직군별 산식 반영" },
       { href: "/calc/national-pension", title: "국민연금 예상수령액 계산기", desc: "직장인·자영업자 대상, 조기·연기수급 반영" },
+      { href: "/calc/national-pension-premium", title: "국민연금 지역가입자 보험료 계산기", desc: "자영업자·프리랜서 대상, 2026년 요율 9.5% 반영" },
       { href: "/calc/deposit", title: "적금·예금 이자 계산기", desc: "세후 만기 수령액" },
       { href: "/calc/income-rank", title: "내 연봉 상위 몇 %?", desc: "국세청 통계 기준 순위" },
       { href: "/calc/salary-compare", title: "대기업 평균연봉 비교", desc: "금감원 DART 공시 기준 실제 데이터" },

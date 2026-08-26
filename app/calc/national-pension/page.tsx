@@ -59,7 +59,11 @@ export default function Page() {
           <Link href="/calc/pension-net" className="text-[#2E4494] underline">
             공무원연금 예상수령액 계산기
           </Link>
-          에서 확인하세요.
+          에서 확인하세요. 자영업자·프리랜서라면 지금 매달 내는 보험료가{" "}
+          <Link href="/calc/national-pension-premium" className="text-[#2E4494] underline">
+            국민연금 지역가입자 보험료 계산기
+          </Link>
+          에서 확인 가능합니다.
         </p>
       </section>
 

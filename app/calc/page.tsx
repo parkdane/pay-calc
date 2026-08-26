@@ -43,6 +43,11 @@ const GROUPS = [
         desc: "직장인·자영업자 대상, 조기·연기수급 반영",
       },
       {
+        href: "/calc/national-pension-premium",
+        title: "국민연금 지역가입자 보험료 계산기",
+        desc: "자영업자·프리랜서 대상, 2026년 요율 9.5% 반영",
+      },
+      {
         href: "/calc/deposit",
         title: "적금·예금 이자 계산기",
         desc: "세후 만기 수령액 (15.4% 반영)",
