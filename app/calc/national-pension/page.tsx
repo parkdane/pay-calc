@@ -65,6 +65,12 @@ export default function Page() {
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />
+
+      <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-4 text-sm">
+        <Link href="/guide/national-pension-guide" className="font-medium text-[#2E4494] underline">
+          A값·B값, 가입시기별 승수까지 자세히 보기 →
+        </Link>
+      </div>
     </div>
   );
 }
