@@ -75,7 +75,11 @@ export default function Page() {
           <Link href="/calc/savings-goal" className="text-[#2E4494] underline">
             저축 목표 시뮬레이터
           </Link>
-          에서 확인하세요.
+          에서 확인하세요. 육아휴직을 앞두고 있다면{" "}
+          <Link href="/calc/parental-leave" className="text-[#2E4494] underline">
+            육아휴직급여 계산기
+          </Link>
+          도 참고하세요.
         </p>
       </section>
 
