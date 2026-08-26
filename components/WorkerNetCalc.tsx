@@ -11,8 +11,9 @@ const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const manwon = (n: number) => Math.round(n / 10000).toLocaleString("ko-KR") + "만";
 
 // 2026 근로자 본인부담 요율
-const PENSION_RATE = 0.045;
-const PENSION_BASE_MAX = 6590000; // 국민연금 기준소득월액 상한
+// 국민연금 보험료율 9.5%(2025년까지 9%→2026년부터 매년 0.5%p씩 인상, 2033년 13%), 본인부담은 절반인 4.75%
+const PENSION_RATE = 0.0475;
+const PENSION_BASE_MAX = 6590000; // 국민연금 기준소득월액 상한(2026.7~2027.6)
 const HEALTH_RATE = 0.03595;
 const LTC_RATE_OF_HEALTH = 0.1314;
 const EMPLOYMENT_RATE = 0.009;
@@ -40,7 +41,7 @@ function calcNet(annualGross: number, dependents: number) {
   return {
     monthlyGross,
     deductions: [
-      { label: "국민연금 (4.5%)", value: pension },
+      { label: "국민연금 (4.75%)", value: pension },
       { label: "건강보험 (3.595%)", value: health },
       { label: "장기요양보험", value: ltc },
       { label: "고용보험 (0.9%)", value: employment },

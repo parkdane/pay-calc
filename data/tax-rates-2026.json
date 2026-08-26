@@ -4,7 +4,7 @@
   "_note": "공무원은 국민연금 대신 공무원연금(기여율 9%) 적용.",
 
   "civilPensionRate": 0.09,
-  "nationalPensionRate": 0.045,
+  "nationalPensionRate": 0.0475,
   "nationalPensionBaseMax": 6590000,
   "nationalPensionBaseMin": 410000,
 
