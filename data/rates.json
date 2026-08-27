@@ -1,7 +1,17 @@
 {
-  "updatedAt": "2026-08-26T21:00:48.607Z",
+  "updatedAt": "2026-08-27T21:00:48.548Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
+    {
+      "bank": "우리저축은행",
+      "product": "정기예금(비대면)",
+      "baseRate": 4.11,
+      "maxRate": 4.11,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷,스마트폰",
+      "note": "없음"
+    },
     {
       "bank": "애큐온저축은행",
       "product": "처음만난예금(모바일전용)",
@@ -65,6 +75,16 @@
     {
       "bank": "바로저축은행",
       "product": "SB톡톡 정기예금(비대면)",
+      "baseRate": 4,
+      "maxRate": 4,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "국제저축은행",
+      "product": "꿈 찾아 정기예금(비대면)",
       "baseRate": 4,
       "maxRate": 4,
       "term": 12,
@@ -181,26 +201,6 @@
       "group": "저축은행",
       "joinWay": "스마트폰",
       "note": "없음"
-    },
-    {
-      "bank": "디비저축은행",
-      "product": "DreamBig 정기예금(6M)",
-      "baseRate": 3.9,
-      "maxRate": 3.9,
-      "term": 6,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "해당사항없음"
-    },
-    {
-      "bank": "디비저축은행",
-      "product": "M-DreamBig 정기예금(6M)",
-      "baseRate": 3.9,
-      "maxRate": 3.9,
-      "term": 6,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "해당사항없음"
     }
   ],
   "savings": [
