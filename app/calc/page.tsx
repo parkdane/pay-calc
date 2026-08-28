@@ -129,6 +129,11 @@ const GROUPS = [
         title: "육아휴직급여 계산기",
         desc: "월별 상한액 + 6+6 부모육아휴직제 특례 반영",
       },
+      {
+        href: "/calc/maternity-leave",
+        title: "출산전후휴가급여 계산기",
+        desc: "기업규모별 지급구조, 다태아 특례 반영",
+      },
     ],
   },
   {

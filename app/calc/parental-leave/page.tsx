@@ -71,7 +71,11 @@ export default function Page() {
           <Link href="/calc/worker-net" className="text-[#2E4494] underline">
             직장인 연봉 실수령액 계산기
           </Link>
-          에서 확인하세요.
+          에서 확인하세요. 출산 직후 기간이라면{" "}
+          <Link href="/calc/maternity-leave" className="text-[#2E4494] underline">
+            출산전후휴가급여 계산기
+          </Link>
+          도 함께 확인해보세요.
         </p>
       </section>
 
