@@ -1,17 +1,7 @@
 {
-  "updatedAt": "2026-08-27T21:00:48.548Z",
+  "updatedAt": "2026-08-28T21:00:49.134Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
-    {
-      "bank": "우리저축은행",
-      "product": "정기예금(비대면)",
-      "baseRate": 4.11,
-      "maxRate": 4.11,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "없음"
-    },
     {
       "bank": "애큐온저축은행",
       "product": "처음만난예금(모바일전용)",
@@ -183,21 +173,31 @@
       "note": "해당사항없음"
     },
     {
-      "bank": "애큐온저축은행",
-      "product": "플러스회전식정기예금(모바일)",
-      "baseRate": 3.9,
-      "maxRate": 3.9,
+      "bank": "유안타저축은행",
+      "product": "회전정기예금 (변동금리)",
+      "baseRate": 3.91,
+      "maxRate": 3.91,
       "term": 12,
       "group": "저축은행",
-      "joinWay": "스마트폰",
+      "joinWay": "영업점",
       "note": "없음"
     },
     {
-      "bank": "애큐온저축은행",
-      "product": "플러스회전식(6M)정기예금(모바일)",
-      "baseRate": 3.9,
-      "maxRate": 3.9,
-      "term": 6,
+      "bank": "유안타저축은행",
+      "product": "e-회전정기예금 (변동금리)",
+      "baseRate": 3.91,
+      "maxRate": 3.91,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷,스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "유안타저축은행",
+      "product": "SB톡톡 회전정기예금 (비대면)",
+      "baseRate": 3.91,
+      "maxRate": 3.91,
+      "term": 12,
       "group": "저축은행",
       "joinWay": "스마트폰",
       "note": "없음"
