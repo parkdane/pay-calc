@@ -1,7 +1,37 @@
 {
-  "updatedAt": "2026-08-30T21:00:48.415Z",
+  "updatedAt": "2026-08-31T21:00:48.828Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
+    {
+      "bank": "HB저축은행",
+      "product": "스마트회전정기예금",
+      "baseRate": 4.02,
+      "maxRate": 4.02,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "해당사항없음"
+    },
+    {
+      "bank": "HB저축은행",
+      "product": "e-정기예금",
+      "baseRate": 4.01,
+      "maxRate": 4.01,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷",
+      "note": "해당사항없음"
+    },
+    {
+      "bank": "HB저축은행",
+      "product": "스마트정기예금",
+      "baseRate": 4.01,
+      "maxRate": 4.01,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "해당사항없음"
+    },
     {
       "bank": "애큐온저축은행",
       "product": "처음만난예금(모바일전용)",
@@ -31,16 +61,6 @@
       "group": "저축은행",
       "joinWay": "영업점,인터넷,스마트폰",
       "note": "* 가입시점 우대금리 조건 충족시 최대 0.1%p 가산 적용(계약기간 24개월 이내)\n- 계좌별 가입금액 10억원 이상 : 0.1%p(최초 계약기간 한정)\n- 우수고객 : 0.1%p(거래기간 3년 이상, 직전 2년 "
-    },
-    {
-      "bank": "HB저축은행",
-      "product": "6개월 회전정기예금",
-      "baseRate": 4,
-      "maxRate": 4,
-      "term": 6,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "해당사항없음"
     },
     {
       "bank": "키움예스저축은행",
@@ -93,16 +113,6 @@
       "note": "없음"
     },
     {
-      "bank": "HB저축은행",
-      "product": "스마트회전정기예금",
-      "baseRate": 3.96,
-      "maxRate": 3.96,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "해당사항없음"
-    },
-    {
       "bank": "애큐온저축은행",
       "product": "다시만난예금(모바일전용)",
       "baseRate": 3.6,
@@ -111,36 +121,6 @@
       "group": "저축은행",
       "joinWay": "스마트폰",
       "note": "최고우대금리 : 0.35%\n- 다시 거래하는 고객 우대(6개월 이상 정기예금 미보유 : 0.25%\n(고시금리 미포함)\n- 다시 거래하는 고객 우대(12개월 이상 정기예금 미보유 : 0.35%\n(고시금리 미포함)"
-    },
-    {
-      "bank": "디비저축은행",
-      "product": "DreamBig 정기예금",
-      "baseRate": 3.95,
-      "maxRate": 3.95,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "해당사항없음"
-    },
-    {
-      "bank": "디비저축은행",
-      "product": "DreamBig E-정기예금",
-      "baseRate": 3.95,
-      "maxRate": 3.95,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷",
-      "note": "해당사항없음"
-    },
-    {
-      "bank": "디비저축은행",
-      "product": "M-DreamBig 정기예금",
-      "baseRate": 3.95,
-      "maxRate": 3.95,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "해당사항없음"
     },
     {
       "bank": "민국저축은행",
@@ -154,22 +134,12 @@
     },
     {
       "bank": "HB저축은행",
-      "product": "e-정기예금",
-      "baseRate": 3.95,
-      "maxRate": 3.95,
-      "term": 12,
+      "product": "6개월 회전정기예금",
+      "baseRate": 3.91,
+      "maxRate": 3.91,
+      "term": 6,
       "group": "저축은행",
-      "joinWay": "인터넷",
-      "note": "해당사항없음"
-    },
-    {
-      "bank": "HB저축은행",
-      "product": "스마트정기예금",
-      "baseRate": 3.95,
-      "maxRate": 3.95,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
+      "joinWay": "영업점",
       "note": "해당사항없음"
     },
     {
@@ -201,6 +171,36 @@
       "group": "저축은행",
       "joinWay": "스마트폰",
       "note": "없음"
+    },
+    {
+      "bank": "애큐온저축은행",
+      "product": "플러스회전식정기예금(모바일)",
+      "baseRate": 3.9,
+      "maxRate": 3.9,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "애큐온저축은행",
+      "product": "플러스회전식(6M)정기예금(모바일)",
+      "baseRate": 3.9,
+      "maxRate": 3.9,
+      "term": 6,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "스카이저축은행",
+      "product": "정기예금",
+      "baseRate": 3.8,
+      "maxRate": 3.9,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "영업점 내방 12개월 신규 또는 재예치 시 + 0.1%"
     }
   ],
   "savings": [
