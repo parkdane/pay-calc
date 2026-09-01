@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-31T21:00:48.828Z",
+  "updatedAt": "2026-09-01T21:01:21.249Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
     {
@@ -85,16 +85,6 @@
     {
       "bank": "바로저축은행",
       "product": "SB톡톡 정기예금(비대면)",
-      "baseRate": 4,
-      "maxRate": 4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "국제저축은행",
-      "product": "꿈 찾아 정기예금(비대면)",
       "baseRate": 4,
       "maxRate": 4,
       "term": 12,
@@ -201,6 +191,16 @@
       "group": "저축은행",
       "joinWay": "영업점",
       "note": "영업점 내방 12개월 신규 또는 재예치 시 + 0.1%"
+    },
+    {
+      "bank": "스카이저축은행",
+      "product": "비대면회전정기예금",
+      "baseRate": 3.9,
+      "maxRate": 3.9,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷,스마트폰",
+      "note": "없음"
     }
   ],
   "savings": [
@@ -349,7 +349,7 @@
       "product": "KB 특★한 적금",
       "baseRate": 2,
       "maxRate": 6,
-      "term": 1,
+      "term": 6,
       "group": "은행",
       "joinWay": "스마트폰",
       "note": "항목별 적용 조건 충족시, 최고 연 4.0%p\n① 목표달성 축하 우대이율: 최고 연 1.0%p\n    50만원 이하: 연 0.5%p, 50만원 초과: 연 1.0%p \n② 별 모으기 우대이율 : 최고 연 1.0%p\n "
