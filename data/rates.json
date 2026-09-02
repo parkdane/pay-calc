@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-01T21:01:21.249Z",
+  "updatedAt": "2026-09-02T21:01:01.194Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
     {
@@ -11,6 +11,36 @@
       "group": "저축은행",
       "joinWay": "스마트폰",
       "note": "해당사항없음"
+    },
+    {
+      "bank": "바로저축은행",
+      "product": "스마트정기예금(인터넷)",
+      "baseRate": 4.02,
+      "maxRate": 4.02,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷",
+      "note": "없음"
+    },
+    {
+      "bank": "바로저축은행",
+      "product": "SB톡톡 정기예금(비대면)",
+      "baseRate": 4.02,
+      "maxRate": 4.02,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "흥국저축은행",
+      "product": "비대면 정기예금",
+      "baseRate": 4.02,
+      "maxRate": 4.02,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
     },
     {
       "bank": "HB저축은행",
@@ -71,36 +101,6 @@
       "group": "저축은행",
       "joinWay": "인터넷,스마트폰",
       "note": "-"
-    },
-    {
-      "bank": "바로저축은행",
-      "product": "스마트정기예금(인터넷)",
-      "baseRate": 4,
-      "maxRate": 4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷",
-      "note": "없음"
-    },
-    {
-      "bank": "바로저축은행",
-      "product": "SB톡톡 정기예금(비대면)",
-      "baseRate": 4,
-      "maxRate": 4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "흥국저축은행",
-      "product": "비대면 정기예금",
-      "baseRate": 4,
-      "maxRate": 4,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
     },
     {
       "bank": "애큐온저축은행",
