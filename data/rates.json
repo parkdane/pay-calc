@@ -1,77 +1,7 @@
 {
-  "updatedAt": "2026-09-08T21:01:59.710Z",
+  "updatedAt": "2026-09-09T21:01:22.407Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
-    {
-      "bank": "HB저축은행",
-      "product": "스마트회전정기예금",
-      "baseRate": 4.02,
-      "maxRate": 4.02,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "해당사항없음"
-    },
-    {
-      "bank": "바로저축은행",
-      "product": "스마트정기예금(인터넷)",
-      "baseRate": 4.02,
-      "maxRate": 4.02,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷",
-      "note": "없음"
-    },
-    {
-      "bank": "바로저축은행",
-      "product": "SB톡톡 정기예금(비대면)",
-      "baseRate": 4.02,
-      "maxRate": 4.02,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "국제저축은행",
-      "product": "꿈 찾아 정기예금(비대면)",
-      "baseRate": 4.02,
-      "maxRate": 4.02,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "흥국저축은행",
-      "product": "비대면 정기예금",
-      "baseRate": 4.02,
-      "maxRate": 4.02,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "HB저축은행",
-      "product": "e-정기예금",
-      "baseRate": 4.01,
-      "maxRate": 4.01,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷",
-      "note": "해당사항없음"
-    },
-    {
-      "bank": "HB저축은행",
-      "product": "스마트정기예금",
-      "baseRate": 4.01,
-      "maxRate": 4.01,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "해당사항없음"
-    },
     {
       "bank": "애큐온저축은행",
       "product": "처음만난예금(모바일전용)",
@@ -113,6 +43,56 @@
       "note": "-"
     },
     {
+      "bank": "국제저축은행",
+      "product": "꿈 찾아 정기예금(비대면)",
+      "baseRate": 4,
+      "maxRate": 4,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "바로저축은행",
+      "product": "스마트정기예금(인터넷)",
+      "baseRate": 3.97,
+      "maxRate": 3.97,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷",
+      "note": "없음"
+    },
+    {
+      "bank": "바로저축은행",
+      "product": "SB톡톡 정기예금(비대면)",
+      "baseRate": 3.97,
+      "maxRate": 3.97,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "흥국저축은행",
+      "product": "비대면 정기예금",
+      "baseRate": 3.97,
+      "maxRate": 3.97,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "HB저축은행",
+      "product": "스마트회전정기예금",
+      "baseRate": 3.96,
+      "maxRate": 3.96,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "해당사항없음"
+    },
+    {
       "bank": "애큐온저축은행",
       "product": "다시만난예금(모바일전용)",
       "baseRate": 3.6,
@@ -134,13 +114,43 @@
     },
     {
       "bank": "HB저축은행",
-      "product": "6개월 회전정기예금",
-      "baseRate": 3.91,
-      "maxRate": 3.91,
-      "term": 6,
+      "product": "e-정기예금",
+      "baseRate": 3.95,
+      "maxRate": 3.95,
+      "term": 12,
       "group": "저축은행",
-      "joinWay": "영업점",
+      "joinWay": "인터넷",
       "note": "해당사항없음"
+    },
+    {
+      "bank": "HB저축은행",
+      "product": "스마트정기예금",
+      "baseRate": 3.95,
+      "maxRate": 3.95,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "해당사항없음"
+    },
+    {
+      "bank": "키움예스저축은행",
+      "product": "e-회전yes정기예금(1년단위 변동금리상품) (인터넷뱅킹, 스마트뱅킹)",
+      "baseRate": 3.92,
+      "maxRate": 3.92,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷,스마트폰",
+      "note": "*회전시점의 정기예금 12개월 금리 + 우대금리 0.1% 적용, 매1년 회전주기 단위로 약정이율이 변동\n*중도해지시 회전주기 충족분에는 약정이율, 잔여기간에는 중도해지이율 적용"
+    },
+    {
+      "bank": "키움예스저축은행",
+      "product": "SB톡톡 회전yes정기예금(1년단위 변동금리상품) (비대면)",
+      "baseRate": 3.92,
+      "maxRate": 3.92,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "*회전시점의 정기예금 12개월 금리 + 우대금리 0.1% 적용, 매1년 회전주기 단위로 약정이율이 변동\n*중도해지시 회전주기 충족분에는 약정이율, 잔여기간에는 중도해지이율 적용"
     },
     {
       "bank": "애큐온저축은행",
@@ -186,16 +196,6 @@
       "bank": "HB저축은행",
       "product": "정기예금",
       "baseRate": 3.9,
-      "maxRate": 3.9,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "해당사항없음"
-    },
-    {
-      "bank": "HB저축은행",
-      "product": "회전정기예금",
-      "baseRate": 3.8,
       "maxRate": 3.9,
       "term": 12,
       "group": "저축은행",
@@ -349,7 +349,7 @@
       "product": "KB 특★한 적금",
       "baseRate": 2,
       "maxRate": 6,
-      "term": 6,
+      "term": 1,
       "group": "은행",
       "joinWay": "스마트폰",
       "note": "항목별 적용 조건 충족시, 최고 연 4.0%p\n① 목표달성 축하 우대이율: 최고 연 1.0%p\n    50만원 이하: 연 0.5%p, 50만원 초과: 연 1.0%p \n② 별 모으기 우대이율 : 최고 연 1.0%p\n "
