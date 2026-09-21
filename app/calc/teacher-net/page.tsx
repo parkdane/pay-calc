@@ -82,6 +82,13 @@ export default function Page() {
           </Link>
           를 기준으로 합니다.
         </p>
+        <p>
+          정년퇴직이 언제인지 궁금하다면{" "}
+          <Link href="/calc/retirement-age" className="text-[#2E4494] underline">
+            정년퇴직일 계산기
+          </Link>
+          에서 확인하세요.
+        </p>
       </section>
 
       <Faq items={FAQ} />
