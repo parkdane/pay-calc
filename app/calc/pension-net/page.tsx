@@ -3,6 +3,7 @@ import PensionNetCalc from "@/components/PensionNetCalc";
 import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -14,6 +15,15 @@ export const metadata: Metadata = {
     description: "임용일·직급·호봉을 입력하면 은퇴 후 받을 공무원연금 예상 월수령액을 계산합니다. 일반직·교사·경찰·소방·군인 전부 지원하며, 1997~2026년 실제 봉급표와 3단계 산식(구법·과도기·소득재분배)을 반영합니다.",
   },
 };
+
+const START_AGE: [string, string][] = [
+  ["2016~2021년", "60세"],
+  ["2022~2023년", "61세"],
+  ["2024~2026년", "62세"],
+  ["2027~2029년", "63세"],
+  ["2030~2032년", "64세"],
+  ["2033년 이후", "65세"],
+];
 
 const FAQ = [
   {
@@ -31,6 +41,14 @@ const FAQ = [
   {
     q: "조기퇴직하면 연금이 얼마나 줄어드나요?",
     a: "연금 개시연령보다 일찍 수급을 시작하면(조기퇴직연금) 1년당 5%씩, 최대 5년(25%)까지 감액됩니다. 개시연령은 임용 시기와 퇴직연도에 따라 다르며, 1996~2009년 임용자는 2024~2026년 퇴직 시 62세, 2027~2029년 63세, 2030~2032년 64세, 2033년 이후 65세입니다(공무원연금공단 안내). 이 계산기는 이 기준을 적용하고, 2010년 이후 임용자는 65세로 보수적으로 계산합니다. 개시연령 이후부터 받으면 감액이 없습니다.",
+  },
+  {
+    q: "2026년에 퇴직하면 연금은 언제부터 받나요?",
+    a: "1996~2009년에 임용된 공무원은 2024~2026년에 퇴직하면 62세부터 받습니다. 2027~2029년 퇴직은 63세, 2030~2032년 64세, 2033년 이후 65세로 늦어지고, 1995년 이전 임용자는 60세입니다(공무원연금공단 안내).",
+  },
+  {
+    q: "재직 10년이 안 되면 연금을 못 받나요?",
+    a: "10년 이상 재직하고 퇴직해야 퇴직연금을 받습니다(공무원연금법 제43조). 10년 미만이면 매달 받는 연금 대신 퇴직일시금을 받습니다.",
   },
 ];
 
@@ -66,6 +84,58 @@ export default function Page() {
         <p className="text-xs font-semibold text-[#2E4494]">교원·일반직 공무원이라면</p>
         <p className="mt-0.5 font-bold text-[#1B2A4A]">내 정년퇴직일 먼저 계산해보기 →</p>
       </Link>
+
+      <section className="space-y-4 text-sm leading-relaxed text-[#5B6478]">
+        <h2 className="text-xl font-bold text-[#1B2A4A]">연금은 언제부터, 얼마나 줄어드나</h2>
+        <p>
+          퇴직연금은 퇴직하자마자 나오는 게 아니라 퇴직연도별 개시연령부터 지급됩니다. 아래는 1996~2009년 임용자 기준이며,
+          1995년 이전 임용자는 60세, 2010년 이후 임용자는 65세입니다(이 계산기는 2010년 이후 임용자를 65세로 보수적으로 계산).
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="overflow-x-auto rounded-xl border border-[rgba(46,68,148,0.14)]">
+            <table className="w-full text-sm">
+              <thead className="bg-[#F5F6FA] text-xs text-[#7A8296]">
+                <tr>
+                  <th className="px-4 py-2 text-left font-medium">퇴직연도</th>
+                  <th className="px-4 py-2 text-right font-medium">연금 개시연령</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[rgba(46,68,148,0.08)] bg-white text-[#1B2A4A]">
+                {START_AGE.map(([y, a]) => (
+                  <tr key={y}>
+                    <td className="px-4 py-2">{y}</td>
+                    <td className="px-4 py-2 text-right">{a}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="overflow-x-auto rounded-xl border border-[rgba(46,68,148,0.14)]">
+            <table className="w-full text-sm">
+              <thead className="bg-[#F5F6FA] text-xs text-[#7A8296]">
+                <tr>
+                  <th className="px-4 py-2 text-left font-medium">개시연령보다 일찍 받으면</th>
+                  <th className="px-4 py-2 text-right font-medium">감액</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[rgba(46,68,148,0.08)] bg-white text-[#1B2A4A]">
+                {[1, 2, 3, 4, 5].map((y) => (
+                  <tr key={y}>
+                    <td className="px-4 py-2">{y}년 일찍</td>
+                    <td className="px-4 py-2 text-right">−{y * 5}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p>
+          조기퇴직연금의 감액은 평생 유지되므로, 정년퇴직 후 개시연령까지 몇 년을 기다릴지와 그 사이 소득을 어떻게 메울지를
+          함께 계획하는 것이 좋습니다. 퇴직 시 한 번에 받는 퇴직수당은 연금과 별개입니다.
+        </p>
+      </section>
+
+      <SourceNote slug="pension-net" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

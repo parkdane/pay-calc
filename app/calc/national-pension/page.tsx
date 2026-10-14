@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import NationalPensionCalc from "@/components/NationalPensionCalc";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -66,6 +67,8 @@ export default function Page() {
           에서 확인 가능합니다.
         </p>
       </section>
+
+      <SourceNote slug="national-pension" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

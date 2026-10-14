@@ -3,6 +3,7 @@ import YouthSavingsCalc from "@/components/YouthSavingsCalc";
 import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 
 export const metadata: Metadata = {
   title: "청년미래적금 계산기 (2026년 기준)",
@@ -65,6 +66,8 @@ export default function Page() {
           받을 수 있습니다.
         </p>
       </section>
+
+      <SourceNote slug="youth-save" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import UnemploymentBenefitCalc from "@/components/UnemploymentBenefitCalc";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -69,6 +70,8 @@ export default function Page() {
           에서 확인하세요.
         </p>
       </section>
+
+      <SourceNote slug="unemployment-benefit" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

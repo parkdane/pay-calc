@@ -3,6 +3,7 @@ import NaeilSavingsCalc from "@/components/NaeilSavingsCalc";
 import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -73,6 +74,8 @@ export default function Page() {
           에서 비교해볼 수 있습니다.
         </p>
       </section>
+
+      <SourceNote slug="naeil-save" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

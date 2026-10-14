@@ -3,6 +3,7 @@ import SavingsGoalSim from "@/components/SavingsGoalSim";
 import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -74,6 +75,8 @@ export default function Page() {
           을 비교해보세요.
         </p>
       </section>
+
+      <SourceNote slug="savings-goal" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

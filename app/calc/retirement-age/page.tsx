@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import RetirementAgeCalc from "@/components/RetirementAgeCalc";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 import { calcRetirementDate, type JobCategory } from "@/lib/retirementAgeCalc";
 import { calcSeverance } from "@/lib/severance";
@@ -193,6 +194,8 @@ export default function Page() {
           에서 확인할 수 있습니다.
         </p>
       </section>
+
+      <SourceNote slug="retirement-age" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

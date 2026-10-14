@@ -3,6 +3,8 @@ import CivilNetCalc from "@/components/CivilNetCalc";
 import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
+import PayStructure, { EXAMPLES } from "@/components/PayStructure";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -14,6 +16,8 @@ export const metadata: Metadata = {
     description: "유·초·중·고 교사의 호봉과 담임·보직 여부를 입력하면 교직수당·담임수당을 반영한 2026년 세후 월급을 계산합니다.",
   },
 };
+
+const wonFmt = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
 const FAQ = [
   {
@@ -31,6 +35,14 @@ const FAQ = [
   {
     q: "40호봉이 끝인가요?",
     a: "아닙니다. 40호봉 이후에는 근속가봉이 적용되어 1년마다 81,000원씩 최대 10호봉(근가10, 월 7,016,100원)까지 오릅니다.",
+  },
+  {
+    q: "신규 교사(9호봉)의 세전 월급은 얼마인가요?",
+    a: `사범대 졸업 초임은 보통 9호봉에서 시작합니다. 9호봉 봉급 ${wonFmt(EXAMPLES.teacher9)}에 교직수당 25만 원, 담임수당 20만 원, 정액급식비 16만 원을 더하면 매달 고정 세전 금액은 ${wonFmt(EXAMPLES.teacher9Total)}입니다. 담임을 맡지 않으면 20만 원이 빠집니다.`,
+  },
+  {
+    q: "교사는 직급보조비를 받지 않나요?",
+    a: "교원에게는 일반직 공무원의 직급보조비 대신 교직수당 월 25만 원이 모든 교원에게 지급됩니다. 이 계산기도 교사를 선택하면 직급보조비 대신 교직수당을 반영합니다.",
   },
 ];
 
@@ -90,6 +102,10 @@ export default function Page() {
           에서 확인하세요.
         </p>
       </section>
+
+      <PayStructure variant="teacher" />
+
+      <SourceNote slug="teacher-net" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

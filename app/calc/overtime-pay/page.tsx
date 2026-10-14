@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import OvertimePayCalc from "@/components/OvertimePayCalc";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 import police from "@/data/salary-police-2026.json";
 import fire from "@/data/salary-fire-2026.json";
@@ -135,6 +136,8 @@ export default function Page() {
           에서 확인하세요.
         </p>
       </section>
+
+      <SourceNote slug="overtime-pay" />
 
       <Faq items={ALL_FAQ} />
       <FaqJsonLd items={ALL_FAQ} />

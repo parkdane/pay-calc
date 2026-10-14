@@ -3,6 +3,8 @@ import CivilNetCalc from "@/components/CivilNetCalc";
 import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
+import PayStructure, { EXAMPLES } from "@/components/PayStructure";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -14,6 +16,8 @@ export const metadata: Metadata = {
     description: "직종·직급·호봉과 가족·근속연수·시간외근무를 입력하면 간이세액표 방식으로 2026년 세후 월급과 연간 수령액을 계산합니다.",
   },
 };
+
+const wonFmt = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
 const FAQ = [
   {
@@ -31,6 +35,14 @@ const FAQ = [
   {
     q: "공무원도 국민연금에 가입하나요?",
     a: "아닙니다. 공무원은 국민연금 대신 공무원연금에 가입하며, 기여율이 9%로 국민연금 본인부담(4.75%)보다 높은 대신 수령 구조가 다릅니다.",
+  },
+  {
+    q: "9급 1호봉 세전 월급은 얼마인가요?",
+    a: `봉급에 정액급식비 16만 원과 직급보조비 17만 5천 원을 더한 ${wonFmt(EXAMPLES.civil9_1)}이 매달 고정으로 받는 세전 금액입니다. 여기에 가족수당·시간외수당이 개인별로 더해지고, 정근수당과 명절휴가비는 연 2회 따로 지급됩니다.`,
+  },
+  {
+    q: "경찰·소방 봉급은 일반직 공무원과 같나요?",
+    a: `1호봉은 순경과 9급 모두 ${wonFmt(EXAMPLES.police1_1)}으로 같지만 봉급표 자체가 다릅니다. 경찰·소방은 공무원보수규정 별표10을 따로 쓰며, 10호봉 기준으로 순경은 ${wonFmt(EXAMPLES.police1_10)}, 일반직 9급은 ${wonFmt(EXAMPLES.civil9_10)}입니다. 경찰·소방에는 위험근무수당 월 8만 원도 붙습니다.`,
   },
 ];
 
@@ -94,6 +106,10 @@ export default function Page() {
           봉급표를 기준으로 합니다.
         </p>
       </section>
+
+      <PayStructure variant="civil" />
+
+      <SourceNote slug="civil-net" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

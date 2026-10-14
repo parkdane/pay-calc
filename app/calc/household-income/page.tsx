@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import HouseholdIncomeCalc from "@/components/HouseholdIncomeCalc";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -49,6 +50,8 @@ export default function Page() {
       <div className="mx-[calc(50%-50vw)] w-screen">
         <HouseholdIncomeCalc />
       </div>
+
+      <SourceNote slug="household-income" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import BusinessBreakEvenCalc from "@/components/BusinessBreakEvenCalc";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 export const metadata: Metadata = {
   title: "자영업자 매출 실수령액 · 손익분기점 계산기",
@@ -49,6 +50,8 @@ export default function Page() {
         <p className="text-xs font-semibold text-[#2E4494]">매달 나가는 고정비 중 하나</p>
         <p className="mt-0.5 font-bold text-[#1B2A4A]">국민연금 지역가입자 보험료도 계산해보기 →</p>
       </Link>
+
+      <SourceNote slug="business-breakeven" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

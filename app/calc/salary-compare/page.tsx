@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import SalaryCompareCalc from "@/components/SalaryCompareCalc";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -53,11 +54,13 @@ export default function Page() {
       <section className="space-y-3 text-sm leading-relaxed text-[#5B6478]">
         <h2 className="text-xl font-bold text-[#1B2A4A]">계산 방식</h2>
         <p>
-          각 기업의 사업보고서 "직원현황"에 보고된 1인평균급여액을 그대로 사용합니다. 사업부문·성별로 나뉘어
+          각 기업의 사업보고서 &quot;직원현황&quot;에 보고된 1인평균급여액을 그대로 사용합니다. 사업부문·성별로 나뉘어
           보고되는 경우(예: DX/DS 사업부문) 인원수를 가중치로 삼아 회사 전체 평균을 계산합니다. 입력한 연봉을
           이 목록의 기업들과 비교해 상위 몇 % 위치인지, 평균 대비 몇 배인지 계산합니다.
         </p>
       </section>
+
+      <SourceNote slug="salary-compare" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />

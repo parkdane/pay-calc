@@ -3,6 +3,7 @@ import SoldierSavingsCalc from "@/components/SoldierSavingsCalc";
 import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
+import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -68,6 +69,8 @@ export default function Page() {
           에서 확인할 수 있습니다.
         </p>
       </section>
+
+      <SourceNote slug="soldier-save" />
 
       <Faq items={FAQ} />
       <FaqJsonLd items={FAQ} />
