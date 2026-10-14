@@ -5,8 +5,8 @@ import civil from "@/data/salary-civil-2026.json";
 import police from "@/data/salary-police-2026.json";
 import fire from "@/data/salary-fire-2026.json";
 import teacher from "@/data/salary-teacher-2026.json";
-import rates from "@/data/tax-rates-2026.json";
 import AdSlot from "@/components/AdSlot";
+import { BASE_HOBONG, MAX_HOURS, overtimeReduction, overtimeHourlyRate } from "@/lib/overtime";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -16,12 +16,6 @@ const OCCUPATIONS = [
   { id: "fire", label: "소방", data: fire, columns: fire.columns, singleColumn: false },
   { id: "teacher", label: "교사 (유·초·중·고)", data: teacher, columns: teacher.columns, singleColumn: true },
 ] as const;
-
-const BASE_HOBONG = rates.overtime.baseHobong;
-const REDUCTION_60_GRADES: readonly string[] = rates.overtime.reduction60Grades;
-const REDUCTION_DEFAULT = rates.overtime.reductionDefault;
-const REDUCTION_60 = rates.overtime.reduction60;
-const MAX_HOURS = rates.overtime.maxHours;
 
 export default function OvertimePayCalc() {
   const [occIdx, setOccIdx] = useState(0);
@@ -37,8 +31,8 @@ export default function OvertimePayCalc() {
     const basePay = row.pay[gradeIdx];
     if (basePay === undefined || basePay === null) return null;
 
-    const reduction = REDUCTION_60_GRADES.includes(gradeLabel) ? REDUCTION_60 : REDUCTION_DEFAULT;
-    const hourlyRate = ((basePay * reduction) / 209) * 1.5;
+    const reduction = overtimeReduction(gradeLabel);
+    const hourlyRate = overtimeHourlyRate(basePay, gradeLabel);
     const cappedHours = Math.min(hours, MAX_HOURS);
     const total = hourlyRate * cappedHours;
 

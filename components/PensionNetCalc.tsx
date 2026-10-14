@@ -65,18 +65,32 @@ export default function PensionNetCalc() {
   const [useDetail, setUseDetail] = useState(false);
   const [promotions, setPromotions] = useState<PromotionRow[]>([]);
 
-  // URL의 ?occ=military 같은 쿼리파라미터로 직군을 미리 선택 (salary 페이지 배너에서 딥링크용)
+  // URL 쿼리파라미터로 입력값을 미리 채움 (salary 페이지 배너·정년퇴직일 계산기 딥링크용)
+  // 예: ?occ=teacher&hire=2000-03-01&retire=2037-08-31&age=62&hobong=35
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const isoDate = /^\d{4}-\d{2}-\d{2}$/;
     const occParam = params.get("occ");
-    if (!occParam) return;
-    const idx = OCCUPATIONS.findIndex((o) => o.id === occParam);
-    if (idx >= 0) {
-      setOccIdx(idx);
-      setCurrentGrade(OCCUPATIONS[idx].grades[OCCUPATIONS[idx].grades.length - 1] || "");
+    let activeIdx = occIdx;
+    if (occParam) {
+      const idx = OCCUPATIONS.findIndex((o) => o.id === occParam);
+      if (idx >= 0) {
+        activeIdx = idx;
+        setOccIdx(idx);
+        setCurrentGrade(OCCUPATIONS[idx].grades[OCCUPATIONS[idx].grades.length - 1] || "");
+      }
     }
-    const branchParam = params.get("branch");
-    if (branchParam === "fire") setJobBranch("fire");
+    if (params.get("branch") === "fire") setJobBranch("fire");
+    const hire = params.get("hire");
+    if (hire && isoDate.test(hire)) setHireDate(hire);
+    const retire = params.get("retire");
+    if (retire && isoDate.test(retire)) setRetireDate(retire);
+    const age = Number(params.get("age"));
+    if (Number.isInteger(age) && age >= 40 && age <= 70) setRetireAge(age);
+    const hobong = Number(params.get("hobong"));
+    if (Number.isInteger(hobong) && hobong >= 1 && hobong <= 60) setCurrentHobong(hobong);
+    const grade = params.get("grade");
+    if (grade && OCCUPATIONS[activeIdx].grades.some((g) => g === grade)) setCurrentGrade(grade);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -153,11 +167,11 @@ export default function PensionNetCalc() {
         ],
         capNote: r.wasCapApplied ? "76% 상한이 적용된 금액입니다" : undefined,
         earlyReductionNote:
-          r.yearsEarly > 0 ? `-${r.yearsEarly * 5}% (${r.yearsEarly}년 조기, 개시가능나이 ${r.eligibleAge}세 근사 기준)` : undefined,
+          r.yearsEarly > 0 ? `-${r.yearsEarly * 5}% (개시연령 ${r.eligibleAge}세보다 ${r.yearsEarly}년 일찍 받는 조기퇴직연금 기준)` : undefined,
         approximationNotes: [
           "기준소득월액을 봉급표 값으로 근사했습니다. 실제 기준소득월액은 각종 수당이 포함되어 이보다 높을 수 있습니다.",
           "소득재분배 계산에 쓰이는 \"전체 공무원 평균 기준소득월액\"은 2026년 값(571만원)을 고정 사용했습니다.",
-          "연금개시가능연령은 65세로 근사했습니다. 2010년 이전 임용자는 실제로 이보다 빠를 수 있습니다(60~64세).",
+          "연금 개시연령은 임용 시기와 퇴직연도에 따라 적용했습니다(1996~2009년 임용자는 2024~2026년 퇴직 62세, 2027~2029년 63세, 2030~2032년 64세, 2033년 이후 65세 / 1995년 이전 임용자 60세 / 2010년 이후 임용자는 65세로 보수적 근사). 개시연령 전에 받는 조기퇴직연금은 1년당 5%(최대 25%) 감액되고, 개시연령 이후에 받으면 감액이 없습니다. 경찰·소방처럼 정년이 60세 미만인 직군은 별도 규정이 적용되어 실제와 다를 수 있습니다.",
         ],
       };
     } catch {

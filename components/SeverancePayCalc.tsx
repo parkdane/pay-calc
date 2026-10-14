@@ -3,24 +3,9 @@
 import { useMemo, useState } from "react";
 import MoneyInput from "@/components/MoneyInput";
 import AdSlot from "@/components/AdSlot";
+import { calcSeverance } from "@/lib/severance";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
-
-// 공무원연금법 시행령 제58조 / 군인연금법 시행령(동일 비율) 기준 재직기간별 지급율
-const BRACKETS = [
-  { minYears: 20, rate: 0.39 },
-  { minYears: 15, rate: 0.325 },
-  { minYears: 10, rate: 0.2925 },
-  { minYears: 5, rate: 0.2275 },
-  { minYears: 1, rate: 0.065 },
-];
-
-function getRate(years: number) {
-  for (const b of BRACKETS) {
-    if (years >= b.minYears) return b.rate;
-  }
-  return 0;
-}
 
 export default function SeverancePayCalc() {
   const [baseIncomeManwon, setBaseIncomeManwon] = useState(400);
@@ -28,10 +13,8 @@ export default function SeverancePayCalc() {
 
   const result = useMemo(() => {
     const baseIncome = baseIncomeManwon * 10000;
-    const cappedYears = Math.min(years, 33);
-    const rate = getRate(years);
-    const total = baseIncome * cappedYears * rate;
-    return { baseIncome, cappedYears, rate, total, eligible: years >= 1 };
+    const { cappedYears, rate, total, eligible } = calcSeverance(baseIncome, years);
+    return { baseIncome, cappedYears, rate, total, eligible };
   }, [baseIncomeManwon, years]);
 
   return (

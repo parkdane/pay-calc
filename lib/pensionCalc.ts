@@ -208,10 +208,23 @@ export function avgLastNYears(careerResults: CareerYear[], n = 5) {
   return lastN.reduce((s, r) => s + r.pay, 0) / lastN.length;
 }
 
-// ── 5. 연금개시가능연령 (근사치: 2010년 이후 임용자는 65세 고정.
-//      1996~2009년 임용자는 60~64세로 더 빠를 수 있으나 정확한 단계적 기준을
-//      확보하지 못해 65세로 보수적 근사 처리. 실제로는 더 일찍 받을 수 있음) ──
-export function estimateEligibleAge(_hireDate: string): number {
+// ── 5. 연금개시연령 (공무원연금법 부칙 / 공무원연금공단 안내 기준) ──
+//  - 1996.1.1~2009.12.31 임용자: 퇴직연도별 단계적 상향
+//    (2016~2021년 60세, 2022~2023년 61세, 2024~2026년 62세, 2027~2029년 63세, 2030~2032년 64세, 2033년~ 65세)
+//  - 1995.12.31 이전 임용자: 2021년 이후 퇴직 시 60세
+//  - 2010.1.1 이후 임용자: 종전 규정(65세)을 유지하는 것으로 보수적으로 근사
+//  - 60세 미만 정년·계급정년 직군(경찰·소방 등)은 "정년 후 N년 경과" 규정이 따로 있어 이 함수로는 정확히 반영되지 않음
+export function estimateEligibleAge(hireDate: string, retireDate?: string): number {
+  if (!retireDate) return 65;
+  const hireYear = new Date(hireDate).getFullYear();
+  const retireYear = new Date(retireDate).getFullYear();
+  if (hireYear >= 2010) return 65;
+  if (hireYear < 1996) return 60;
+  if (retireYear <= 2021) return 60;
+  if (retireYear <= 2023) return 61;
+  if (retireYear <= 2026) return 62;
+  if (retireYear <= 2029) return 63;
+  if (retireYear <= 2032) return 64;
   return 65;
 }
 
@@ -344,7 +357,7 @@ export function calcPension(params: {
 
   let pension = t1 + t2 + t3;
 
-  const eligibleAge = estimateEligibleAge(hireDate);
+  const eligibleAge = estimateEligibleAge(hireDate, retireDate);
   const yearsEarly = Math.max(eligibleAge - retireAge, 0);
   pension = applyEarlyRetirementReduction(pension, yearsEarly);
 
