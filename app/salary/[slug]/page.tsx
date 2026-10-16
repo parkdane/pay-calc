@@ -35,6 +35,30 @@ const PENSION_LABEL: Record<string, string> = {
   teacher: "교사 은퇴 후 연금",
 };
 
+// 검색 결과 설명문(스니펫): 페이지마다 실제 봉급 숫자를 넣어 차별화 (값은 데이터 파일에서 직접 읽음)
+const wonShort = (n: number) => `${n.toLocaleString("ko-KR")}원`;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function payAt(d: any, hobong: number, col: number): number | null {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return d.rows?.find((r: any) => r.hobong === hobong)?.pay?.[col] ?? null;
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function snippet(slug: string, d: any): string {
+  if (d.type === "military") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const soldier = (rank: string) => d.soldier.rows.find((r: any) => r.rank === rank)?.pay;
+    const nco = d.officerTables[0];
+    const officer = d.officerTables[1];
+    return `${d.year}년 군인 봉급: 병장 ${wonShort(soldier("병장"))}·상병 ${wonShort(soldier("상병"))}, 하사 1호봉 ${wonShort(nco.rows[0].pay[0])}, 소위 1호봉 ${wonShort(officer.rows[0].pay[0])}. 부사관·장교 계급·호봉별 전체 표와 실수령액 계산기.`;
+  }
+  if (slug === "teacher") {
+    return `${d.year}년 교원 봉급표: 초임 9호봉 ${wonShort(payAt(d, 9, 0)!)}, 20호봉 ${wonShort(payAt(d, 20, 0)!)}, 40호봉 ${wonShort(payAt(d, 40, 0)!)}. 유·초·중·고 교사 1~40호봉 전체 표와 교직·담임수당 포함 실수령액 계산기.`;
+  }
+  const first = d.columns[0];
+  const second = slug === "civil" ? 2 : 3; // 일반직은 7급, 경찰·소방은 경위·소방위
+  return `${d.year}년 ${d.title} 봉급표: ${first} 1호봉 ${wonShort(payAt(d, 1, 0)!)}, ${first} 10호봉 ${wonShort(payAt(d, 10, 0)!)}, ${d.columns[second]} 1호봉 ${wonShort(payAt(d, 1, second)!)}. 공무원보수규정 원문 기준 계급·호봉별 전체 표와 실수령액 계산기.`;
+}
+
 export function generateStaticParams() {
   return Object.keys(DATA).map((slug) => ({ slug }));
 }
@@ -48,10 +72,10 @@ export async function generateMetadata({
   const d = DATA[slug as Slug];
   return {
     title: `${d.year}년 ${d.title} 봉급표·호봉표`,
-    description: `${d.year}년 ${d.title} 봉급표(호봉표)를 계급·호봉별로 정리했습니다. 실수령액 계산기로 세후 월급까지 확인하세요.`,
+    description: snippet(slug, d),
   openGraph: {
     title: `${d.year}년 ${d.title} 봉급표·호봉표`,
-    description: `${d.year}년 ${d.title} 봉급표(호봉표)를 계급·호봉별로 정리했습니다. 실수령액 계산기로 세후 월급까지 확인하세요.`,
+    description: snippet(slug, d),
   },
 };
 }
