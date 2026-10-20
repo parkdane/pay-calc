@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-19T21:01:15.419Z",
+  "updatedAt": "2026-10-20T21:01:11.795Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
     {
@@ -45,8 +45,8 @@
     {
       "bank": "키움예스저축은행",
       "product": "e-회전yes정기예금(1년단위 변동금리상품) (인터넷뱅킹, 스마트뱅킹)",
-      "baseRate": 4.02,
-      "maxRate": 4.02,
+      "baseRate": 4.05,
+      "maxRate": 4.05,
       "term": 12,
       "group": "저축은행",
       "joinWay": "인터넷,스마트폰",
@@ -55,8 +55,8 @@
     {
       "bank": "키움예스저축은행",
       "product": "SB톡톡 회전yes정기예금(1년단위 변동금리상품) (비대면)",
-      "baseRate": 4.02,
-      "maxRate": 4.02,
+      "baseRate": 4.05,
+      "maxRate": 4.05,
       "term": 12,
       "group": "저축은행",
       "joinWay": "스마트폰",
