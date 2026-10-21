@@ -1,3 +1,17 @@
+import teacherPay from "@/data/salary-teacher-2026.json";
+import militaryPay from "@/data/salary-military-2026.json";
+import { calcNationalPension } from "@/lib/nationalPensionCalc";
+
+const w = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
+const tPay = (h: number) => teacherPay.rows.find((r) => r.hobong === h)!.pay[0] as number;
+const T_FIXED = 250000 + 160000; // 교직수당 + 정액급식비 (CivilNetCalc와 동일)
+const mil1 = (tableIdx: number, col: number) => militaryPay.officerTables[tableIdx].rows[0].pay[col] as number;
+const npMonthly = (years: number, income: number) =>
+  calcNationalPension({
+    startYear: 2026, startMonth: 1, endYear: 2026 + years - 1, endMonth: 12, avgMonthlyIncome: income,
+    claimType: "normal", claimYearsShift: 0, dependents: { spouse: false, childrenOrParents: 0, disabledChildren: 0 },
+  }).adjustedPension;
+
 export type GuideSection = { h2: string; paragraphs: string[] };
 export type Guide = {
   slug: string;
@@ -14,7 +28,7 @@ export type Guide = {
 export const GUIDES: Guide[] = [
   {
     slug: "military-net-guide",
-    title: "군인 실수령액, 계급·호봉별로 얼마나 다를까",
+    title: "군인 실수령액 2026: 병장 150만 원, 하사 1호봉 2,133,000원",
     desc: "병사와 간부는 봉급 체계 자체가 다릅니다. 이병 75만 원부터 간부 초임까지, 실수령액이 어떻게 갈리는지 정리했습니다.",
     date: "2026-07-15",
     calcHref: "/calc/military-net",
@@ -48,11 +62,18 @@ export const GUIDES: Guide[] = [
           "공무원연금은 퇴직연도별로 정해진 개시연령(2033년 이후 퇴직자는 65세)이 되어야 연금을 받을 수 있지만, 군인연금은 전역과 동시에 바로 지급이 시작됩니다. 은퇴 이후를 미리 계산해보고 싶다면 실수령액과는 별도로 예상연금 계산기를 함께 확인해보는 것을 추천합니다.",
         ],
       },
+      {
+        h2: "계급별 1호봉 기본급 한눈에 보기",
+        paragraphs: [
+          `2026년 군인 봉급표(공무원보수규정 별표13) 기준 1호봉 기본급은 하사 ${w(mil1(0, 0))}, 중사 ${w(mil1(0, 1))}, 상사 ${w(mil1(0, 2))}, 원사 ${w(mil1(0, 3))}이고, 장교는 소위 ${w(mil1(1, 0))}, 중위 ${w(mil1(1, 1))}, 대위 ${w(mil1(1, 2))}입니다.`,
+          "위 금액은 각 계급 봉급표의 첫 칸(1호봉) 기준이며 수당은 포함하지 않았습니다. 본인의 계급과 호봉에 맞는 기본급과 세후 실수령액은 군인 실수령액 계산기에서 골라 확인할 수 있습니다.",
+        ],
+      },
     ],
   },
   {
     slug: "youth-account-comparison",
-    title: "청년도약계좌 vs 청년미래적금, 뭐가 더 유리할까",
+    title: "청년도약계좌 vs 청년미래적금: 5년·3년 만기와 정부기여금 비교",
     desc: "5년 만기 도약계좌와 3년 만기 미래적금, 총액만 보면 착각하기 쉽습니다. 정부기여금 구조와 실효수익률까지 따져봤습니다.",
     date: "2026-07-16",
     calcHref: "/calc/youth-compare",
@@ -90,7 +111,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "four-insurance-explained",
-    title: "월급에서 빠지는 4대보험, 정확히 얼마씩 떼일까",
+    title: "4대보험 공제율 2026: 국민연금 4.75%·건강보험 3.595%·고용보험 0.9%",
     desc: "국민연금 4.75%, 건강보험 3.595%, 장기요양보험, 고용보험 0.9% — 각각 어떻게 계산되는지 원리를 정리했습니다.",
     date: "2026-07-17",
     calcHref: "/calc/worker-net",
@@ -129,7 +150,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "business-breakeven-guide",
-    title: "자영업 손익분기점, 어떻게 계산해야 할까",
+    title: "자영업 손익분기점 계산법: 고정비 ÷ 마진율",
     desc: "손익분기 매출 공식과 보증금을 고정비로 착각하면 안 되는 이유, 그리고 소상공인 생존율 통계까지 정리했습니다.",
     date: "2026-07-18",
     calcHref: "/calc/business-breakeven",
@@ -167,7 +188,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "fire-retirement-fund-guide",
-    title: "파이어족(FIRE) 은퇴자금, 4% 룰만 믿어도 될까",
+    title: "FIRE 은퇴자금 계산: 4% 룰(연 지출의 25배)과 그 한계",
     desc: "널리 알려진 4% 룰은 30년 은퇴를 전제로 만들어진 규칙입니다. 조기 은퇴자에게 그대로 적용하면 위험할 수 있는 이유를 정리했습니다.",
     date: "2026-07-20",
     calcHref: "/calc/fire",
@@ -360,7 +381,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "first-salary-tax",
-    title: "첫 월급, 세금은 왜 이렇게 떼일까",
+    title: "첫 월급 세금: 세전·세후 차이와 간이세액표 원천징수",
     desc: "4대보험과 소득세가 월급에서 빠져나가는 구조를 처음 월급 받는 사람 눈높이로 설명합니다.",
     date: "2026-07-09",
     calcHref: "/calc/civil-net",
@@ -432,11 +453,18 @@ export const GUIDES: Guide[] = [
           "정근수당은 1월과 7월에 목돈으로, 명절휴가비는 설·추석 무렵에 목돈으로 들어오기 때문에 월급 명세서만 보면 실제 연봉보다 적어 보일 수 있습니다. 연봉 협상이나 이직 비교 시에는 이런 목돈 항목까지 합산해서 봐야 정확합니다.",
         ],
       },
+      {
+        h2: "호봉별 고정 세전 월급 예시",
+        paragraphs: [
+          `봉급에 교직수당 25만 원과 정액급식비 16만 원을 더한 매달 고정 세전 금액(담임수당 제외)은 9호봉 ${w(tPay(9) + T_FIXED)}, 15호봉 ${w(tPay(15) + T_FIXED)}, 20호봉 ${w(tPay(20) + T_FIXED)}, 30호봉 ${w(tPay(30) + T_FIXED)}, 40호봉 ${w(tPay(40) + T_FIXED)}입니다. 담임을 맡으면 여기에 20만 원이 더해집니다.`,
+          `봉급만 보면 9호봉 ${w(tPay(9))}에서 20호봉 ${w(tPay(20))}까지 11년간 ${w(tPay(20) - tPay(9))}, 20호봉에서 30호봉까지 10년간 ${w(tPay(30) - tPay(20))}이 오릅니다. 경력 중반 이후 승급액이 더 커지는 구조라 장기 근속할수록 월급 증가 폭이 커집니다.`,
+        ],
+      },
     ],
   },
   {
     slug: "pension-net-guide",
-    title: "공무원·교사 은퇴 후 예상연금, 왜 이렇게 복잡하게 계산될까",
+    title: "공무원·교사 연금 계산법: 재직 시기별 산식과 소득재분배",
     desc: "은퇴를 앞둔 공무원·교사라면 2016년 이후 재직분에 적용되는 소득재분배 산식부터 알아야 합니다. 구법·과도기·신법 3단계 산식이 왜 필요한지 정리했습니다.",
     date: "2026-08-18",
     calcHref: "/calc/pension-net",
@@ -474,7 +502,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "household-income-guide",
-    title: "가구소득 계산, 내 연봉과 뭐가 다를까",
+    title: "가구소득 계산법: 개인 연봉과의 차이와 기준 중위소득 비교",
     desc: "맞벌이 합산소득은 개인 연봉과 다른 기준입니다. 평균 가구소득과 기준 중위소득, 어떤 걸 봐야 하는지 정리했습니다.",
     date: "2026-08-19",
     calcHref: "/calc/household-income",
@@ -512,7 +540,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "income-rank-guide",
-    title: "연봉 상위 몇 %, 어떻게 계산되는 걸까",
+    title: "연봉 상위 % 계산법: 국세청 근로소득 백분위 기준",
     desc: "국세청 근로소득 백분위 자료가 기준입니다. 평균 연봉과 중위 연봉이 왜 다르게 느껴지는지, 백분위의 의미를 정리했습니다.",
     date: "2026-08-19",
     calcHref: "/calc/income-rank",
@@ -550,7 +578,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "salary-compare-guide",
-    title: "대기업 평균연봉, DART 공시 숫자를 그대로 믿어도 될까",
+    title: "대기업 평균연봉 보는 법: DART 1인평균급여액의 의미와 한계",
     desc: "전자공시(DART)에 나오는 1인평균급여액은 재직 전 직원의 평균입니다. 내 예상 연봉과 다를 수 있는 이유를 정리했습니다.",
     date: "2026-08-20",
     calcHref: "/calc/salary-compare",
@@ -588,7 +616,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "deposit-savings-guide",
-    title: "예금·적금 이자, 세전과 세후는 왜 이렇게 차이 날까",
+    title: "예금·적금 세후 이자 계산: 이자소득세 15.4%",
     desc: "이자소득세 15.4%가 적용되는 방식과, 적금 이자가 원금 대비 생각보다 적게 느껴지는 이유를 정리했습니다.",
     date: "2026-08-20",
     calcHref: "/calc/deposit",
@@ -626,7 +654,7 @@ export const GUIDES: Guide[] = [
   },
   {
     slug: "savings-goal-guide",
-    title: "1억 모으기, 현실적으로 몇 년 걸릴까",
+    title: "1억 모으기 기간 계산: 월 저축액별 현실적인 목표",
     desc: "월급에서 고정비·생활비를 뺀 저축 가능액이 핵심입니다. 목표 금액까지 걸리는 기간을 현실적으로 계산하는 방법을 정리했습니다.",
     date: "2026-08-21",
     calcHref: "/calc/savings-goal",
@@ -741,7 +769,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "national-pension-guide",
-    title: "국민연금 예상수령액, A값·B값이 뭐길래 이렇게 복잡할까",
+    title: "국민연금 A값·B값 뜻과 계산법 (2026년 A값 3,193,511원)",
     desc: "국민연금 기본연금액은 전체 가입자 평균소득(A값)과 본인 평균소득(B값)을 함께 반영합니다. 가입 시기마다 승수가 다르고 2026년 개혁까지 겹쳐 헷갈리는 계산 구조를 정리했습니다.",
     date: "2026-08-26",
     calcHref: "/calc/national-pension",
@@ -764,7 +792,7 @@ export const GUIDES: Guide[] = [
       {
         h2: "10년은 채워야 하고, 20년 넘으면 더 받습니다",
         paragraphs: [
-          "국민연금은 최소 10년(120개월)을 채워야 매달 연금으로 받을 수 있습니다. 10년을 못 채우면 낸 보험료를 이자와 함께 반환일시금으로 한 번에 받는 것으로 끝납니다. 반대로 20년(240개월)을 넘게 가입하면 초과한 개월 수만큼 연 5%씩 연금액이 가산됩니다.",
+          "국민연금은 최소 10년(120개월)을 채워야 매달 연금으로 받을 수 있습니다. 10년을 못 채우면 낸 보험료를 이자와 함께 반환일시금으로 한 번에 받는 것으로 끝납니다. 반대로 20년(240개월)을 넘게 가입하면 초과한 개월 수만큼 연 5%씩 연금액이 가산됩니다. 반대로 10년 이상 20년 미만이면 기본연금액의 50%에 10년을 넘는 1년마다 5%씩 더한 금액만 받습니다(국민연금법 제63조). 그래서 10년 가입자는 같은 소득의 20년 가입자보다 연금이 절반 수준입니다.",
           "수급 시기도 조정할 수 있습니다. 정해진 지급개시연령(출생연도에 따라 60~65세)보다 최대 5년 일찍 받으면 1년당 6%씩 감액(최대 30%)되고, 최대 5년 늦게 받으면 1년당 7.2%씩 가산(최대 36%)됩니다. 배우자·자녀 등 부양가족이 있으면 부양가족연금액이 별도로 더해집니다(2026년 기준 배우자 연 260,720원, 자녀·부모 1인당 연 173,770원).",
         ],
       },
@@ -773,6 +801,13 @@ export const GUIDES: Guide[] = [
         paragraphs: [
           "정확한 국민연금액은 국민연금공단이 보유한 실제 재평가 소득이력을 기준으로 계산됩니다. 이 계산기는 사용자가 입력한 가입기간 평균소득(B값) 하나로 전체 기간을 근사하기 때문에, 소득이 해마다 크게 오르내렸다면 실제 값과 차이가 날 수 있습니다.",
           "또한 2026년 이후 승수 1.29는 2025년 연금개혁 확정 자료를 근거로 한 값이며, 2027년 이후 추가 조정 여지가 있는 항목입니다. 정확한 예상수령액은 국민연금공단 홈페이지의 모의계산이나 가까운 지사 상담을 통해 최종 확인하는 것이 안전합니다.",
+        ],
+      },
+      {
+        h2: "가입기간별로 얼마나 받나: 계산 예시",
+        paragraphs: [
+          `평균소득 월 300만 원으로 2026년부터 가입해 정상 수급 나이에 받는다고 가정하면 월 연금액은 10년 가입 ${w(npMonthly(10, 3000000))}, 20년 ${w(npMonthly(20, 3000000))}, 30년 ${w(npMonthly(30, 3000000))}, 40년 ${w(npMonthly(40, 3000000))}입니다(부양가족연금 제외, 현재 가치 기준).`,
+          "10년 가입이 20년 가입의 정확히 절반인 것은 20년 미만 가입자에게 지급률(기본연금액의 50%+1년마다 5%)이 적용되기 때문이고, 20년을 넘으면 1년마다 기본연금액의 5%씩 가산되어 30년·40년으로 갈수록 꾸준히 늘어납니다. 같은 소득이라도 가입기간을 늘리는 것이 연금액에 가장 크게 작용합니다.",
         ],
       },
     ],
@@ -819,7 +854,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "national-pension-premium-guide",
-    title: "국민연금 지역가입자, 왜 직장인보다 더 부담스러울까",
+    title: "국민연금 지역가입자 보험료 2026: 9.5% 전액 본인부담, 상·하한 41만~659만 원",
     desc: "지역가입자는 국민연금 보험료 9.5% 전액을 혼자 냅니다. 기준소득월액 상하한액과 저소득 지원제도까지, 자영업자·프리랜서가 알아야 할 보험료 구조를 정리했습니다.",
     date: "2026-08-26",
     calcHref: "/calc/national-pension-premium",
@@ -857,7 +892,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "retirement-pay-guide",
-    title: "퇴직금, 왜 통상 월급이랑 다른 금액이 나올까",
+    title: "퇴직금 계산법: 최근 3개월 평균임금 × 30일 × 근속연수",
     desc: "퇴직금은 최근 3개월 평균임금을 기준으로 계산됩니다. 평균임금과 통상임금의 하한 규칙, 상여금·연차수당 반영 방식, 1년 미만 근무자 예외까지 정리했습니다.",
     date: "2026-08-26",
     calcHref: "/calc/retirement-pay",
@@ -895,7 +930,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "unemployment-benefit-guide",
-    title: "실업급여, 얼마나 얼마 동안 받을 수 있을까",
+    title: "실업급여 2026: 하루 66,048~68,100원, 120~270일 수급",
     desc: "실업급여는 평균임금의 60%에 소정급여일수를 곱해서 계산합니다. 연령과 가입기간에 따라 120일에서 270일까지 달라지는 지급 기간과 2026년 상하한액을 정리했습니다.",
     date: "2026-08-26",
     calcHref: "/calc/unemployment-benefit",
@@ -932,7 +967,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "maternity-leave-guide",
-    title: "출산전후휴가급여, 회사 규모에 따라 왜 다르게 계산될까",
+    title: "출산전후휴가급여 2026: 90일 상한 660만 원, 회사 규모별 지급 주체",
     desc: "출산전후휴가급여는 회사가 우선지원대상기업인지 대규모기업인지에 따라 지급 주체와 상한 적용 범위가 달라집니다. 90일 총액 660만원 상한과 최저임금 하한 규칙까지 정리했습니다.",
     date: "2026-08-27",
     calcHref: "/calc/maternity-leave",
@@ -968,7 +1003,7 @@ export const GUIDES: Guide[] = [
 
   {
     slug: "retirement-age-guide",
-    title: "교사 정년퇴직일, 왜 생일이 아니라 8월 31일일까",
+    title: "교사 정년퇴직일 계산: 만 62세, 8월 31일·2월 말일 퇴직",
     desc: "교원 정년은 62세(대학은 65세)지만 실제 퇴직일은 생일이 아니라 학기에 맞춰 8월 31일이나 2월 말일로 정해집니다. 일반직 공무원과 다른 이 규칙을 정리했습니다.",
     date: "2026-09-21",
     calcHref: "/calc/retirement-age",

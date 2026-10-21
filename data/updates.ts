@@ -9,6 +9,7 @@ export const UPDATES: UpdateEntry[] = [
     items: [
       { text: "봉급표 5개 페이지에 2025년 대비 호봉별 인상액·인상률표와 호봉 1개당 평균 승급액표 추가", href: "/salary/military" },
       { text: "봉급표 모음에 같은 호봉 기준 직군별(일반직·경찰·소방·군인·교원) 기본급 비교표 추가", href: "/salary" },
+      { text: "가이드 18개 제목을 핵심 수치 중심으로 정비, 교원·군인·국민연금 가이드에 계산 예시 섹션 추가", href: "/guide" },
     ],
   },
   {
