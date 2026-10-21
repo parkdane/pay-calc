@@ -5,6 +5,7 @@ import AdSlot from "@/components/AdSlot";
 import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
 import CalcCta from "@/components/CalcCta";
+import SalaryInsights from "@/components/SalaryInsights";
 import Link from "next/link";
 
 import civil from "@/data/salary-civil-2026.json";
@@ -201,6 +202,8 @@ export default async function SalaryPage({
           에서 인상률과 수당 변경 내용을 자세히 확인할 수 있습니다.
         </p>
       </section>
+
+      <SalaryInsights slug={slug} />
 
       <Faq items={d.faq} />
       <FaqJsonLd items={d.faq} />

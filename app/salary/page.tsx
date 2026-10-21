@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CrossCompare } from "@/components/SalaryInsights";
 
 export const metadata: Metadata = {
   title: "봉급표 전체 보기",
@@ -63,6 +64,8 @@ export default function Page() {
           </Link>
         ))}
       </div>
+
+      <CrossCompare />
     </div>
   );
 }
