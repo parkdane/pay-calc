@@ -14,7 +14,7 @@ export const CALC_META: Record<string, CalcMeta> = {
   },
   "civil-net": {
     sources: ["공무원보수규정 별표3·별표10·별표11(2026년 봉급표)", "공무원수당 등에 관한 규정", "공무원연금 기여율·국민건강보험료율(2026년)", TAX_TABLE],
-    updated: "2026-10-14",
+    updated: "2026-10-21",
   },
   deposit: { sources: ["금융감독원 금융상품통합비교공시(오픈API)"], updated: "2026-08-18", autoData: "rates" },
   fire: { sources: ["4% 인출 규칙 등 일반 재무 계산식(실질수익률 기준)", "사용자 입력값 기반 시뮬레이션"], updated: "2026-08-20" },
@@ -38,9 +38,9 @@ export const CALC_META: Record<string, CalcMeta> = {
   "naeil-save": { sources: ["보건복지부 청년내일저축계좌 정부지원금 기준"], updated: "2026-08-18" },
   "national-pension-premium": {
     sources: ["국민연금법 제3조·제88조", "보건복지부 고시 기준소득월액 상·하한(2026.7~2027.6)", "국민연금공단 보험료율 안내(2026년 9.5%)"],
-    updated: "2026-10-15",
+    updated: "2026-10-21",
   },
-  "national-pension": { sources: ["국민연금법 제51조(기본연금액)", "국민연금공단 2026년 A값"], updated: "2026-08-26" },
+  "national-pension": { sources: ["국민연금법 제51조(기본연금액)", "국민연금법 제63조(노령연금액·가입기간별 지급률)", "국민연금공단 2026년 A값"], updated: "2026-10-16" },
   "overtime-pay": {
     sources: ["공무원수당 등에 관한 규정(시간외근무수당)", "공무원보수규정 별표3·별표10·별표11(2026년 봉급표)"],
     updated: "2026-10-14",
@@ -48,13 +48,13 @@ export const CALC_META: Record<string, CalcMeta> = {
   "parental-leave": { sources: ["고용보험법 시행령 제95조·제95조의3"], updated: "2026-08-28" },
   "pension-net": {
     sources: ["공무원연금법·같은 법 시행령", "공무원연금법 부칙(퇴직연도별 연금 개시연령)", "공무원연금공단 연금수급 안내", "공무원보수규정 연도별 봉급표(국가법령정보센터)"],
-    updated: "2026-10-14",
+    updated: "2026-10-21",
   },
   "retirement-age": {
     sources: ["교육공무원법 제47조", "국가공무원법 제74조", "공무원연금법 시행령 제58조(퇴직수당)", "공무원연금공단 연금 개시연령 안내"],
     updated: "2026-10-14",
   },
-  "retirement-pay": { sources: ["근로자퇴직급여 보장법 제8조·제9조", "근로기준법 제2조(평균임금)"], updated: "2026-08-26" },
+  "retirement-pay": { sources: ["근로자퇴직급여 보장법 제8조·제9조", "근로기준법 제2조(평균임금)"], updated: "2026-10-16" },
   "salary-compare": {
     sources: ["금융감독원 전자공시(OpenDART) 사업보고서 직원현황(1인 평균급여액)"],
     updated: "2026-08-20",
@@ -68,11 +68,11 @@ export const CALC_META: Record<string, CalcMeta> = {
   "soldier-save": { sources: ["국방부 장병내일준비적금 안내", "농협은행 상품설명서(2026.1 기준)"], updated: "2026-08-13" },
   "teacher-net": {
     sources: ["공무원보수규정 별표11(2026년 교원 봉급표)", "공무원수당 등에 관한 규정(교직수당·담임수당)", "공무원연금 기여율·국민건강보험료율(2026년)", TAX_TABLE],
-    updated: "2026-10-13",
+    updated: "2026-10-21",
   },
   "unemployment-benefit": {
     sources: ["고용보험법 제40조·제46조·제49조·제50조, 별표1(소정급여일수)", "2026년 구직급여 상·하한액"],
-    updated: "2026-08-26",
+    updated: "2026-10-16",
   },
   "worker-net": { sources: [INSURANCE, TAX_TABLE], updated: "2026-08-26" },
   "youth-compare": {

@@ -12,6 +12,7 @@ const pct = (r: number) => `${+(r * 100).toFixed(3)}%`;
 
 const TEACHER_ALLOWANCE = 250000; // 교직수당 (CivilNetCalc와 동일)
 const HOMEROOM_ALLOWANCE = 200000; // 담임수당 (CivilNetCalc와 동일)
+const DEPT_HEAD_ALLOWANCE = 150000; // 보직교사수당 (CivilNetCalc와 동일)
 
 type Row = [string, string, string?];
 
@@ -102,6 +103,7 @@ export default function PayStructure({ variant }: { variant: "civil" | "teacher"
         ? [
             ["교직수당", won(TEACHER_ALLOWANCE), "전 교원 공통 (직급보조비 대신)"],
             ["담임수당", won(HOMEROOM_ALLOWANCE), "담임을 맡은 경우"],
+            ["보직교사수당", won(DEPT_HEAD_ALLOWANCE), "부장교사 등 보직을 맡은 경우"],
             ["정액급식비", won(rates.meal), "전 교원 공통"],
             ["가족수당", `배우자 ${won(fam.spouse)} / 첫째 ${won(fam.child1)} / 둘째 ${won(fam.child2)} / 셋째 이상 ${won(fam.child3plus)}`, "해당자만"],
             ["정근수당 가산금", addonText, "5년 이상 근무 시 단계적 증가"],

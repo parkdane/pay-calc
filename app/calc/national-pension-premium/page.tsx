@@ -6,11 +6,11 @@ import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "지역가입자 국민연금 보험료 계산기 (자영업자·프리랜서, 2026년)",
+  title: "국민연금 지역가입자 보험료 계산기 (2026년 기준)",
   description:
     "월 신고소득을 입력하면 2026년 기준(보험료율 9.5%, 상한 659만원·하한 41만원) 국민연금 지역가입자 보험료를 계산합니다. 자영업자·프리랜서 대상입니다.",
   openGraph: {
-    title: "지역가입자 국민연금 보험료 계산기 (자영업자·프리랜서, 2026년)",
+    title: "국민연금 지역가입자 보험료 계산기 (2026년 기준)",
     description:
       "월 신고소득을 입력하면 2026년 기준 국민연금 지역가입자 보험료를 계산합니다. 자영업자·프리랜서 대상입니다.",
   },
@@ -44,7 +44,7 @@ export default function Page() {
     <div className="space-y-8">
       <header className="space-y-2">
         <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
-          지역가입자 국민연금 보험료 계산기
+          국민연금 지역가입자 보험료 계산기
         </h1>
         <p className="text-sm text-[#5B6478]">
           월 신고소득을 입력하면 2026년 기준 국민연금 지역가입자 보험료를 계산합니다.

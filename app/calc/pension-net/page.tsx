@@ -7,11 +7,11 @@ import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "공무원연금 은퇴 후 예상수령액 계산기 (교사·경찰·소방·군인 포함)",
+  title: "교사·공무원 연금 수령액 계산기 (경찰·소방·군인, 개시연령 반영)",
   description:
     "임용일·직급·호봉을 입력하면 은퇴 후 받을 공무원연금 예상 월수령액을 계산합니다. 일반직·교사·경찰·소방·군인 전부 지원하며, 1997~2026년 실제 봉급표와 3단계 산식(구법·과도기·소득재분배)을 반영합니다.",
   openGraph: {
-    title: "공무원연금 은퇴 후 예상수령액 계산기 (교사·경찰·소방·군인 포함)",
+    title: "교사·공무원 연금 수령액 계산기 (경찰·소방·군인, 개시연령 반영)",
     description: "임용일·직급·호봉을 입력하면 은퇴 후 받을 공무원연금 예상 월수령액을 계산합니다. 일반직·교사·경찰·소방·군인 전부 지원하며, 1997~2026년 실제 봉급표와 3단계 산식(구법·과도기·소득재분배)을 반영합니다.",
   },
 };
@@ -57,7 +57,7 @@ export default function Page() {
     <div className="space-y-8">
       <header className="space-y-2">
         <h1 className="text-2xl font-bold tracking-tight text-[#1B2A4A] sm:text-3xl">
-          공무원연금 은퇴 후 예상수령액 계산기
+          교사·공무원 연금 수령액 계산기
         </h1>
         <p className="text-sm text-[#5B6478]">
           임용일·직급·호봉을 입력하면 실제 봉급표 이력과 공무원연금법 3단계 산식을 반영한

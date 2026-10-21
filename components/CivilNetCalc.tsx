@@ -22,6 +22,7 @@ const OCCUPATIONS = [
 
 const TEACHER_ALLOWANCE = 250000; // 교직수당 (전 교원 공통)
 const HOMEROOM_ALLOWANCE = 200000; // 담임수당
+const DEPT_HEAD_ALLOWANCE = 150000; // 보직교사수당(부장교사 등), 2024년 7만→15만 원 인상, 2026년 동결
 
 function pickBracket<T extends { underYears: number }>(brackets: T[], years: number): T {
   return brackets.find((b) => years < b.underYears) ?? brackets[brackets.length - 1];
@@ -57,6 +58,7 @@ export default function CivilNetCalc({
   const [years, setYears] = useState(0);
   const [overtimeH, setOvertimeH] = useState(0);
   const [includeDanger, setIncludeDanger] = useState(true);
+  const [includeDeptHead, setIncludeDeptHead] = useState(false);
 
   const occ = OCCUPATIONS[occIdx];
   const d = occ.data;
@@ -79,6 +81,9 @@ export default function CivilNetCalc({
       if (includeDanger) {
         // 교사 직종에서 이 체크박스는 담임수당으로 사용
         items.push({ label: "담임수당", value: HOMEROOM_ALLOWANCE });
+      }
+      if (includeDeptHead) {
+        items.push({ label: "보직교사수당", value: DEPT_HEAD_ALLOWANCE });
       }
     } else {
       const positionBonus =
@@ -154,7 +159,7 @@ export default function CivilNetCalc({
       annualGross,
       annualNetApprox,
     };
-  }, [occIdx, gradeIdx, hobong, useDetail, spouse, children, years, overtimeH, includeDanger, d, gradeLabel, occ.danger]);
+  }, [occIdx, gradeIdx, hobong, useDetail, spouse, children, years, overtimeH, includeDanger, includeDeptHead, d, gradeLabel, occ.danger]);
 
   // 대기업 평균연봉과 비교 (가까운 순으로 3개, 이미 있는 DART 데이터 재사용)
   const nearbyCompanies = useMemo(() => {
@@ -243,6 +248,17 @@ export default function CivilNetCalc({
                 {occ.teacher
                   ? `담임수당 포함 (월 ${won(HOMEROOM_ALLOWANCE)})`
                   : `위험근무수당 포함 (월 ${won(occ.danger)})`}
+              </label>
+            )}
+            {occ.teacher && (
+              <label className="flex items-center gap-2 text-sm text-[#5B6478]">
+                <input
+                  type="checkbox"
+                  checked={includeDeptHead}
+                  onChange={(e) => setIncludeDeptHead(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                {`보직교사수당 포함 — 부장교사 등 (월 ${won(DEPT_HEAD_ALLOWANCE)})`}
               </label>
             )}
           </div>
