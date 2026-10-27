@@ -3,30 +3,17 @@
 import { useMemo, useState } from "react";
 import AdSlot from "@/components/AdSlot";
 import Link from "next/link";
+import { calcNaeil, NAEIL_TIERS as TIERS, NAEIL_MONTHS as MONTHS } from "@/lib/policySavings";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
-const MONTHS = 36;
-
-const TIERS = [
-  { id: "low", label: "기준중위소득 50% 이하 (차상위 이하)", match: 300000, hint: "정부지원금 월 30만 원" },
-  { id: "mid", label: "기준중위소득 50% 초과 ~ 100% 이하", match: 100000, hint: "정부지원금 월 10만 원" },
-] as const;
-
 export default function NaeilSavingsCalc() {
-  const [tierId, setTierId] = useState<string>("mid");
+  const [tierId, setTierId] = useState<string>("low");
   const [monthly, setMonthly] = useState(100000);
   const [rate, setRate] = useState(3.0);
 
   const tier = TIERS.find((t) => t.id === tierId)!;
 
-  const result = useMemo(() => {
-    const principal = monthly * MONTHS;
-    const matching = tier.match * MONTHS;
-    const monthlyRate = rate / 100 / 12;
-    const interest = monthly * monthlyRate * ((MONTHS * (MONTHS + 1)) / 2);
-    const total = principal + matching + interest;
-    return { principal, matching, interest, total };
-  }, [tierId, monthly, rate, tier.match]);
+  const result = useMemo(() => calcNaeil(monthly, tier.match, rate), [monthly, rate, tier.match]);
 
   return (
     <div className="mx-auto max-w-[1280px] px-4">

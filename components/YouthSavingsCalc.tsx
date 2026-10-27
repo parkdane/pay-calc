@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import cfg from "@/data/youth-savings-2026.json";
 import AdSlot from "@/components/AdSlot";
 import Link from "next/link";
+import { calcYouthFuture } from "@/lib/policySavings";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -13,24 +14,8 @@ export default function YouthSavingsCalc() {
   const [rate, setRate] = useState(cfg.baseRate);
 
   const type = cfg.types.find((t) => t.id === typeId)!;
-  const months = cfg.months;
 
-  const result = useMemo(() => {
-    const principal = monthly * months;
-
-    const monthlyMatch = Math.min(monthly * type.matchRate, type.monthlyCap);
-    const matching = monthlyMatch * months;
-
-    const monthlyRate = rate / 100 / 12;
-    const sumFactor = (months * (months + 1)) / 2;
-    const interestOnSavings = monthly * monthlyRate * sumFactor;
-    const interestOnMatch = monthlyMatch * monthlyRate * sumFactor;
-    const interest = interestOnSavings + interestOnMatch;
-
-    const total = principal + matching + interest;
-
-    return { principal, matching, interest, total, monthlyMatch };
-  }, [monthly, typeId, rate, type, months]);
+  const result = useMemo(() => calcYouthFuture(monthly, typeId, rate), [monthly, typeId, rate]);
 
   return (
     <div className="mx-auto max-w-[1280px] px-4">

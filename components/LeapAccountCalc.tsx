@@ -3,44 +3,16 @@
 import { useMemo, useState } from "react";
 import AdSlot from "@/components/AdSlot";
 import Link from "next/link";
+import { calcLeap, LEAP_TIERS as TIERS } from "@/lib/policySavings";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
-const MONTHS = 60;
-const CAP = 700000;
-
-// 2025.1 확대 기준: 소득구간별 [기준한도, 기본 매칭비율], 확대구간(기준한도~70만)은 3.0%
-const TIERS = [
-  { id: "t2400", label: "총급여 2,400만 원 이하", base: 400000, rate: 0.06 },
-  { id: "t3600", label: "2,400만 초과 ~ 3,600만 이하", base: 500000, rate: 0.046 },
-  { id: "t4800", label: "3,600만 초과 ~ 4,800만 이하", base: 600000, rate: 0.037 },
-  { id: "t6000", label: "4,800만 초과 ~ 6,000만 이하", base: 700000, rate: 0.03 },
-  { id: "t7500", label: "6,000만 초과 ~ 7,500만 이하 (비과세만)", base: 0, rate: 0 },
-] as const;
-
-const EXPAND_RATE = 0.03;
-
 export default function LeapAccountCalc() {
   const [tierId, setTierId] = useState<string>("t3600");
   const [monthly, setMonthly] = useState(700000);
   const [rate, setRate] = useState(4.5);
 
-  const tier = TIERS.find((t) => t.id === tierId)!;
 
-  const result = useMemo(() => {
-    const m = Math.min(monthly, CAP);
-    const principal = m * MONTHS;
-
-    const basePart = Math.min(m, tier.base) * tier.rate;
-    const expandPart = tier.base > 0 ? Math.max(0, m - tier.base) * EXPAND_RATE : 0;
-    const monthlyMatch = basePartRound(basePart + expandPart);
-    const matching = monthlyMatch * MONTHS;
-
-    const monthlyRate = rate / 100 / 12;
-    const interest = m * monthlyRate * ((MONTHS * (MONTHS + 1)) / 2);
-
-    const total = principal + matching + interest;
-    return { principal, monthlyMatch, matching, interest, total };
-  }, [tierId, monthly, rate, tier.base, tier.rate]);
+  const result = useMemo(() => calcLeap(monthly, tierId, rate), [monthly, tierId, rate]);
 
   return (
     <div className="mx-auto max-w-[1280px] px-4">
@@ -209,9 +181,6 @@ const DECISION_CARDS = [
 ];
 
 // 기여금은 원 단위 절사 근사
-function basePartRound(n: number) {
-  return Math.floor(n / 100) * 100;
-}
 
 function Row({
   label,

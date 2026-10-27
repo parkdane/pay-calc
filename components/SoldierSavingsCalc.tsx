@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import cfg from "@/data/soldier-savings-2026.json";
 import AdSlot from "@/components/AdSlot";
+import { calcSoldierSavings } from "@/lib/policySavings";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -11,14 +12,7 @@ export default function SoldierSavingsCalc() {
   const [months, setMonths] = useState(18);
   const [rate, setRate] = useState(cfg.defaultRate);
 
-  const result = useMemo(() => {
-    const principal = monthly * months;
-    const matching = principal * cfg.matchRate;
-    const monthlyRate = rate / 100 / 12;
-    const interest = monthly * monthlyRate * ((months * (months + 1)) / 2);
-    const total = principal + matching + interest;
-    return { principal, matching, interest, total };
-  }, [monthly, months, rate]);
+  const result = useMemo(() => calcSoldierSavings(monthly, months, rate), [monthly, months, rate]);
 
   return (
     <div className="mx-auto max-w-[1280px] px-4">
