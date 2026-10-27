@@ -1,11 +1,13 @@
 import teacherPay from "@/data/salary-teacher-2026.json";
 import militaryPay from "@/data/salary-military-2026.json";
 import { calcNationalPension } from "@/lib/nationalPensionCalc";
+import { calcMaternityLeavePay } from "@/lib/maternityLeaveCalc";
 
 const w = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const tPay = (h: number) => teacherPay.rows.find((r) => r.hobong === h)!.pay[0] as number;
 const T_FIXED = 250000 + 160000; // 교직수당 + 정액급식비 (CivilNetCalc와 동일)
 const mil1 = (tableIdx: number, col: number) => militaryPay.officerTables[tableIdx].rows[0].pay[col] as number;
+const mat300 = calcMaternityLeavePay(300, "priority", false);
 const npMonthly = (years: number, income: number) =>
   calcNationalPension({
     startYear: 2026, startMonth: 1, endYear: 2026 + years - 1, endMonth: 12, avgMonthlyIncome: income,
@@ -994,21 +996,21 @@ export const GUIDES: Guide[] = [
     title: "출산전후휴가급여 2026: 90일 상한 660만 원, 회사 규모별 지급 주체",
     desc: "출산전후휴가급여는 회사가 우선지원대상기업인지 대규모기업인지에 따라 지급 주체와 상한 적용 범위가 달라집니다. 90일 총액 660만원 상한과 최저임금 하한 규칙까지 정리했습니다.",
     date: "2026-08-27",
-    updated: "2026-10-21",
+    updated: "2026-10-27",
     calcHref: "/calc/maternity-leave",
     calcLabel: "내 출산전후휴가급여 계산하기",
     sections: [
       {
         h2: "회사 규모에 따라 지급 주체가 다릅니다",
         paragraphs: [
-          "출산전후휴가는 90일(다태아 120일)이며 이 중 최초 60일(다태아 75일)은 유급휴가입니다. 다만 이 유급 기간을 누가 부담하는지는 회사 규모에 따라 다릅니다. 우선지원대상기업(중소기업 등)은 고용보험이 휴가기간 전체를 대신 지급합니다. 반면 대규모기업(대기업)은 최초 60일은 회사가 통상임금 100%를 상한 없이 직접 지급하고, 나머지 30일(다태아 45일)만 고용보험이 상한액 이내로 지급합니다.",
+          "출산전후휴가는 90일(다태아 120일)이며 이 중 최초 60일(다태아 75일)은 유급휴가입니다(근로기준법 제74조). 이 유급 기간에는 회사 규모와 관계없이 통상임금 100%를 받고, 회사 규모는 누가 얼마를 부담하는지만 바꿉니다. 우선지원대상기업(중소기업 등)은 고용보험이 휴가기간 전체를 상한액 이내로 지급하고, 최초 60일은 통상임금이 고용보험 지급액보다 많으면 그 차액을 회사가 지급합니다. 대규모기업(대기업)은 최초 60일은 회사가 통상임금 100%를 상한 없이 직접 지급하고, 나머지 30일(다태아 45일)만 고용보험이 상한액 이내로 지급합니다.",
           "우선지원대상기업 여부는 업종별 상시근로자 수로 정해집니다. 제조업은 500명 이하, 광업·건설업·운수업·전문과학기술서비스업·보건복지서비스업 등은 300명 이하, 도소매업·숙박음식점업·금융보험업 등은 200명 이하인 경우가 해당합니다.",
         ],
       },
       {
         h2: "상한액은 90일 총액 660만원입니다",
         paragraphs: [
-          "고용보험이 지급하는 금액에는 상한액이 있습니다. 2026년 기준 월 220만원이며, 90일 전체로 보면 660만원(다태아 120일은 880만원)입니다. 통상임금이 이보다 높은 고소득자는 초과분을 받지 못합니다. 다만 대규모기업 근로자라면 최초 60일은 회사가 상한 없이 통상임금 100%를 그대로 지급하므로, 이 구간에서는 상한액의 영향을 받지 않습니다.",
+          `고용보험이 지급하는 금액에는 상한액이 있습니다. 2026년 기준 월 220만원이며, 90일 전체로 보면 660만원(다태아 120일은 880만원)입니다. 다만 최초 60일(다태아 75일)은 유급휴가라 고용보험이 지급한 금액은 그 한도에서 회사가 지급한 것으로 보고(남녀고용평등법 제18조 제2항), 모자라는 부분은 회사가 지급합니다. 그래서 통상임금이 상한보다 높아도 상한의 영향을 받는 구간은 마지막 30일(다태아 45일)뿐입니다. 예를 들어 월 통상임금 300만원이면 최초 60일 ${w(mat300.dailyOrdinary * mat300.paidDays)}과 마지막 30일 ${w(mat300.dailyGovAmount * mat300.restDays)}을 합쳐 ${w(mat300.totalAmount)}을 받습니다.`,
         ],
       },
       {

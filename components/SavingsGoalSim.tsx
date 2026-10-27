@@ -2,16 +2,9 @@
 
 import { useMemo, useState } from "react";
 import AdSlot from "@/components/AdSlot";
+import { monthsToGoal, formatMonths } from "@/lib/savingsGoal";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
-
-// 월 저축액과 목표금액, 금리로 걸리는 개월수 계산 (메인 계산과 동일한 공식)
-function monthsToGoal(save: number, goal: number, ratePercent: number): number | null {
-  if (save <= 0) return null;
-  const r = ratePercent / 100 / 12;
-  if (r === 0) return Math.ceil(goal / save);
-  return Math.ceil(Math.log((goal * r) / save + 1) / Math.log(1 + r));
-}
 
 const PRESET_SAVINGS = [300000, 500000, 1000000, 1500000, 2000000, 3000000];
 
@@ -32,14 +25,7 @@ export default function SavingsGoalSim() {
     if (save <= 0) return { save, months: null, goal, inc, fix, varc };
 
     const plainMonths = Math.ceil(goal / save);
-
-    const r = rate / 100 / 12;
-    let months: number;
-    if (r === 0) {
-      months = plainMonths;
-    } else {
-      months = Math.ceil(Math.log((goal * r) / save + 1) / Math.log(1 + r));
-    }
+    const months = monthsToGoal(save, goal, rate)!;
 
     const totalSaved = save * months;
     const interest = Math.max(0, goal - totalSaved) > 0 ? 0 : totalSaved - goal;
@@ -67,11 +53,7 @@ export default function SavingsGoalSim() {
     }));
   }, [goalManwon, rate]);
 
-  const fmt = (m: number) => {
-    const y = Math.floor(m / 12);
-    const mo = m % 12;
-    return y > 0 ? `${y}년 ${mo}개월` : `${mo}개월`;
-  };
+  const fmt = formatMonths;
 
   const pctFix = result.inc > 0 ? (result.fix / result.inc) * 100 : 0;
   const pctVar = result.inc > 0 ? (result.varc / result.inc) * 100 : 0;

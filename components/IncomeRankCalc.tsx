@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import data from "@/data/income-percentile-2024.json";
 import AdSlot from "@/components/AdSlot";
+import { topPercentOf } from "@/lib/incomePercentile";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -18,23 +19,6 @@ const AGE_SALARY_TABLE = [
   { range: "55~59세", avg: 57210000, median: 41680000 },
   { range: "60세 이상", avg: 46220000, median: 31850000 },
 ] as const;
-
-// 연봉 → 상위 % (앵커 사이 선형 보간)
-function topPercentOf(income: number): number {
-  const a = data.anchors;
-  if (income <= 0) return 100;
-  const top = a[a.length - 1];
-  if (income >= top.income) return top.topPercent;
-  for (let i = 0; i < a.length - 1; i++) {
-    const lo = a[i];
-    const hi = a[i + 1];
-    if (income >= lo.income && income < hi.income) {
-      const t = (income - lo.income) / (hi.income - lo.income);
-      return lo.topPercent + (hi.topPercent - lo.topPercent) * t;
-    }
-  }
-  return 100;
-}
 
 const INCOME_RANK_DECISION_CARDS = [
   {

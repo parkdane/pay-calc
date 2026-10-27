@@ -3,9 +3,10 @@
 import { useMemo, useState } from "react";
 import MoneyInput from "@/components/MoneyInput";
 import AdSlot from "@/components/AdSlot";
-import { calcMaternityLeavePay, type CompanySize } from "@/lib/maternityLeaveCalc";
+import { calcMaternityLeavePay, MONTHLY_CAP, MIN_HOURLY_WAGE, type CompanySize } from "@/lib/maternityLeaveCalc";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
+const manwon = (n: number) => (n / 10000).toLocaleString("ko-KR") + "만원";
 
 export default function MaternityLeaveCalc() {
   const [monthlyWage, setMonthlyWage] = useState(300);
@@ -45,7 +46,7 @@ export default function MaternityLeaveCalc() {
               </select>
               <span className="mt-1 block text-xs font-normal text-[#8B93A6]">
                 {companySize === "priority"
-                  ? "휴가기간 전체를 고용보험이 지급합니다."
+                  ? "휴가기간 전체를 고용보험이 지급하고, 최초 60일(다태아 75일)은 통상임금과의 차액을 회사가 지급합니다."
                   : "최초 60일(다태아 75일)은 회사가 통상임금 100%를 직접 지급하고, 나머지만 고용보험이 지급합니다."}
               </span>
             </label>
@@ -66,7 +67,7 @@ export default function MaternityLeaveCalc() {
         <div className="space-y-5 lg:sticky lg:top-20">
           <div className="overflow-hidden rounded-xl border border-[rgba(46,68,148,0.14)]">
             <div className="bg-[#2E4494] px-5 py-4 text-white">
-              <p className="text-sm opacity-80">{result.totalLeaveDays}일 휴가기간 합산 예상 총액</p>
+              <p className="text-sm opacity-80">{result.totalLeaveDays}일 휴가기간 합산 예상 수령액</p>
               <p className="text-3xl font-bold tabular-nums">{won(result.totalAmount)}</p>
             </div>
 
@@ -77,13 +78,21 @@ export default function MaternityLeaveCalc() {
             )}
             {result.capApplied && (
               <div className="border-t border-[rgba(46,68,148,0.10)] bg-[#F0F5FF] px-5 py-3 text-xs leading-relaxed text-[#2E4494]">
-                고용보험 지급분은 월 상한액(220만원)을 넘어 상한 기준으로 계산했습니다.
+                고용보험 지급분은 월 상한액({manwon(MONTHLY_CAP)})을 넘어 상한 기준으로 계산했습니다.
               </div>
             )}
 
             <dl className="divide-y divide-[rgba(46,68,148,0.10)] bg-white text-sm">
               {result.companyPaidDays > 0 && (
-                <Row label={`회사 직접 지급 (${result.companyPaidDays}일, 통상임금 100%)`} value={won(result.companyPaidAmount)} muted />
+                <Row
+                  label={
+                    result.isTopUp
+                      ? `회사 차액 지급 (최초 ${result.companyPaidDays}일, 통상임금 − 고용보험)`
+                      : `회사 직접 지급 (${result.companyPaidDays}일, 통상임금 100%)`
+                  }
+                  value={won(result.companyPaidAmount)}
+                  muted
+                />
               )}
               <Row label={`고용보험 지급 (${result.govPaidDays}일, 상한 적용)`} value={won(result.govPaidAmount)} bold />
             </dl>
@@ -92,8 +101,13 @@ export default function MaternityLeaveCalc() {
           <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5 text-xs leading-relaxed text-[#7A8296]">
             <p className="font-semibold text-[#5B6478] mb-2">2026년 기준 상하한액</p>
             <ul className="space-y-1">
-              <li>· 상한: 월 220만원 (90일 총액 660만원, 다태아 120일 총액 880만원)</li>
-              <li>· 하한: 시간급 통상임금이 시간급 최저임금(10,320원)보다 낮으면 최저임금 기준 적용</li>
+              <li>
+                · 상한: 월 {manwon(MONTHLY_CAP)} (90일 총액 {manwon(MONTHLY_CAP * 3)}, 다태아 120일 총액 {manwon(MONTHLY_CAP * 4)})
+              </li>
+              <li>
+                · 하한: 시간급 통상임금이 시간급 최저임금({MIN_HOURLY_WAGE.toLocaleString("ko-KR")}원)보다 낮으면 최저임금 기준 적용
+              </li>
+              <li>· 최초 60일(다태아 75일)은 유급이라 회사 규모와 관계없이 통상임금 100%를 받습니다</li>
             </ul>
           </div>
         </div>

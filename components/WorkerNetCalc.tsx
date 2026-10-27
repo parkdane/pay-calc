@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { monthlyIncomeTax } from "@/lib/incomeTax";
+import { calcWorkerNet as calcNet } from "@/lib/workerNet";
 import { topPercentOf, incomePercentileMeta } from "@/lib/incomePercentile";
 import salaryData from "@/data/salary-compare.json";
 import AdSlot from "@/components/AdSlot";
@@ -9,14 +9,6 @@ import Link from "next/link";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const manwon = (n: number) => Math.round(n / 10000).toLocaleString("ko-KR") + "만";
-
-// 2026 근로자 본인부담 요율
-// 국민연금 보험료율 9.5%(2025년까지 9%→2026년부터 매년 0.5%p씩 인상, 2033년 13%), 본인부담은 절반인 4.75%
-const PENSION_RATE = 0.0475;
-const PENSION_BASE_MAX = 6590000; // 국민연금 기준소득월액 상한(2026.7~2027.6)
-const HEALTH_RATE = 0.03595;
-const LTC_RATE_OF_HEALTH = 0.1314;
-const EMPLOYMENT_RATE = 0.009;
 
 // 종합소득세 과세표준 구간 (참고 표시용)
 const TAX_BRACKETS = [
@@ -27,33 +19,6 @@ const TAX_BRACKETS = [
   { upTo: "3억", rate: "38%" },
   { upTo: "3억 초과", rate: "40%~45%" },
 ];
-
-function calcNet(annualGross: number, dependents: number) {
-  const monthlyGross = annualGross / 12;
-  const pension = Math.min(monthlyGross, PENSION_BASE_MAX) * PENSION_RATE;
-  const health = monthlyGross * HEALTH_RATE;
-  const ltc = health * LTC_RATE_OF_HEALTH;
-  const employment = monthlyGross * EMPLOYMENT_RATE;
-  const incomeTax = monthlyIncomeTax(monthlyGross, pension, dependents);
-  const localTax = Math.floor(incomeTax * 0.1);
-  const totalDeduction = pension + health + ltc + employment + incomeTax + localTax;
-  const net = monthlyGross - totalDeduction;
-  return {
-    monthlyGross,
-    deductions: [
-      { label: "국민연금 (4.75%)", value: pension },
-      { label: "건강보험 (3.595%)", value: health },
-      { label: "장기요양보험", value: ltc },
-      { label: "고용보험 (0.9%)", value: employment },
-      { label: "소득세", value: incomeTax },
-      { label: "지방소득세", value: localTax },
-    ],
-    totalDeduction,
-    net,
-    annualNet: net * 12,
-    netRate: net / monthlyGross,
-  };
-}
 
 // 비교 막대그래프용 기준 연봉들 (만원)
 const COMPARE = [3000, 5000, 7000, 9000, 10000, 12000, 15000];

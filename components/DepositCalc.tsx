@@ -5,9 +5,9 @@ import ratesData from "@/data/rates.json";
 import AdSlot from "@/components/AdSlot";
 import MoneyInput from "@/components/MoneyInput";
 import Link from "next/link";
+import { calcSavings, calcDeposit } from "@/lib/depositCalc";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
-const TAX_RATE = 0.154; // 이자소득세 15.4% (소득세 14% + 지방세 1.4%)
 
 export default function DepositCalc() {
   const [mode, setMode] = useState<"savings" | "deposit">("savings");
@@ -31,23 +31,9 @@ export default function DepositCalc() {
   }, []);
 
   const result = useMemo(() => {
-    const r = rate / 100;
-    let principal: number;
-    let interest: number;
-
-    if (mode === "savings") {
-      principal = monthly * months;
-      interest = monthly * (r / 12) * ((months * (months + 1)) / 2);
-    } else {
-      principal = lump;
-      interest = lump * r * (months / 12);
-    }
-
-    const tax = taxFree ? 0 : interest * TAX_RATE;
-    const netInterest = interest - tax;
-    const total = principal + netInterest;
-
-    return { principal, interest, tax, netInterest, total };
+    return mode === "savings"
+      ? calcSavings(monthly, months, rate, taxFree)
+      : calcDeposit(lump, months, rate, taxFree);
   }, [mode, monthly, lump, months, rate, taxFree]);
 
   // 지금 최고금리 TOP3 (이미 있는 금감원 금리 데이터 재사용)

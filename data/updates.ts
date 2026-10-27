@@ -5,6 +5,20 @@ export type UpdateEntry = { date: string; items: UpdateItem[] };
 
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-10-27",
+    items: [
+      {
+        text: "출산전후휴가급여 계산기 정정: 우선지원대상기업도 최초 60일(다태아 75일)은 통상임금과 고용보험 지급액의 차액을 회사가 지급하는 부분 반영(근로기준법 제74조, 남녀고용평등법 제18조). 기존에는 고용보험 지급액만 표시되어 월 통상임금이 상한액(220만 원)을 넘으면 수령액이 낮게 표시됨. 출산전후휴가 가이드도 함께 정정",
+        href: "/calc/maternity-leave",
+      },
+      { text: "출산전후휴가급여 계산기에 월 통상임금별·기업규모별·다태아 수령액 예시표와 신청 요건·기한 FAQ 추가", href: "/calc/maternity-leave" },
+      { text: "적금·예금 계산기에 납입액·원금별 세후 이자표, 적금 실질 이율 환산표, 금감원 금리 데이터 기준 오늘 금리 예시, 예금자보호 한도 FAQ 추가", href: "/calc/deposit" },
+      { text: "연봉 순위 계산기에 연봉별 상위 %·월 실수령액표와 국세청 근로소득 백분위 기준점 표 추가", href: "/calc/income-rank" },
+      { text: "1억 모으기 시뮬레이터에 저축액·목표 금액·저축률별 달성 기간표와 이자소득세 반영 시 기간 차이 추가", href: "/calc/savings-goal" },
+      { text: "업데이트 내역 페이지 신설(사이트 하단 메뉴)", href: "/updates" },
+    ],
+  },
+  {
     date: "2026-10-21",
     items: [
       { text: "봉급표 5개 페이지에 2025년 대비 호봉별 인상액·인상률표와 호봉 1개당 평균 승급액표 추가", href: "/salary/military" },
@@ -21,7 +35,6 @@ export const UPDATES: UpdateEntry[] = [
       { text: "국민연금 예상수령액 계산기에 가입기간·평균소득별 예시표와 조기·연기수령 비교표 추가", href: "/calc/national-pension" },
       { text: "실업급여 계산기에 월급별 1일 구직급여액·총수급액 예시표 추가(상·하한액 적용 구간 설명)", href: "/calc/unemployment-benefit" },
       { text: "퇴직금 계산기에 월급·근속연수별 퇴직금 예시표 추가", href: "/calc/retirement-pay" },
-      { text: "업데이트 내역 페이지 신설", href: "/updates" },
     ],
   },
   {

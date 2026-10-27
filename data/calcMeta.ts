@@ -16,20 +16,20 @@ export const CALC_META: Record<string, CalcMeta> = {
     sources: ["공무원보수규정 별표3·별표10·별표11(2026년 봉급표)", "공무원수당 등에 관한 규정", "공무원연금 기여율·국민건강보험료율(2026년)", TAX_TABLE],
     updated: "2026-10-21",
   },
-  deposit: { sources: ["금융감독원 금융상품통합비교공시(오픈API)"], updated: "2026-08-18", autoData: "rates" },
+  deposit: { sources: ["금융감독원 금융상품통합비교공시(오픈API)", "소득세법(이자소득세 14%)·지방세법(지방소득세 1.4%)", "예금자보호법 시행령(보호한도 1억 원, 2025.9.1 시행)"], updated: "2026-10-27", autoData: "rates" },
   fire: { sources: ["4% 인출 규칙 등 일반 재무 계산식(실질수익률 기준)", "사용자 입력값 기반 시뮬레이션"], updated: "2026-08-20" },
   "household-income": {
     sources: ["보건복지부 2026년 기준 중위소득 고시", "통계청·한국은행·금융감독원 가계금융복지조사(2025.12 발표)", INSURANCE, TAX_TABLE],
     updated: "2026-08-26",
   },
   "income-rank": {
-    sources: ["국세청 근로소득 백분위(천분위) 자료, 2024년 귀속(공공데이터포털)", "연령대별 평균은 통계청 등 공개 통계 종합(참고치)"],
-    updated: "2026-08-18",
+    sources: ["국세청 근로소득 백분위(천분위) 자료, 2024년 귀속(공공데이터포털)", "연령대별 평균은 통계청 등 공개 통계 종합(참고치)", INSURANCE, TAX_TABLE],
+    updated: "2026-10-27",
   },
   "leap-save": { sources: ["금융위원회·서민금융진흥원 청년도약계좌 정부기여금 기준(2025.1 확대)"], updated: "2026-08-18" },
   "maternity-leave": {
-    sources: ["근로기준법 제74조", "고용보험법 제75조·제76조", "고용보험법 시행령 제101조(상·하한액)"],
-    updated: "2026-08-28",
+    sources: ["근로기준법 제74조", "남녀고용평등과 일·가정 양립 지원에 관한 법률 제18조", "고용보험법 제75조·제76조", "고용보험법 시행령 제101조(상·하한액)"],
+    updated: "2026-10-27",
   },
   "military-net": {
     sources: ["공무원보수규정 별표13(2026년 군인 봉급표)", "공무원수당 등에 관한 규정", "군인연금법(기여율)", "국민건강보험료율(2026년)", TAX_TABLE],
@@ -60,7 +60,7 @@ export const CALC_META: Record<string, CalcMeta> = {
     updated: "2026-08-20",
     autoData: "salary-compare",
   },
-  "savings-goal": { sources: ["사용자 입력값 기반 계산(외부 데이터 없음)"], updated: "2026-08-20" },
+  "savings-goal": { sources: ["사용자 입력값 기반 계산(외부 데이터 없음)"], updated: "2026-10-27" },
   "severance-pay": {
     sources: ["공무원연금법 시행령 제58조(퇴직수당 지급률)", "군인연금법 시행령(재직기간별 지급률 동일)"],
     updated: "2026-10-14",
