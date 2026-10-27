@@ -18,6 +18,8 @@ export type Guide = {
   title: string;
   desc: string;
   date: string;
+  /** 본문·제목을 마지막으로 수정한 날짜. 없으면 date와 같음. 내용을 고치면 함께 갱신한다. */
+  updated?: string;
   calcHref?: string;
   calcLabel?: string;
   relatedHref?: string;
@@ -31,6 +33,7 @@ export const GUIDES: Guide[] = [
     title: "군인 실수령액 2026: 병장 150만 원, 하사 1호봉 2,133,000원",
     desc: "병사와 간부는 봉급 체계 자체가 다릅니다. 이병 75만 원부터 간부 초임까지, 실수령액이 어떻게 갈리는지 정리했습니다.",
     date: "2026-07-15",
+    updated: "2026-10-21",
     calcHref: "/calc/military-net",
     calcLabel: "내 실수령액 계산하기",
     sections: [
@@ -76,6 +79,7 @@ export const GUIDES: Guide[] = [
     title: "청년도약계좌 vs 청년미래적금: 5년·3년 만기와 정부기여금 비교",
     desc: "5년 만기 도약계좌와 3년 만기 미래적금, 총액만 보면 착각하기 쉽습니다. 정부기여금 구조와 실효수익률까지 따져봤습니다.",
     date: "2026-07-16",
+    updated: "2026-10-21",
     calcHref: "/calc/youth-compare",
     calcLabel: "직접 비교해보기",
     sections: [
@@ -114,6 +118,7 @@ export const GUIDES: Guide[] = [
     title: "4대보험 공제율 2026: 국민연금 4.75%·건강보험 3.595%·고용보험 0.9%",
     desc: "국민연금 4.75%, 건강보험 3.595%, 장기요양보험, 고용보험 0.9% — 각각 어떻게 계산되는지 원리를 정리했습니다.",
     date: "2026-07-17",
+    updated: "2026-10-21",
     calcHref: "/calc/worker-net",
     calcLabel: "내 실수령액 계산하기",
     relatedHref: "/calc/national-pension",
@@ -153,6 +158,7 @@ export const GUIDES: Guide[] = [
     title: "자영업 손익분기점 계산법: 고정비 ÷ 마진율",
     desc: "손익분기 매출 공식과 보증금을 고정비로 착각하면 안 되는 이유, 그리고 소상공인 생존율 통계까지 정리했습니다.",
     date: "2026-07-18",
+    updated: "2026-10-21",
     calcHref: "/calc/business-breakeven",
     calcLabel: "손익분기점 계산하기",
     sections: [
@@ -191,6 +197,7 @@ export const GUIDES: Guide[] = [
     title: "FIRE 은퇴자금 계산: 4% 룰(연 지출의 25배)과 그 한계",
     desc: "널리 알려진 4% 룰은 30년 은퇴를 전제로 만들어진 규칙입니다. 조기 은퇴자에게 그대로 적용하면 위험할 수 있는 이유를 정리했습니다.",
     date: "2026-07-20",
+    updated: "2026-10-21",
     calcHref: "/calc/fire",
     calcLabel: "내 파이어 나이 계산하기",
     sections: [
@@ -229,6 +236,7 @@ export const GUIDES: Guide[] = [
     title: "2026년 공무원 봉급표 변경점 총정리",
     desc: "인상률 3.5%, 저연차 6.6%, 정액급식비 16만 원 인상까지 — 2026년 공무원 보수에서 달라진 것들을 정리했습니다.",
     date: "2026-07-09",
+    updated: "2026-08-20",
     calcHref: "/calc/civil-net",
     calcLabel: "내 실수령액 계산하기",
     sections: [
@@ -268,6 +276,7 @@ export const GUIDES: Guide[] = [
     title: "청년미래적금 가입조건 완벽 정리",
     desc: "2026년 6월 출시된 청년미래적금의 가입 대상, 일반형·우대형 차이, 금리와 만기 수령액을 정리했습니다.",
     date: "2026-07-09",
+    updated: "2026-08-20",
     calcHref: "/calc/youth-save",
     calcLabel: "만기 수령액 계산하기",
     sections: [
@@ -307,6 +316,7 @@ export const GUIDES: Guide[] = [
     title: "공무원 수당 종류 한눈에 보기",
     desc: "정근수당, 직급보조비, 가족수당, 시간외근무수당, 명절휴가비 — 월급에 붙는 주요 수당의 금액과 조건을 정리했습니다.",
     date: "2026-07-09",
+    updated: "2026-08-20",
     calcHref: "/calc/civil-net",
     calcLabel: "수당 포함 실수령액 계산하기",
     sections: [
@@ -346,6 +356,7 @@ export const GUIDES: Guide[] = [
     title: "군 복무 중 돈 모으기 — 장병내일준비적금 100% 활용법",
     desc: "병사 월급으로 전역 때 2,000만 원 만들기. 장병내일준비적금의 매칭지원금 구조와 꼭 알아야 할 조건을 정리했습니다.",
     date: "2026-07-09",
+    updated: "2026-08-20",
     calcHref: "/calc/soldier-save",
     calcLabel: "전역 시 수령액 계산하기",
     sections: [
@@ -384,6 +395,7 @@ export const GUIDES: Guide[] = [
     title: "첫 월급 세금: 세전·세후 차이와 간이세액표 원천징수",
     desc: "4대보험과 소득세가 월급에서 빠져나가는 구조를 처음 월급 받는 사람 눈높이로 설명합니다.",
     date: "2026-07-09",
+    updated: "2026-10-21",
     calcHref: "/calc/civil-net",
     calcLabel: "내 실수령액 계산하기",
     sections: [
@@ -422,6 +434,7 @@ export const GUIDES: Guide[] = [
     title: "교사 실수령액, 교직수당·담임수당까지 정확히 계산하는 법",
     desc: "호봉만으로는 실수령액이 안 나옵니다. 교직수당 25만 원, 담임수당 20만 원이 어떻게 더해지고 공제되는지 정리했습니다.",
     date: "2026-08-18",
+    updated: "2026-10-21",
     calcHref: "/calc/teacher-net",
     calcLabel: "내 실수령액 계산하기",
     sections: [
@@ -467,6 +480,7 @@ export const GUIDES: Guide[] = [
     title: "공무원·교사 연금 계산법: 재직 시기별 산식과 소득재분배",
     desc: "은퇴를 앞둔 공무원·교사라면 2016년 이후 재직분에 적용되는 소득재분배 산식부터 알아야 합니다. 구법·과도기·신법 3단계 산식이 왜 필요한지 정리했습니다.",
     date: "2026-08-18",
+    updated: "2026-10-21",
     calcHref: "/calc/pension-net",
     calcLabel: "내 예상연금 계산하기",
     sections: [
@@ -505,6 +519,7 @@ export const GUIDES: Guide[] = [
     title: "가구소득 계산법: 개인 연봉과의 차이와 기준 중위소득 비교",
     desc: "맞벌이 합산소득은 개인 연봉과 다른 기준입니다. 평균 가구소득과 기준 중위소득, 어떤 걸 봐야 하는지 정리했습니다.",
     date: "2026-08-19",
+    updated: "2026-10-21",
     calcHref: "/calc/household-income",
     calcLabel: "우리 가구소득 계산하기",
     sections: [
@@ -543,6 +558,7 @@ export const GUIDES: Guide[] = [
     title: "연봉 상위 % 계산법: 국세청 근로소득 백분위 기준",
     desc: "국세청 근로소득 백분위 자료가 기준입니다. 평균 연봉과 중위 연봉이 왜 다르게 느껴지는지, 백분위의 의미를 정리했습니다.",
     date: "2026-08-19",
+    updated: "2026-10-21",
     calcHref: "/calc/income-rank",
     calcLabel: "내 연봉 순위 확인하기",
     sections: [
@@ -581,6 +597,7 @@ export const GUIDES: Guide[] = [
     title: "대기업 평균연봉 보는 법: DART 1인평균급여액의 의미와 한계",
     desc: "전자공시(DART)에 나오는 1인평균급여액은 재직 전 직원의 평균입니다. 내 예상 연봉과 다를 수 있는 이유를 정리했습니다.",
     date: "2026-08-20",
+    updated: "2026-10-21",
     calcHref: "/calc/salary-compare",
     calcLabel: "대기업 연봉과 비교하기",
     sections: [
@@ -619,6 +636,7 @@ export const GUIDES: Guide[] = [
     title: "예금·적금 세후 이자 계산: 이자소득세 15.4%",
     desc: "이자소득세 15.4%가 적용되는 방식과, 적금 이자가 원금 대비 생각보다 적게 느껴지는 이유를 정리했습니다.",
     date: "2026-08-20",
+    updated: "2026-10-21",
     calcHref: "/calc/deposit",
     calcLabel: "세후 이자 계산하기",
     sections: [
@@ -657,6 +675,7 @@ export const GUIDES: Guide[] = [
     title: "1억 모으기 기간 계산: 월 저축액별 현실적인 목표",
     desc: "월급에서 고정비·생활비를 뺀 저축 가능액이 핵심입니다. 목표 금액까지 걸리는 기간을 현실적으로 계산하는 방법을 정리했습니다.",
     date: "2026-08-21",
+    updated: "2026-10-21",
     calcHref: "/calc/savings-goal",
     calcLabel: "목표 달성 기간 계산하기",
     sections: [
@@ -733,6 +752,7 @@ export const GUIDES: Guide[] = [
     title: "청년도약계좌 기존 가입자, 2025년부터 뭐가 달라졌나",
     desc: "5년 만기 상품인 청년도약계좌의 기여금이 2025년 확대됐습니다. 기존 가입자가 챙겨야 할 변화를 정리했습니다.",
     date: "2026-08-22",
+    updated: "2026-08-26",
     calcHref: "/calc/leap-save",
     calcLabel: "만기 수령액 계산하기",
     sections: [
@@ -772,6 +792,7 @@ export const GUIDES: Guide[] = [
     title: "국민연금 A값·B값 뜻과 계산법 (2026년 A값 3,193,511원)",
     desc: "국민연금 기본연금액은 전체 가입자 평균소득(A값)과 본인 평균소득(B값)을 함께 반영합니다. 가입 시기마다 승수가 다르고 2026년 개혁까지 겹쳐 헷갈리는 계산 구조를 정리했습니다.",
     date: "2026-08-26",
+    updated: "2026-10-21",
     calcHref: "/calc/national-pension",
     calcLabel: "내 국민연금 예상수령액 계산하기",
     sections: [
@@ -857,6 +878,7 @@ export const GUIDES: Guide[] = [
     title: "국민연금 지역가입자 보험료 2026: 9.5% 전액 본인부담, 상·하한 41만~659만 원",
     desc: "지역가입자는 국민연금 보험료 9.5% 전액을 혼자 냅니다. 기준소득월액 상하한액과 저소득 지원제도까지, 자영업자·프리랜서가 알아야 할 보험료 구조를 정리했습니다.",
     date: "2026-08-26",
+    updated: "2026-10-21",
     calcHref: "/calc/national-pension-premium",
     calcLabel: "내 지역가입자 보험료 계산하기",
     sections: [
@@ -895,6 +917,7 @@ export const GUIDES: Guide[] = [
     title: "퇴직금 계산법: 최근 3개월 평균임금 × 30일 × 근속연수",
     desc: "퇴직금은 최근 3개월 평균임금을 기준으로 계산됩니다. 평균임금과 통상임금의 하한 규칙, 상여금·연차수당 반영 방식, 1년 미만 근무자 예외까지 정리했습니다.",
     date: "2026-08-26",
+    updated: "2026-10-21",
     calcHref: "/calc/retirement-pay",
     calcLabel: "내 퇴직금 계산하기",
     sections: [
@@ -933,6 +956,7 @@ export const GUIDES: Guide[] = [
     title: "실업급여 2026: 하루 66,048~68,100원, 120~270일 수급",
     desc: "실업급여는 평균임금의 60%에 소정급여일수를 곱해서 계산합니다. 연령과 가입기간에 따라 120일에서 270일까지 달라지는 지급 기간과 2026년 상하한액을 정리했습니다.",
     date: "2026-08-26",
+    updated: "2026-10-21",
     calcHref: "/calc/unemployment-benefit",
     calcLabel: "내 실업급여 계산하기",
     sections: [
@@ -970,6 +994,7 @@ export const GUIDES: Guide[] = [
     title: "출산전후휴가급여 2026: 90일 상한 660만 원, 회사 규모별 지급 주체",
     desc: "출산전후휴가급여는 회사가 우선지원대상기업인지 대규모기업인지에 따라 지급 주체와 상한 적용 범위가 달라집니다. 90일 총액 660만원 상한과 최저임금 하한 규칙까지 정리했습니다.",
     date: "2026-08-27",
+    updated: "2026-10-21",
     calcHref: "/calc/maternity-leave",
     calcLabel: "내 출산전후휴가급여 계산하기",
     sections: [
@@ -1006,6 +1031,7 @@ export const GUIDES: Guide[] = [
     title: "교사 정년퇴직일 계산: 만 62세, 8월 31일·2월 말일 퇴직",
     desc: "교원 정년은 62세(대학은 65세)지만 실제 퇴직일은 생일이 아니라 학기에 맞춰 8월 31일이나 2월 말일로 정해집니다. 일반직 공무원과 다른 이 규칙을 정리했습니다.",
     date: "2026-09-21",
+    updated: "2026-10-21",
     calcHref: "/calc/retirement-age",
     calcLabel: "내 정년퇴직일 계산하기",
     sections: [

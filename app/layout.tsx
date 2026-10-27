@@ -12,6 +12,8 @@ const notoSerifKR = Noto_Serif_KR({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://moneywatch.kr"),
+  // 각 페이지의 정식 주소(canonical). "./"는 페이지마다 자기 경로로 해석됨 → /calc/fire, /calc/fire/, /calc/fire.html 중복 방지
+  alternates: { canonical: "./" },
   title: {
     default: "2026 봉급표 · 실수령액 계산기",
     template: "%s | 봉급계산소",

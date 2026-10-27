@@ -38,7 +38,9 @@ export default async function GuidePage({
           {g.title}
         </h1>
         <p className="text-sm text-[#5B6478]">{g.desc}</p>
-        <p className="text-xs text-[#8B93A6]">최종 갱신 {g.date}</p>
+        <p className="text-xs text-[#8B93A6]">
+          {g.updated && g.updated !== g.date ? `작성 ${g.date} · 최종 갱신 ${g.updated}` : `최종 갱신 ${g.date}`}
+        </p>
       </header>
 
       {g.sections.map((s, i) => (
