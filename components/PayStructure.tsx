@@ -29,7 +29,7 @@ const regularText = `근무연수에 따라 월봉급액의 ${regular
   .filter((b) => b.rate > 0)
   .map((b) => pct(b.rate))
   .filter((v, i, a) => a.indexOf(v) === i)
-  .join("·")} (1년 미만 0%)`;
+  .join("·")}`;
 const addonText = `근무연수에 따라 월 ${won(addon[0].amount)}~${won(addon[addon.length - 1].amount)}`;
 
 function Table({ head, rows }: { head: [string, string, string?]; rows: Row[] }) {
@@ -96,7 +96,7 @@ export default function PayStructure({ variant }: { variant: "civil" | "teacher"
           ["정액급식비", won(rates.meal), "전 직급 공통"],
           ["직급보조비", `9·8급 ${won(pb["9급"])} / 7급 ${won(pb["7급"])} / 6급 ${won(pb["6급"])} / 3~5급 ${won(pb["5급"])}`, "경찰·소방도 대응 계급별 동일"],
           ["가족수당", `배우자 ${won(fam.spouse)} / 첫째 ${won(fam.child1)} / 둘째 ${won(fam.child2)} / 셋째 이상 ${won(fam.child3plus)}`, "해당자만"],
-          ["정근수당 가산금", addonText, "5년 이상 근무 시 단계적 증가"],
+          ["정근수당 가산금", addonText, "근무연수 구간별로 증가"],
           ["위험근무수당", won(rates.dangerAllowance.police), "경찰·소방만 (2026년 7만→8만 원)"],
         ]
       : variant === "teacher"
@@ -106,7 +106,7 @@ export default function PayStructure({ variant }: { variant: "civil" | "teacher"
             ["보직교사수당", won(DEPT_HEAD_ALLOWANCE), "부장교사 등 보직을 맡은 경우"],
             ["정액급식비", won(rates.meal), "전 교원 공통"],
             ["가족수당", `배우자 ${won(fam.spouse)} / 첫째 ${won(fam.child1)} / 둘째 ${won(fam.child2)} / 셋째 이상 ${won(fam.child3plus)}`, "해당자만"],
-            ["정근수당 가산금", addonText, "5년 이상 근무 시 단계적 증가"],
+            ["정근수당 가산금", addonText, "근무연수 구간별로 증가"],
           ]
         : mil.allowances
             .filter((a) => a.id !== "overtimeHours")

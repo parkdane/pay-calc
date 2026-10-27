@@ -12,7 +12,7 @@ export const MIN_INSURED_DAYS = 180; // 최소 피보험단위기간(고용보�
 export type AgeGroup = "under50" | "over50OrDisabled";
 
 // 고용보험법 별표1 — [연령그룹][가입기간구간] = 소정급여일수
-const SCHEDULE: Record<AgeGroup, number[]> = {
+export const SCHEDULE: Record<AgeGroup, number[]> = {
   // 가입기간: 1년미만 / 1~3년 / 3~5년 / 5~10년 / 10년이상
   under50: [120, 150, 180, 210, 240],
   over50OrDisabled: [120, 180, 210, 240, 270],

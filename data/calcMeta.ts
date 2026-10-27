@@ -14,7 +14,7 @@ export const CALC_META: Record<string, CalcMeta> = {
   },
   "civil-net": {
     sources: ["공무원보수규정 별표3·별표10·별표11(2026년 봉급표)", "공무원수당 등에 관한 규정", "공무원연금 기여율·국민건강보험료율(2026년)", TAX_TABLE],
-    updated: "2026-10-21",
+    updated: "2026-10-27",
   },
   deposit: { sources: ["금융감독원 금융상품통합비교공시(오픈API)", "소득세법(이자소득세 14%)·지방세법(지방소득세 1.4%)", "예금자보호법 시행령(보호한도 1억 원, 2025.9.1 시행)"], updated: "2026-10-27", autoData: "rates" },
   fire: { sources: ["4% 인출 규칙 등 일반 재무 계산식(실질수익률 기준)", "사용자 입력값 기반 시뮬레이션"], updated: "2026-08-20" },
@@ -33,7 +33,7 @@ export const CALC_META: Record<string, CalcMeta> = {
   },
   "military-net": {
     sources: ["공무원보수규정 별표13(2026년 군인 봉급표)", "공무원수당 등에 관한 규정", "군인연금법(기여율)", "국민건강보험료율(2026년)", TAX_TABLE],
-    updated: "2026-10-14",
+    updated: "2026-10-27",
   },
   "naeil-save": { sources: ["보건복지부 2026년 청년내일저축계좌 모집 공고(기준 중위소득 50% 이하)"], updated: "2026-10-27" },
   "national-pension-premium": {
@@ -68,7 +68,7 @@ export const CALC_META: Record<string, CalcMeta> = {
   "soldier-save": { sources: ["국방부 장병내일준비적금 안내", "취급은행 상품설명서(은행별 월 30만 원·합산 55만 원)"], updated: "2026-10-27" },
   "teacher-net": {
     sources: ["공무원보수규정 별표11(2026년 교원 봉급표)", "공무원수당 등에 관한 규정(교직수당·담임수당)", "공무원연금 기여율·국민건강보험료율(2026년)", TAX_TABLE],
-    updated: "2026-10-21",
+    updated: "2026-10-27",
   },
   "unemployment-benefit": {
     sources: ["고용보험법 제40조·제46조·제49조·제50조, 별표1(소정급여일수)", "2026년 구직급여 상·하한액"],

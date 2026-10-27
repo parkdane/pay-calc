@@ -89,15 +89,15 @@
   },
 
   "regularBonus": {
-    "_note": "정근수당 (연 2회). 월봉급액 대비 비율, 월 환산 시 ÷6 근사. 근무연수 구간별.",
+    "_note": "정근수당 (연 2회). 월봉급액 대비 비율, 월 환산 시 ÷6 근사. 근무연수 구간별. 공무원수당 등에 관한 규정 별표2(2025.1.3 개정): 2년 미만 10%, 5년 미만 20%, 이후 1년마다 5%p, 10년 이상 50%.",
     "brackets": [
-      { "underYears": 1, "rate": 0 },
       { "underYears": 2, "rate": 0.1 },
-      { "underYears": 3, "rate": 0.2 },
-      { "underYears": 4, "rate": 0.25 },
-      { "underYears": 5, "rate": 0.3 },
-      { "underYears": 6, "rate": 0.35 },
-      { "underYears": 7, "rate": 0.4 },
+      { "underYears": 5, "rate": 0.2 },
+      { "underYears": 6, "rate": 0.25 },
+      { "underYears": 7, "rate": 0.3 },
+      { "underYears": 8, "rate": 0.35 },
+      { "underYears": 9, "rate": 0.4 },
+      { "underYears": 10, "rate": 0.45 },
       { "underYears": 999, "rate": 0.5 }
     ]
   }
