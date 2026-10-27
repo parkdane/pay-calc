@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GUIDES } from "@/data/guides";
 import AdSlot from "@/components/AdSlot";
 import CalcCta from "@/components/CalcCta";
+import SimpleTable from "@/components/SimpleTable";
 import Link from "next/link";
 
 export function generateStaticParams() {
@@ -51,6 +52,8 @@ export default async function GuidePage({
               {p}
             </p>
           ))}
+          {s.table && <SimpleTable head={s.table.head} rows={s.table.rows} minWidth={s.table.minWidth} />}
+          {s.table?.note && <p className="text-xs leading-relaxed text-[#8B93A6]">{s.table.note}</p>}
           {/* 중간 광고: 첫 섹션 뒤 */}
           {i === 0 && <AdSlot id={`guide-${g.slug}-mid`} />}
         </section>

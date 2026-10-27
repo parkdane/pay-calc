@@ -3,6 +3,13 @@
 import { useMemo, useState } from "react";
 import { monthlyIncomeTax } from "@/lib/incomeTax";
 import AdSlot from "@/components/AdSlot";
+import {
+  MEDIAN_INCOME_2026,
+  AVG_HOUSEHOLD_INCOME,
+  AVG_DISPOSABLE_INCOME,
+  AVG_INCOME_METRO,
+  AVG_INCOME_NONMETRO,
+} from "@/lib/medianIncome";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const manwon = (n: number) => Math.round(n / 10000).toLocaleString("ko-KR") + "만원";
@@ -28,21 +35,6 @@ function estimateMonthlyNet(annualGross: number, dependents: number): number {
   return monthlyGross - totalDeduction;
 }
 
-// 2026년도 기준 중위소득 (월, 원) - 보건복지부 고시
-const MEDIAN_INCOME_2026: Record<number, number> = {
-  1: 2564238,
-  2: 4199292,
-  3: 5359036,
-  4: 6494738,
-  5: 7556719,
-  6: 8555952,
-};
-
-// 2024년 가구 평균소득/처분가능소득 (연, 원) - 통계청·한국은행·금융감독원 「가계금융복지조사」(2025.12 발표)
-const AVG_HOUSEHOLD_INCOME = 74270000;
-const AVG_DISPOSABLE_INCOME = 60320000;
-const AVG_INCOME_METRO = 81180000;
-const AVG_INCOME_NONMETRO = 67520000;
 
 export default function HouseholdIncomeCalc() {
   const [mySalary, setMySalary] = useState(52000000);
