@@ -104,6 +104,9 @@ export default function RootLayout({
               <Link href="/contact" className="hover:text-[#2E4494]">
                 문의하기
               </Link>
+              <Link href="/updates" className="hover:text-[#2E4494]">
+                업데이트 내역
+              </Link>
             </div>
             <p>
               본 사이트의 봉급표·계산 결과는 인사혁신처, 국세청, 금융위원회 등 공개

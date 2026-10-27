@@ -4,6 +4,7 @@ import path from "path";
 import { GUIDES } from "@/data/guides";
 import { CALC_META } from "@/data/calcMeta";
 import { PAGE_UPDATED } from "@/data/pageUpdated";
+import { UPDATES } from "@/data/updates";
 import rates from "@/data/rates.json";
 import salaryCompare from "@/data/salary-compare.json";
 
@@ -60,6 +61,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/calc", date: calcHub },
     { path: "/guide", date: guideHub },
     { path: "/rates", date: AUTO_DATA.rates },
+    { path: "/updates", date: maxDate(UPDATES.map((u) => u.date)) },
     ...["/about", "/terms", "/privacy", "/contact"].map((p) => ({ path: p, date: fixed(p) })),
     ...salaryPaths.map((p) => ({ path: p, date: fixed(p) })),
     ...calcEntries,
