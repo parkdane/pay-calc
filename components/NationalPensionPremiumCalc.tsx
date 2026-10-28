@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import MoneyInput from "@/components/MoneyInput";
 import AdSlot from "@/components/AdSlot";
-import { calcNationalPensionPremium } from "@/lib/nationalPensionPremiumCalc";
+import { calcNationalPensionPremium, LOW_INCOME_SUPPORT_MAX } from "@/lib/nationalPensionPremiumCalc";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
@@ -59,7 +59,7 @@ export default function NationalPensionPremiumCalc() {
           {result.lowIncomeSupportEligible && (
             <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[#F0F5FF] p-4 text-xs leading-relaxed text-[#2E4494]">
               기준소득월액이 80만원 미만이면 저소득 지역가입자 보험료 지원제도 대상일 수 있습니다.
-              보험료의 50%(월 최대 46,350원)를 국가가 지원하며, 생애 최대 12개월까지 받을 수
+              보험료의 50%(2026년 월 최대 {LOW_INCOME_SUPPORT_MAX.toLocaleString("ko-KR")}원)를 국가가 지원하며, 생애 최대 12개월까지 받을 수
               있습니다. 국민연금공단(1355)에서 자격을 확인해보세요.
             </div>
           )}

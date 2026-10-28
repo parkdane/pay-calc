@@ -38,7 +38,7 @@ export const CALC_META: Record<string, CalcMeta> = {
   "naeil-save": { sources: ["보건복지부 2026년 청년내일저축계좌 모집 공고(기준 중위소득 50% 이하)"], updated: "2026-10-27" },
   "national-pension-premium": {
     sources: ["국민연금법 제3조·제88조", "보건복지부 고시 기준소득월액 상·하한(2026.7~2027.6)", "국민연금공단 보험료율 안내(2026년 9.5%)"],
-    updated: "2026-10-21",
+    updated: "2026-10-28",
   },
   "national-pension": { sources: ["국민연금법 제51조(기본연금액)", "국민연금법 제63조(노령연금액·가입기간별 지급률)", "국민연금공단 2026년 A값"], updated: "2026-10-16" },
   "overtime-pay": {

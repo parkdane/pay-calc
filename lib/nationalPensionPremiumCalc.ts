@@ -9,6 +9,8 @@ export const RATE = 0.095;
 
 // 저소득 지역가입자 보험료 지원제도 기준(참고용 안내에만 사용, 계산에는 반영하지 않음)
 export const LOW_INCOME_SUPPORT_THRESHOLD = 800_000; // 기준소득월액 80만원 미만
+// 2026년 지원액: 보험료의 50%, 월 최대 37,950원(80만 원 미만 × 9.5% × 50%). 2025년까지는 기준 103만 원·최대 46,350원(9%)
+export const LOW_INCOME_SUPPORT_MAX = 37_950;
 
 export function calcNationalPensionPremium(monthlyIncome: number) {
   const standardIncome = Math.min(Math.max(monthlyIncome, LOWER_INCOME_LIMIT), UPPER_INCOME_LIMIT);

@@ -22,6 +22,9 @@ import {
 } from "@/lib/unemploymentBenefitCalc";
 import { calcParentalLeave } from "@/lib/parentalLeaveCalc";
 import { calcRetirementPay } from "@/lib/retirementPayCalc";
+import { calcNationalPensionPremium, RATE as NP_RATE, LOWER_INCOME_LIMIT, UPPER_INCOME_LIMIT } from "@/lib/nationalPensionPremiumCalc";
+import { calcMaternityLeavePay, MIN_HOURLY_WAGE, STANDARD_MONTHLY_HOURS } from "@/lib/maternityLeaveCalc";
+import { leapMonthlyMatch, LEAP_TIERS } from "@/lib/policySavings";
 
 export const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 export const man = (n: number) => {
@@ -306,3 +309,86 @@ export const retireBonusRows = [0, 400, 600].map((b) => [
   won(rp(b, 10).retirementPay),
 ]);
 export const retireWindowDays = rp(0, 3).threeMonthWindowDays;
+
+// ════════ 3차 묶음 ════════
+
+// ── 손익분기 ──
+export const breakevenRows = [3000000, 5000000, 8000000].map((fixed) => [
+  `월 ${man(fixed)}`,
+  ...[0.3, 0.5, 0.7].map((m) => man(fixed / m)),
+]);
+const BE = { fixed: 5000000, margin: 0.6, sales: 12000000 };
+const profitAt = (sales: number) => sales * BE.margin - BE.fixed;
+export const breakevenShock = {
+  ...BE,
+  be: BE.fixed / BE.margin,
+  profit: profitAt(BE.sales),
+  rows: [0, 0.2, 0.4].map((drop) => {
+    const s = BE.sales * (1 - drop);
+    const p = profitAt(s);
+    return [drop === 0 ? "정상 매출" : `${drop * 100}% 감소`, man(s), `${p < 0 ? "−" : ""}${man(Math.abs(p))}`];
+  }),
+};
+
+// ── FIRE ──
+export const fireNumberRows = [2000000, 3000000, 4000000].map((m) => [
+  `월 ${man(m)}`,
+  ...[0.03, 0.035, 0.04].map((wr) => man((m * 12) / wr)),
+]);
+export const fireTimeRows = [1000000, 2000000, 3000000].map((save) => [
+  `월 ${man(save)}`,
+  ...[2, 4, 6].map((r) => formatMonths(monthsToGoal(save, (3000000 * 12) / 0.04, r)!)),
+]);
+export const fireTarget = (3000000 * 12) / 0.04;
+
+// ── 4대보험 항목별 ──
+export const insuranceRows = [2500000, 4000000, 7000000, 10000000].map((m) => {
+  const r = calcWorkerNet(m * 12, 1);
+  const d = r.deductions;
+  const ins = d.slice(0, 4).reduce((a, x) => a + x.value, 0);
+  return [`월 ${man(m)}`, won(d[0].value), won(d[1].value), won(d[2].value), won(d[3].value), `${((ins / m) * 100).toFixed(2)}%`];
+});
+
+// ── 지역가입자 ──
+export const npPremiumRows = [LOWER_INCOME_LIMIT, 1000000, 2000000, 3000000, 5000000, UPPER_INCOME_LIMIT].map((inc) => {
+  const r = calcNationalPensionPremium(inc);
+  return [man(inc), won(r.premium), won(r.employeeShareIfWorkplace), won(r.premium * 12)];
+});
+const NP_SCHEDULE = [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033].map((y, i) => ({ y, rate: NP_RATE + 0.005 * i }));
+export const npScheduleRows = NP_SCHEDULE.map(({ y, rate }) => [
+  `${y}년`,
+  `${(rate * 100).toFixed(1)}%`,
+  won(3000000 * rate),
+  won(3000000 * rate * 12),
+]);
+export const npLimits = { lower: LOWER_INCOME_LIMIT, upper: UPPER_INCOME_LIMIT };
+
+// ── 출산휴가 최저임금 하한 ──
+export const maternityFloor = MIN_HOURLY_WAGE * STANDARD_MONTHLY_HOURS;
+export const maternityFloorRows = [180, 200, 215, 250].map((w) => {
+  const r = calcMaternityLeavePay(w, "priority", false);
+  return [`월 ${w}만 원`, won(w * 10000 * 3), won(r.totalAmount), r.floorApplied ? "최저임금 기준" : "통상임금 기준"];
+});
+
+// ── 도약계좌: 납입액 × 소득구간 월 기여금 ──
+const LEAP_PAID = LEAP_TIERS.filter((x) => x.base > 0);
+export const leapMatrixHead = ["월 납입액", "총급여 2,400만 원 이하", "2,400만~3,600만 원", "3,600만~4,800만 원", "4,800만~6,000만 원"];
+export const leapMatrixRows = [300000, 400000, 500000, 600000, 700000].map((m) => [
+  `월 ${man(m)}`,
+  ...LEAP_PAID.map((x) => won(leapMonthlyMatch(m, x.id))),
+]);
+const lm = leapMonthlyMatch(700000, "t2400");
+export const leapEarly = { monthly: lm, full: lm * 60, at36: lm * 36 * 0.6 };
+
+// ── 미래적금 금리별 ──
+export const youthRateRows = [5, 6, 7, 8].map((r) => [
+  `연 ${r}%`,
+  won(calcYouthFuture(500000, "general", r).total),
+  won(calcYouthFuture(500000, "premium", r).total),
+]);
+
+// ── 1억 모으기 중간 목표 ──
+export const milestoneRows = [30000000, 50000000, 70000000, EOK].map((g) => {
+  const n = monthsToGoal(1000000, g, 3)!;
+  return [man(g), formatMonths(n), `${n}개월`];
+});
