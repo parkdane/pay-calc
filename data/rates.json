@@ -1,7 +1,37 @@
 {
-  "updatedAt": "2026-10-29T21:00:44.575Z",
+  "updatedAt": "2026-10-30T21:00:39.361Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
+    {
+      "bank": "바로저축은행",
+      "product": "스마트정기예금(인터넷)",
+      "baseRate": 4.12,
+      "maxRate": 4.12,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷",
+      "note": "없음"
+    },
+    {
+      "bank": "바로저축은행",
+      "product": "SB톡톡 정기예금(비대면)",
+      "baseRate": 4.12,
+      "maxRate": 4.12,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "흥국저축은행",
+      "product": "비대면 정기예금",
+      "baseRate": 4.12,
+      "maxRate": 4.12,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
     {
       "bank": "전북은행",
       "product": "JB 123 정기예금\n (만기일시지급식)",
@@ -63,26 +93,6 @@
       "note": "없음"
     },
     {
-      "bank": "바로저축은행",
-      "product": "스마트정기예금(인터넷)",
-      "baseRate": 4.1,
-      "maxRate": 4.1,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷",
-      "note": "없음"
-    },
-    {
-      "bank": "바로저축은행",
-      "product": "SB톡톡 정기예금(비대면)",
-      "baseRate": 4.1,
-      "maxRate": 4.1,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
       "bank": "고려저축은행",
       "product": "정기예금(비대면)",
       "baseRate": 4.1,
@@ -123,16 +133,6 @@
       "note": "없음"
     },
     {
-      "bank": "흥국저축은행",
-      "product": "비대면 정기예금",
-      "baseRate": 4.1,
-      "maxRate": 4.1,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
       "bank": "HB저축은행",
       "product": "스마트회전정기예금",
       "baseRate": 4.07,
@@ -163,6 +163,36 @@
       "note": "해당사항없음"
     },
     {
+      "bank": "유안타저축은행",
+      "product": "회전정기예금 (변동금리)",
+      "baseRate": 4.06,
+      "maxRate": 4.06,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "없음"
+    },
+    {
+      "bank": "유안타저축은행",
+      "product": "e-회전정기예금 (변동금리)",
+      "baseRate": 4.06,
+      "maxRate": 4.06,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷,스마트폰",
+      "note": "없음"
+    },
+    {
+      "bank": "유안타저축은행",
+      "product": "SB톡톡 회전정기예금 (비대면)",
+      "baseRate": 4.06,
+      "maxRate": 4.06,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
       "bank": "한국스탠다드차타드은행",
       "product": "e-그린세이브예금",
       "baseRate": 3.85,
@@ -171,36 +201,6 @@
       "group": "은행",
       "joinWay": "인터넷,스마트폰",
       "note": "1.SC제일은행 최초 거래 신규고객에 대하여 우대 이율을 제공함 (보너스이율0.2%)                     \n2.만기일에 아래의 조건을 모두 충족하는 경우에 보너스이율을 제공함\n-6~12개월제(만기일시"
-    },
-    {
-      "bank": "부산은행",
-      "product": "더(The) 특판 정기예금",
-      "baseRate": 2.1,
-      "maxRate": 4.05,
-      "term": 12,
-      "group": "은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "* 우대이율 (최대 1.95%p)\n가. 모바일뱅킹 금융정보 및 혜택알림 동의 우대이율 : 0.10%p\n나. 신규고객 또는 정기예금 중도해지고객 우대이율 1.25%p\n다. 특판우대이율 : 0.60%"
-    },
-    {
-      "bank": "제주은행",
-      "product": "J정기예금\n(만기지급식)",
-      "baseRate": 2,
-      "maxRate": 4.05,
-      "term": 12,
-      "group": "은행",
-      "joinWay": "영업점,인터넷,스마트폰",
-      "note": "- 아래의 우대요건 충족시 최고 0.5%p 추가 우대 \n①비대면 채널 가입시 0.3%제공(신규시제공)  \n(단, 이벤트시 디지털 채널에 고시한 우대금리를 추가 적용할 수 있음)\n②신규일로부터 만기달 제외한 계약기간의"
-    },
-    {
-      "bank": "디비저축은행",
-      "product": "DreamBig 정기예금(6M)",
-      "baseRate": 4.05,
-      "maxRate": 4.05,
-      "term": 6,
-      "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "해당사항없음"
     }
   ],
   "savings": [
@@ -317,8 +317,8 @@
     {
       "bank": "유안타저축은행",
       "product": "아이행복적금",
-      "baseRate": 3.75,
-      "maxRate": 6.75,
+      "baseRate": 3.95,
+      "maxRate": 6.95,
       "term": 12,
       "group": "저축은행",
       "joinWay": "영업점",
