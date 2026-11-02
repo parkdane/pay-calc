@@ -22,6 +22,7 @@ import {
 } from "@/lib/unemploymentBenefitCalc";
 import { calcParentalLeave } from "@/lib/parentalLeaveCalc";
 import { calcRetirementPay } from "@/lib/retirementPayCalc";
+import { calcNationalPension, A_VALUE_2026 } from "@/lib/nationalPensionCalc";
 import { calcNationalPensionPremium, RATE as NP_RATE, LOWER_INCOME_LIMIT, UPPER_INCOME_LIMIT } from "@/lib/nationalPensionPremiumCalc";
 import { calcMaternityLeavePay, MIN_HOURLY_WAGE, STANDARD_MONTHLY_HOURS } from "@/lib/maternityLeaveCalc";
 import { leapMonthlyMatch, LEAP_TIERS } from "@/lib/policySavings";
@@ -392,3 +393,29 @@ export const milestoneRows = [30000000, 50000000, 70000000, EOK].map((g) => {
   const n = monthsToGoal(1000000, g, 3)!;
   return [man(g), formatMonths(n), `${n}개월`];
 });
+
+// ── 국민연금 A값·B값 ──
+export const npA = A_VALUE_2026;
+// 2026년부터 20년(240개월) 가입, 정상 수급, 부양가족 없음
+const np20 = (B: number) =>
+  calcNationalPension({
+    startYear: 2026,
+    startMonth: 1,
+    endYear: 2045,
+    endMonth: 12,
+    avgMonthlyIncome: B,
+    claimType: "normal",
+    claimYearsShift: 0,
+    dependents: { spouse: false, childrenOrParents: 0, disabledChildren: 0 },
+  }).basePension;
+export const npBRows = [1500000, 2500000, A_VALUE_2026, 4500000, 6000000].map((B) => {
+  const m = np20(B);
+  return [
+    B === A_VALUE_2026 ? `${won(B)} (A값과 같음)` : won(B),
+    `${((B / A_VALUE_2026) * 100).toFixed(0)}%`,
+    won(m),
+    `${((m / B) * 100).toFixed(1)}%`,
+  ];
+});
+export const npBLow = { B: 1500000, m: np20(1500000) };
+export const npBHigh = { B: 6000000, m: np20(6000000) };

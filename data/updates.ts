@@ -5,6 +5,15 @@ export type UpdateEntry = { date: string; items: UpdateItem[] };
 
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-11-02",
+    items: [
+      {
+        text: "국민연금 가이드에 A값과 B값 차이 비교표, 기본연금액의 뜻, B값 수준별 월 연금·소득 대비 비율표 추가",
+        href: "/guide/national-pension-guide",
+      },
+    ],
+  },
+  {
     date: "2026-10-28",
     items: [
       {
