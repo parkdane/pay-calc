@@ -1,36 +1,16 @@
 {
-  "updatedAt": "2026-11-05T21:01:04.077Z",
+  "updatedAt": "2026-11-06T21:01:00.660Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
     {
-      "bank": "바로저축은행",
-      "product": "스마트정기예금(인터넷)",
-      "baseRate": 4.12,
-      "maxRate": 4.12,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷",
-      "note": "없음"
-    },
-    {
-      "bank": "바로저축은행",
-      "product": "SB톡톡 정기예금(비대면)",
-      "baseRate": 4.12,
-      "maxRate": 4.12,
+      "bank": "HB저축은행",
+      "product": "스마트회전정기예금",
+      "baseRate": 4.11,
+      "maxRate": 4.11,
       "term": 12,
       "group": "저축은행",
       "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "흥국저축은행",
-      "product": "비대면 정기예금",
-      "baseRate": 4.12,
-      "maxRate": 4.12,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
+      "note": "해당사항없음"
     },
     {
       "bank": "전북은행",
@@ -123,6 +103,26 @@
       "note": "해당사항없음"
     },
     {
+      "bank": "HB저축은행",
+      "product": "e-정기예금",
+      "baseRate": 4.1,
+      "maxRate": 4.1,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷",
+      "note": "해당사항없음"
+    },
+    {
+      "bank": "HB저축은행",
+      "product": "스마트정기예금",
+      "baseRate": 4.1,
+      "maxRate": 4.1,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "해당사항없음"
+    },
+    {
       "bank": "조은저축은행",
       "product": "정기예금(서울본점)",
       "baseRate": 4.1,
@@ -130,6 +130,26 @@
       "term": 12,
       "group": "저축은행",
       "joinWay": "영업점",
+      "note": "없음"
+    },
+    {
+      "bank": "바로저축은행",
+      "product": "스마트정기예금(인터넷)",
+      "baseRate": 4.1,
+      "maxRate": 4.1,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "인터넷",
+      "note": "없음"
+    },
+    {
+      "bank": "바로저축은행",
+      "product": "SB톡톡 정기예금(비대면)",
+      "baseRate": 4.1,
+      "maxRate": 4.1,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
       "note": "없음"
     },
     {
@@ -175,26 +195,6 @@
     {
       "bank": "고려저축은행",
       "product": "정기예금(비대면)",
-      "baseRate": 4.1,
-      "maxRate": 4.1,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "고려저축은행",
-      "product": "회전정기예금(비대면)",
-      "baseRate": 4.1,
-      "maxRate": 4.1,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "인터넷,스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "고려저축은행",
-      "product": "GPS 정기예금(비대면)",
       "baseRate": 4.1,
       "maxRate": 4.1,
       "term": 12,
