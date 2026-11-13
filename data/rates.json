@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-12T21:00:20.723Z",
+  "updatedAt": "2026-11-13T21:00:29.139Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
     {
@@ -133,6 +133,16 @@
       "note": "해당사항없음"
     },
     {
+      "bank": "민국저축은행",
+      "product": "정기예금",
+      "baseRate": 4,
+      "maxRate": 4.1,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "* 최대우대금리 : 0.1%\n- 창구에서 1년이상 재예치 하는 경우 + 0.1%p"
+    },
+    {
       "bank": "HB저축은행",
       "product": "e-정기예금",
       "baseRate": 4.1,
@@ -190,16 +200,6 @@
       "term": 12,
       "group": "저축은행",
       "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "다올저축은행",
-      "product": "Fi 하이브리드 정기예금 (대면)",
-      "baseRate": 2.6,
-      "maxRate": 4.1,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "영업점",
       "note": "없음"
     }
   ],
