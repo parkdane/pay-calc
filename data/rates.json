@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-15T21:00:29.518Z",
+  "updatedAt": "2026-11-16T21:00:35.828Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
     {
@@ -133,6 +133,16 @@
       "note": "해당사항없음"
     },
     {
+      "bank": "스카이저축은행",
+      "product": "회전정기예금",
+      "baseRate": 4.1,
+      "maxRate": 4.1,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "영업점",
+      "note": "없음"
+    },
+    {
       "bank": "민국저축은행",
       "product": "정기예금",
       "baseRate": 4,
@@ -163,14 +173,14 @@
       "note": "해당사항없음"
     },
     {
-      "bank": "조은저축은행",
-      "product": "정기예금(서울본점)",
+      "bank": "키움예스저축은행",
+      "product": "e-정기예금(인터넷뱅킹, 스마트뱅킹)",
       "baseRate": 4.1,
       "maxRate": 4.1,
       "term": 12,
       "group": "저축은행",
-      "joinWay": "영업점",
-      "note": "없음"
+      "joinWay": "인터넷,스마트폰",
+      "note": "-"
     },
     {
       "bank": "교보SBI저축은행",
@@ -190,16 +200,6 @@
       "term": 12,
       "group": "저축은행",
       "joinWay": "인터넷",
-      "note": "없음"
-    },
-    {
-      "bank": "바로저축은행",
-      "product": "SB톡톡 정기예금(비대면)",
-      "baseRate": 4.1,
-      "maxRate": 4.1,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
       "note": "없음"
     }
   ],
