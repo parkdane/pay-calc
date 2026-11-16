@@ -6,7 +6,10 @@ export type UpdateEntry = { date: string; items: UpdateItem[] };
 export const UPDATES: UpdateEntry[] = [
   {
     date: "2026-11-16",
-    items: [{ text: "교원 봉급표에 유치원 교사 적용 여부 안내 추가(국공립은 초·중·고와 같은 별표11, 사립은 유치원별 보수 규정)", href: "/salary/teacher" }],
+    items: [
+      { text: "경찰 봉급표에 경정·총경·경무관·치안감·치안정감, 소방 봉급표에 소방령·소방정·소방준감·소방감·소방정감 호봉별 봉급 추가(공무원보수규정 별표10)", href: "/salary/police" },
+      { text: "교원 봉급표에 유치원 교사 적용 여부 안내 추가(국공립은 초·중·고와 같은 별표11, 사립은 유치원별 보수 규정)", href: "/salary/teacher" },
+    ],
   },
   {
     date: "2026-11-02",

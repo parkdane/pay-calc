@@ -60,6 +60,26 @@ function snippet(slug: string, d: any): string {
   return `${d.year}년 ${d.title} 봉급표: ${first} 1호봉 ${wonShort(payAt(d, 1, 0)!)}, ${first} 10호봉 ${wonShort(payAt(d, 10, 0)!)}, ${d.columns[second]} 1호봉 ${wonShort(payAt(d, 1, second)!)}. 공무원보수규정 원문 기준 계급·호봉별 전체 표와 실수령액 계산기.`;
 }
 
+// 경정·소방령 이상 상위 계급 FAQ (금액은 upper 데이터에서 생성)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function upperFaq(d: any): { q: string; a: string }[] {
+  if (!d.upper) return [];
+  const u = d.upper;
+  const maxH = (i: number) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Math.max(...u.rows.filter((r: any) => r.pay[i] !== null).map((r: any) => r.hobong));
+  const at = (h: number, i: number) => wonShort(payAt(u, h, i)!);
+  const list = u.columns
+    .map((c: string, i: number) => `${c} 1호봉 ${at(1, i)}(최고 ${maxH(i)}호봉 ${at(maxH(i), i)})`)
+    .join(", ");
+  return [
+    {
+      q: `${u.columns[0]}·${u.columns[1]} 봉급은 얼마인가요?`,
+      a: `${d.year}년 기준 ${list}입니다. 기본급만의 금액이며, 실제 월급에는 수당이 더해지고 세금·기여금이 공제됩니다.`,
+    },
+  ];
+}
+
 export function generateStaticParams() {
   return Object.keys(DATA).map((slug) => ({ slug }));
 }
@@ -88,6 +108,7 @@ export default async function SalaryPage({
 }) {
   const { slug } = await params;
   const d = DATA[slug as Slug];
+  const faqItems = [...d.faq, ...upperFaq(d)];
   const isMilitary = d.type === "military";
   const pensionOcc = PENSION_OCC[slug] ?? "civil";
   const pensionLabel = PENSION_LABEL[slug] ?? "공무원연금";
@@ -166,7 +187,16 @@ export default async function SalaryPage({
           )}
         </div>
       ) : (
-        <SalaryTable columns={d.columns} rows={d.rows} />
+        <div className="space-y-8">
+          <SalaryTable columns={d.columns} rows={d.rows} />
+          {d.upper && (
+            <div className="space-y-2">
+              <h3 className="font-semibold text-[#1B2A4A]">{d.upper.title}</h3>
+              <SalaryTable columns={d.upper.columns} rows={d.upper.rows} />
+              <p className="text-xs leading-relaxed text-[#8B93A6]">{d.upper.note}</p>
+            </div>
+          )}
+        </div>
       )}
 
       <section className="space-y-3 text-[#5B6478]">
@@ -205,8 +235,8 @@ export default async function SalaryPage({
 
       <SalaryInsights slug={slug} />
 
-      <Faq items={d.faq} />
-      <FaqJsonLd items={d.faq} />
+      <Faq items={faqItems} />
+      <FaqJsonLd items={faqItems} />
 
       {/* 하단 광고 */}
       <AdSlot id={`salary-${slug}-bottom`} />
