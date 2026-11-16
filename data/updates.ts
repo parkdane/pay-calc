@@ -5,6 +5,10 @@ export type UpdateEntry = { date: string; items: UpdateItem[] };
 
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-11-16",
+    items: [{ text: "교원 봉급표에 유치원 교사 적용 여부 안내 추가(국공립은 초·중·고와 같은 별표11, 사립은 유치원별 보수 규정)", href: "/salary/teacher" }],
+  },
+  {
     date: "2026-11-02",
     items: [
       {

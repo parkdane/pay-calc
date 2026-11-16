@@ -5,14 +5,18 @@ import Faq from "@/components/Faq";
 import FaqJsonLd from "@/components/FaqJsonLd";
 import SourceNote from "@/components/SourceNote";
 import Link from "next/link";
+import { getPayoutRate } from "@/lib/pensionCalc";
+
+// 검색 결과 설명문 CTR 테스트(2026-11-16 시작, 이전 문구는 git 이력). 2주 뒤 네이버 "공무원 연금 계산기" CTR(시작 0.8%)로 판정
+const PAYOUT_2026 = getPayoutRate(2026)!.toFixed(3);
+const DESC = `임용연도·직급·호봉을 넣으면 은퇴 후 공무원연금 월 예상액과 연금 받는 나이(퇴직연도별 60~65세)를 계산합니다. 2026년 지급률 ${PAYOUT_2026}%, 조기퇴직 감액, 교사·경찰·소방·군인까지 반영.`;
 
 export const metadata: Metadata = {
   title: "교사·공무원 연금 수령액 계산기 (경찰·소방·군인, 개시연령 반영)",
-  description:
-    "임용일·직급·호봉을 입력하면 은퇴 후 받을 공무원연금 예상 월수령액을 계산합니다. 일반직·교사·경찰·소방·군인 전부 지원하며, 1997~2026년 실제 봉급표와 3단계 산식(구법·과도기·소득재분배)을 반영합니다.",
+  description: DESC,
   openGraph: {
     title: "교사·공무원 연금 수령액 계산기 (경찰·소방·군인, 개시연령 반영)",
-    description: "임용일·직급·호봉을 입력하면 은퇴 후 받을 공무원연금 예상 월수령액을 계산합니다. 일반직·교사·경찰·소방·군인 전부 지원하며, 1997~2026년 실제 봉급표와 3단계 산식(구법·과도기·소득재분배)을 반영합니다.",
+    description: DESC,
   },
 };
 

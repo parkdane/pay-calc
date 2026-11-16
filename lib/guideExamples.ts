@@ -419,3 +419,8 @@ export const npBRows = [1500000, 2500000, A_VALUE_2026, 4500000, 6000000].map((B
 });
 export const npBLow = { B: 1500000, m: np20(1500000) };
 export const npBHigh = { B: 6000000, m: np20(6000000) };
+
+// ── 군인 실수령액 가이드 설명문용 (CTR 테스트 2026-11-16) ──
+const sPay = (rank: string) => militaryPay.soldier.rows.find((r) => r.rank === rank)!.pay;
+const manShort = (n: number) => `${(n / 10000).toLocaleString("ko-KR")}만 원`;
+export const militaryGuideDesc = `${militaryPay.year}년 군인 월급: 이병 ${manShort(sPay("이병"))}·일병 ${manShort(sPay("일병"))}·상병 ${manShort(sPay("상병"))}·병장 ${manShort(sPay("병장"))}, 하사 1호봉 ${won(militaryPay.officerTables[0].rows[0].pay[0] as number)}·소위 1호봉 ${won(militaryPay.officerTables[1].rows[0].pay[0] as number)}. 병사와 간부 실수령액이 갈리는 이유를 계급별로 정리했습니다.`;

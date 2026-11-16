@@ -7,7 +7,7 @@ export const PAGE_UPDATED: Record<string, string> = {
   "/salary/military": "2026-10-21",
   "/salary/police": "2026-10-21",
   "/salary/fire": "2026-10-21",
-  "/salary/teacher": "2026-10-21",
+  "/salary/teacher": "2026-11-16",
   "/about": "2026-08-13",
   "/terms": "2026-08-20",
   "/privacy": "2026-08-13",

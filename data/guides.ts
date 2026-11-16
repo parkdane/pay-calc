@@ -36,7 +36,8 @@ export const GUIDES: Guide[] = [
   {
     slug: "military-net-guide",
     title: "군인 실수령액 2026: 병장 150만 원, 하사 1호봉 2,133,000원",
-    desc: "병사와 간부는 봉급 체계 자체가 다릅니다. 이병 75만 원부터 간부 초임까지, 실수령액이 어떻게 갈리는지 정리했습니다.",
+    // 설명문 CTR 테스트(2026-11-16 시작, 시작 CTR 0.4%). 이전 문구는 git 이력
+    desc: GX.militaryGuideDesc,
     date: "2026-07-15",
     updated: "2026-10-21",
     calcHref: "/calc/military-net",
