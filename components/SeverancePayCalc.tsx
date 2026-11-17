@@ -69,12 +69,12 @@ export default function SeverancePayCalc() {
             <dl className="divide-y divide-[rgba(46,68,148,0.10)] bg-white text-sm">
               <Row label="기준소득월액" value={won(result.baseIncome)} muted />
               <Row label="계산 반영 재직연수" value={`${result.cappedYears}년`} muted />
-              <Row label="지급율" value={`${(result.rate * 100).toFixed(2)}%`} bold />
+              <Row label="지급률" value={`${(result.rate * 100).toFixed(2)}%`} bold />
             </dl>
           </div>
 
           <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-[rgba(46,68,148,0.03)] p-5 text-xs leading-relaxed text-[#7A8296]">
-            <p className="font-semibold text-[#5B6478] mb-2">재직기간별 지급율</p>
+            <p className="font-semibold text-[#5B6478] mb-2">재직기간별 지급률</p>
             <ul className="space-y-1">
               <li>· 1년 이상 5년 미만: 6.5%</li>
               <li>· 5년 이상 10년 미만: 22.75%</li>

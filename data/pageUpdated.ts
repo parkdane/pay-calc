@@ -3,8 +3,8 @@
 // (빌드 시각을 쓰면 매일 자동 커밋 때문에 모든 페이지가 매일 바뀐 것처럼 보여 구글이 lastmod를 무시하게 됨)
 export const PAGE_UPDATED: Record<string, string> = {
   "/salary": "2026-10-21",
-  "/salary/civil": "2026-10-21",
-  "/salary/military": "2026-10-21",
+  "/salary/civil": "2026-11-16",
+  "/salary/military": "2026-11-16",
   "/salary/police": "2026-11-16",
   "/salary/fire": "2026-11-16",
   "/salary/teacher": "2026-11-16",

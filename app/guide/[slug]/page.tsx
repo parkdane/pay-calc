@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GUIDES } from "@/data/guides";
 import AdSlot from "@/components/AdSlot";
 import CalcCta from "@/components/CalcCta";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 import SimpleTable from "@/components/SimpleTable";
 import Link from "next/link";
 
@@ -73,6 +74,7 @@ export default async function GuidePage({
       )}
 
       <AdSlot id={`guide-${g.slug}-bottom`} />
+      <BreadcrumbJsonLd items={[{ name: "가이드", path: "/guide" }, { name: g.title, path: `/guide/${g.slug}` }]} />
     </article>
   );
 }

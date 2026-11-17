@@ -196,7 +196,7 @@ export default function RetirementAgeCalc() {
                     <Row label="정년퇴직 시 호봉(추정)" value={`${money.hobongAtRetire}호봉`} muted />
                     <Row label="기준소득월액(추정)" value={won(money.baseIncome)} muted />
                     <Row
-                      label={`퇴직수당 (재직 ${money.severanceYears}년, 지급율 ${(money.severanceRate * 100).toFixed(2).replace(/\.?0+$/, "")}%)`}
+                      label={`퇴직수당 (재직 ${money.severanceYears}년, 지급률 ${(money.severanceRate * 100).toFixed(2).replace(/\.?0+$/, "")}%)`}
                       value={won(money.severance)}
                       bold
                     />

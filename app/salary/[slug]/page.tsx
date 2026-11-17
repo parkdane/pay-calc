@@ -7,6 +7,8 @@ import FaqJsonLd from "@/components/FaqJsonLd";
 import CalcCta from "@/components/CalcCta";
 import SalaryInsights from "@/components/SalaryInsights";
 import Link from "next/link";
+import RelatedCalcs from "@/components/RelatedCalcs";
+import BreadcrumbJsonLd from "@/components/BreadcrumbJsonLd";
 
 import civil from "@/data/salary-civil-2026.json";
 import military from "@/data/salary-military-2026.json";
@@ -79,6 +81,15 @@ function upperFaq(d: any): { q: string; a: string }[] {
     },
   ];
 }
+
+// 봉급표 아래 "함께 많이 쓰는 계산기" (표 위 CTA에 이미 있는 계산기는 제외)
+const RELATED: Record<string, { title: string; hrefs: string[] }> = {
+  civil: { title: "공무원이 함께 많이 쓰는 계산기", hrefs: ["/calc/overtime-pay", "/calc/retirement-age", "/calc/severance-pay"] },
+  police: { title: "경찰공무원이 함께 많이 쓰는 계산기", hrefs: ["/calc/overtime-pay", "/calc/severance-pay", "/calc/retirement-age"] },
+  fire: { title: "소방공무원이 함께 많이 쓰는 계산기", hrefs: ["/calc/overtime-pay", "/calc/severance-pay", "/calc/retirement-age"] },
+  teacher: { title: "교사가 함께 많이 쓰는 계산기", hrefs: ["/calc/teacher-net", "/calc/retirement-age", "/calc/severance-pay"] },
+  military: { title: "군인이 함께 많이 쓰는 계산기", hrefs: ["/calc/severance-pay", "/calc/youth-save", "/calc/savings-goal"] },
+};
 
 export function generateStaticParams() {
   return Object.keys(DATA).map((slug) => ({ slug }));
@@ -199,6 +210,8 @@ export default async function SalaryPage({
         </div>
       )}
 
+      {RELATED[slug] && <RelatedCalcs title={RELATED[slug].title} hrefs={RELATED[slug].hrefs} />}
+
       <section className="space-y-3 text-[#5B6478]">
         <h2 className="text-xl font-bold text-[#1B2A4A]">봉급표 보는 법</h2>
         <p>
@@ -237,6 +250,12 @@ export default async function SalaryPage({
 
       <Faq items={faqItems} />
       <FaqJsonLd items={faqItems} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "봉급표", path: "/salary" },
+          { name: `${d.year}년 ${d.title} 봉급표`, path: `/salary/${slug}` },
+        ]}
+      />
 
       {/* 하단 광고 */}
       <AdSlot id={`salary-${slug}-bottom`} />
