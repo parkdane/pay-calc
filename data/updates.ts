@@ -5,6 +5,10 @@ export type UpdateEntry = { date: string; items: UpdateItem[] };
 
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-11-17",
+    items: [{ text: "사이트 소개에 제공 콘텐츠 현황, 법령별 데이터 출처, 정확성 확인 방법과 정정 공개 원칙 추가", href: "/about" }],
+  },
+  {
     date: "2026-11-16",
     items: [
       { text: "봉급표 5개 페이지에 직군별 '함께 많이 쓰는 계산기' 링크 추가(경찰·소방·일반직은 시간외수당·퇴직수당·정년, 교원은 실수령액·정년·퇴직수당, 군인은 퇴직수당·적금)", href: "/salary" },
