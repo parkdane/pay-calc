@@ -5,6 +5,15 @@ export type UpdateEntry = { date: string; items: UpdateItem[] };
 
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-11-23",
+    items: [
+      {
+        text: "연봉 순위 계산기의 연령대별 비교표를 출처가 특정되지 않던 참고치에서 국가데이터처 「2024년 임금근로일자리 소득(보수) 결과」 공식 수치(연령대별 월평균 소득, 연 환산)로 교체. 연령대 구간은 10세 단위로 변경",
+        href: "/calc/income-rank",
+      },
+    ],
+  },
+  {
     date: "2026-11-17",
     items: [{ text: "사이트 소개에 제공 콘텐츠 현황, 법령별 데이터 출처, 정확성 확인 방법과 정정 공개 원칙 추가", href: "/about" }],
   },

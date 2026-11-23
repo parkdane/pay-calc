@@ -4,21 +4,10 @@ import { useMemo, useRef, useState } from "react";
 import data from "@/data/income-percentile-2024.json";
 import AdSlot from "@/components/AdSlot";
 import { topPercentOf } from "@/lib/incomePercentile";
+import { WAGE_BY_AGE, annualOf } from "@/lib/wageByAge";
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 
-// 연령대별 평균·중위 연봉 (2025년 기준, 통계청·임금직업포털 데이터 종합)
-// 국세청 백분위 자료처럼 단일 공식 통계가 아니라 여러 공개 통계를 종합한 참고치입니다.
-const AGE_SALARY_TABLE = [
-  { range: "25~29세", avg: 37910000, median: 33800000 },
-  { range: "30~34세", avg: 45500000, median: 40060000 },
-  { range: "35~39세", avg: 54050000, median: 46660000 },
-  { range: "40~44세", avg: 58650000, median: 49980000 },
-  { range: "45~49세", avg: 60970000, median: 49990000 },
-  { range: "50~54세", avg: 61330000, median: 47030000 },
-  { range: "55~59세", avg: 57210000, median: 41680000 },
-  { range: "60세 이상", avg: 46220000, median: 31850000 },
-] as const;
 
 const INCOME_RANK_DECISION_CARDS = [
   {
@@ -204,17 +193,17 @@ export default function IncomeRankCalc() {
             </dl>
           </div>
 
-          {/* 연령대별 평균·중위 연봉 */}
+          {/* 연령대별 평균 소득 (국가데이터처 임금근로일자리 소득) */}
           <div className="rounded-xl border border-[rgba(46,68,148,0.14)] bg-white p-5 text-sm">
             <div className="mb-3 flex items-center justify-between">
-              <p className="font-semibold text-[#1B2A4A]">연령대별 평균·중위 연봉</p>
+              <p className="font-semibold text-[#1B2A4A]">연령대별 평균 소득</p>
               <select
                 value={ageRange}
                 onChange={(e) => setAgeRange(e.target.value)}
-                className="rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-2 py-1 text-xs text-[#5B6478]"
+                className="rounded-lg border border-[rgba(46,68,148,0.22)] bg-white px-2 py-1 text-base text-[#5B6478]"
               >
                 <option value="">내 나이대 선택</option>
-                {AGE_SALARY_TABLE.map((a) => (
+                {WAGE_BY_AGE.rows.map((a) => (
                   <option key={a.range} value={a.range}>
                     {a.range}
                   </option>
@@ -225,12 +214,12 @@ export default function IncomeRankCalc() {
               <thead>
                 <tr className="text-xs text-[#8B93A6]">
                   <th className="pb-1.5 text-left font-medium">연령대</th>
-                  <th className="pb-1.5 text-right font-medium">평균</th>
-                  <th className="pb-1.5 text-right font-medium">중위</th>
+                  <th className="pb-1.5 text-right font-medium">월평균</th>
+                  <th className="pb-1.5 text-right font-medium">연 환산</th>
                 </tr>
               </thead>
               <tbody>
-                {AGE_SALARY_TABLE.map((a) => (
+                {WAGE_BY_AGE.rows.map((a) => (
                   <tr
                     key={a.range}
                     className={`border-t border-[rgba(46,68,148,0.10)] ${
@@ -240,8 +229,8 @@ export default function IncomeRankCalc() {
                     <td className={`py-1.5 ${a.range === ageRange ? "font-bold text-[#2E4494]" : "text-[#5B6478]"}`}>
                       {a.range}
                     </td>
-                    <td className="py-1.5 text-right tabular-nums text-[#1B2A4A]">{won(a.avg)}</td>
-                    <td className="py-1.5 text-right tabular-nums text-[#7A8296]">{won(a.median)}</td>
+                    <td className="py-1.5 text-right tabular-nums text-[#1B2A4A]">{won(a.avgMonthly)}</td>
+                    <td className="py-1.5 text-right tabular-nums text-[#7A8296]">{won(annualOf(a.avgMonthly))}</td>
                   </tr>
                 ))}
               </tbody>
@@ -249,17 +238,18 @@ export default function IncomeRankCalc() {
             {ageRange && submitted && manwon > 0 && (
               <p className="mt-3 border-t border-[rgba(46,68,148,0.10)] pt-3 text-xs leading-relaxed text-[#5B6478]">
                 {(() => {
-                  const bracket = AGE_SALARY_TABLE.find((a) => a.range === ageRange)!;
-                  const diff = manwon * 10000 - bracket.avg;
+                  const row = WAGE_BY_AGE.rows.find((a) => a.range === ageRange)!;
+                  const diff = manwon * 10000 - annualOf(row.avgMonthly);
                   return diff >= 0
-                    ? `입력한 연봉은 ${ageRange} 평균보다 ${won(diff)} 높습니다.`
-                    : `입력한 연봉은 ${ageRange} 평균보다 ${won(-diff)} 낮습니다.`;
+                    ? `입력한 연봉은 ${ageRange} 평균(연 환산)보다 ${won(diff)} 높습니다.`
+                    : `입력한 연봉은 ${ageRange} 평균(연 환산)보다 ${won(-diff)} 낮습니다.`;
                 })()}
               </p>
             )}
-            <p className="mt-3 text-xs text-[#8B93A6]">
-              2025년 기준, 통계청·임금직업포털 등 공개 통계를 종합한 참고치입니다. 위 상위% 표와 달리 단일
-              공식 통계가 아니라 실제와 차이가 있을 수 있습니다.
+            <p className="mt-3 text-xs leading-relaxed text-[#8B93A6]">
+              {WAGE_BY_AGE.source}. 임금근로자의 세전 월평균 소득이며, 연 환산은 12를 곱한 단순 계산입니다. 전체
+              평균은 월 {won(WAGE_BY_AGE.overallAvgMonthly)}, 중위값은 월 {won(WAGE_BY_AGE.overallMedianMonthly)}
+              입니다. 연령대별 중위값은 공개 자료에서 확인되지 않아 싣지 않았습니다.
             </p>
           </div>
         </div>

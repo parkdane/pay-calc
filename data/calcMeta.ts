@@ -23,8 +23,8 @@ export const CALC_META: Record<string, CalcMeta> = {
     updated: "2026-08-26",
   },
   "income-rank": {
-    sources: ["국세청 근로소득 백분위(천분위) 자료, 2024년 귀속(공공데이터포털)", "연령대별 평균은 통계청 등 공개 통계 종합(참고치)", INSURANCE, TAX_TABLE],
-    updated: "2026-10-27",
+    sources: ["국세청 근로소득 백분위(천분위) 자료, 2024년 귀속(공공데이터포털)", "연령대별 평균: 국가데이터처 2024년 임금근로일자리 소득(보수) 결과", INSURANCE, TAX_TABLE],
+    updated: "2026-11-23",
   },
   "leap-save": { sources: ["금융위원회 청년도약계좌 기여금 확대(2025.1 납입분부터)", "취급은행 청년도약계좌 약관(정부기여금 이자)"], updated: "2026-10-27" },
   "maternity-leave": {
