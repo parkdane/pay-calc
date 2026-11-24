@@ -52,7 +52,7 @@ export const CALC_META: Record<string, CalcMeta> = {
   },
   "retirement-age": {
     sources: ["교육공무원법 제47조", "국가공무원법 제74조", "공무원연금법 시행령 제58조(퇴직수당)", "공무원연금공단 연금 개시연령 안내"],
-    updated: "2026-10-14",
+    updated: "2026-11-24",
   },
   "retirement-pay": { sources: ["근로자퇴직급여 보장법 제8조·제9조", "근로기준법 제2조(평균임금)"], updated: "2026-10-16" },
   "salary-compare": {

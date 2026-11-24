@@ -5,6 +5,19 @@ export type UpdateEntry = { date: string; items: UpdateItem[] };
 
 export const UPDATES: UpdateEntry[] = [
   {
+    date: "2026-11-24",
+    items: [
+      {
+        text: "정년퇴직일 계산기 정정: 사립학교 교원 정년은 교육공무원법이 그대로 준용되지 않고 학교법인 정관으로 정한다는 점 반영(법제처 법령해석 10-0372). 정년 가이드도 함께 정정",
+        href: "/calc/retirement-age",
+      },
+      {
+        text: "정년퇴직일 계산기에 출생연도별 교사·일반직 퇴직일 표, 퇴직연도별 연금 개시연령과 교사 대기 기간 표, 3월 1일생 퇴직일 FAQ(법제처 해석), 정년 연장 논의 현황 안내 추가",
+        href: "/calc/retirement-age",
+      },
+    ],
+  },
+  {
     date: "2026-11-23",
     items: [
       {

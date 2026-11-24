@@ -97,7 +97,7 @@ export default function RetirementAgeCalc() {
                 <option value="general-civil">일반직 공무원 (정년 60세)</option>
               </select>
               <span className="mt-1 block text-xs font-normal text-[#8B93A6]">
-                사립학교 교원도 사립학교법에 따라 동일한 정년이 적용됩니다.
+                국공립 기준입니다. 사립학교 교원은 학교법인 정관에 따라 다를 수 있습니다.
               </span>
             </label>
           </div>
