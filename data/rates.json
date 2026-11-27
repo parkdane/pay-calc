@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T21:00:43.223Z",
+  "updatedAt": "2026-11-27T21:00:28.370Z",
   "source": "금융감독원 금융상품통합비교공시 오픈API",
   "deposits": [
     {
@@ -123,6 +123,16 @@
       "note": "없음"
     },
     {
+      "bank": "국제저축은행",
+      "product": "꿈 찾아 정기예금(비대면)",
+      "baseRate": 4.2,
+      "maxRate": 4.2,
+      "term": 12,
+      "group": "저축은행",
+      "joinWay": "스마트폰",
+      "note": "없음"
+    },
+    {
       "bank": "HB저축은행",
       "product": "e-정기예금",
       "baseRate": 4.17,
@@ -185,16 +195,6 @@
     {
       "bank": "유안타저축은행",
       "product": "SB톡톡 회전정기예금 (비대면)",
-      "baseRate": 4.16,
-      "maxRate": 4.16,
-      "term": 12,
-      "group": "저축은행",
-      "joinWay": "스마트폰",
-      "note": "없음"
-    },
-    {
-      "bank": "흥국저축은행",
-      "product": "비대면 정기예금",
       "baseRate": 4.16,
       "maxRate": 4.16,
       "term": 12,
